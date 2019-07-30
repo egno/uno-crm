@@ -1,0 +1,37 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto+Slab');
+
+#app .button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  box-sizing: border-box;
+  color: #fff;
+  background-color: #b69768;
+  outline: none;
+  transition: background-color 0.4s 0s;
+  cursor: pointer;
+  font: bold 18px Roboto Slab, Times New Roman, Times, serif;
+  @media only screen and (min-width : 1360px) {
+    width: 240px;
+    height: 56px;
+    border-radius: 0;
+    &:hover {
+      background-color: #07101C;;
+    }
+  }
+
+  &_disabled {
+    background-color: rgba(137, 149, 175, 0.2) !important;
+    color: rgba(255, 255, 255, 0.5);
+    pointer-events: none;
+  }
+
+  &_attractive {
+    @extend .button;
+    font-weight: normal;
+    background-color: #EF4D37;
+    &:hover {
+      background-color: #EC2E2E;
+    }
+  }
+}

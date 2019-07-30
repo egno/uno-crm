@@ -1,0 +1,16 @@
+@import 'infocard';
+
+.widget-settings .infocard {
+  @media only screen and (min-width : $tablet) {
+    width: 724px;
+  }
+
+  &._edit {
+    // todo remove these styles after widget styles fix
+    .infocard__content {
+      @media only screen and (min-width : $desktop) {
+        max-width: 724px;
+      }
+    }
+  }
+}

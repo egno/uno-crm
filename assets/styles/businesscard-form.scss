@@ -1,0 +1,158 @@
+@import 'common';
+@import 'icon';
+
+.businesscard-form {
+  &__avatar {
+    margin-bottom: 26px;
+  }
+  &__field {
+    label {
+      font-family: $lato;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      line-height: normal;
+      color: rgba(7, 16, 28, 0.35);
+    }
+
+    .v-select__selection {
+      padding-left: 16px;
+      font-weight: 400;
+      font-size: 14px;
+    }
+
+    textarea {
+      padding-bottom: 0;
+    }
+
+    &._phone {
+      input {
+        padding-left: 0;
+        text-align: left;
+      }
+      .v-text-field__prefix {
+        padding-left: 16px;
+        font-weight: 400;
+        font-size: 14px;
+      }
+    }
+
+    &._office {
+      width: 79px;
+      padding-left: 12px;
+      label {
+        margin-left: 5px;
+      }
+      input {
+        padding-left: 9px;
+      }
+    }
+
+    &._select {
+      position: relative;
+    }
+
+    .v-input__append-inner {
+      display: none;
+    }
+    .v-messages {
+      display: none;
+    }
+    .v-select__selection--comma {
+      margin: 0;
+    }
+  }
+
+  &__delete {
+    @include uno-icon();
+    @extend %vertical-align;
+    justify-content: center;
+    &:hover {
+      background-color: rgba(137, 149, 175, 0.35);
+
+      path {
+        fill: #000;
+      }
+    }
+  }
+
+  &__add-field {
+    @extend %button-bordered;
+  }
+
+  &__errors {
+    width: 260px;
+    margin: 0 auto;
+    padding-top: 14px;
+    text-align: center;
+    font-family: $lato;
+    font-size: 14px;
+    color: #EF4D37;
+    line-height: 18px;
+  }
+
+  &__map {
+    margin-bottom: 15px;
+  }
+
+  &__next {
+    display: block;
+    width: 240px !important;
+    height: 56px !important;
+    margin: 28px auto 0;
+    color: #fff;
+    background-color: #5699FF !important;
+    border-radius: 0 !important;
+    cursor: pointer;
+    font-family: $roboto;
+    font-weight: 900;
+    font-size: 18px;
+    text-align: center;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: background-color 0.4s;
+
+    &:hover {
+      background: #07101C;
+    }
+  }
+
+  .v-text-field {
+    margin-top: 12px;
+  }
+  .day-schedule .v-text-field {
+    margin-top: 0;
+  }
+  .v-text-field__prefix {
+    color: #07101C;
+    caret-color: #07101C !important;
+  }
+
+  .v-counter {
+    order: -1;
+    margin-top: 5px;
+  }
+
+  .save-info {
+    display: block;
+    width: 240px !important;
+    height: 56px !important;
+    border-radius: 0 !important;
+    margin: 28px auto 0;
+    font-family: $roboto;
+    font-weight: 900;
+    font-size: 18px;
+    text-align: center;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    &:hover {
+      background-color: #07101c;
+    }
+  }
+
+  .phone-edit {
+    .businesscard-form__delete {
+      margin-top: 18px;
+    }
+  }
+}

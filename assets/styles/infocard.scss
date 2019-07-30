@@ -1,0 +1,81 @@
+@import 'common';
+
+.infocard {
+  width: 100%;
+  @media only screen and (min-width : $tablet) {
+    width: 524px;
+    margin: 0 auto;
+  }
+
+  @media only screen and (min-width : $desktop) {
+    margin: 0;
+  }
+
+  &__content {
+    padding: 30px 37px 60px;
+    background: #fff;
+    @media only screen and (min-width : $tablet) {
+      box-shadow: 0px 2px 12px rgba(137, 149, 175, 0.1);
+    }
+
+    @media only screen and (min-width : $desktop) {
+      padding: 40px 120px 60px;
+    }
+  }
+
+  &__field-title {
+    padding-top: 20px;
+    padding-left: 8px;
+    font-family: $lato;
+    font-style: normal;
+    font-size: 12px;
+    line-height: normal;
+    color: rgba(7, 16, 28, 0.35);
+  }
+
+  &__field-value {
+    max-width: calc(100% - 12px);
+    overflow: hidden;
+    padding-top: 8px;
+    padding-left: 8px;
+    font-family: $lato;
+    font-style: normal;
+    font-size: 14px;
+    line-height: normal;
+    color: #07101C;
+
+    &._description {
+      word-break: break-all;
+    }
+  }
+
+  .top-bordered {
+    padding-top: 20px;
+    margin: 15px 2px 0;
+    border-top: 1px solid  rgba(137, 149, 175, 0.1);
+    .infocard__field-title,
+    .infocard__field-value {
+      padding-top: 0;
+      padding-left: 6px;
+    }
+  }
+
+  &._view {
+    .infocard__field-title {
+      margin-right: 8px;
+    }
+    .infocard__field-value {
+      margin-right: 8px;
+    }
+    .soc {
+      padding: 0 10px;
+    }
+  }
+  &._edit {
+    .infocard__content {
+      @media only screen and (min-width : $desktop) {
+        padding: 40px 88px 60px;
+      }
+    }
+  }
+}

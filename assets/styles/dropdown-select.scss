@@ -1,0 +1,35 @@
+.dropdown-select {
+  position: relative;
+  overflow: visible;
+  .v-list {
+    background-color: rgba(137, 149, 175, 0.1);
+  }
+  .v-list__tile {
+    height: auto;
+    padding: 0;
+    &:hover {
+      background: rgba(137, 149, 175, 0.2);
+    }
+  }
+  .v-list__tile__content {
+    height: auto;
+    padding: 6px 0 5px 32px;
+  }
+  .v-list__tile__title {
+    height: auto;
+    color: #8995AF;
+    font-family: Lato, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: normal;
+  }
+  .v-menu__content {
+    overflow-x: visible;
+    max-width: fit-content;
+    top: 100% !important;
+  }
+  .v-text-field__details {
+    display: none;
+  }
+}

@@ -1,0 +1,68 @@
+@import 'common';
+
+.day-schedule {
+
+  &>div {
+    text-align: center;
+  }
+
+  &__wrapper {
+    @extend %vertical-align;
+    justify-content: space-between;
+    padding: 7px 0;
+  }
+
+  &__dayname {
+    font-family: Lato, sans-serif;
+    font-style: normal;
+    font-weight: 900;
+    font-size: 14px;
+    line-height: normal;
+    color: #07101C;
+    text-align: center;
+    text-transform: capitalize;
+  }
+
+  &__for-all {
+    width: 240px;
+    padding-top: 32px;
+  }
+
+  &__times {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-grow: 0;
+    padding: 3px 6px 3px 7px;
+    font-family: Lato,  sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 13px;
+    line-height: normal;
+    color: #07101C;
+    border-left: 1px solid #8995AF;
+    border-right: 1px solid #8995AF;
+
+    input {
+      width: 38px;
+      text-align: center;
+      font-weight: 400;
+      padding: 0;
+    }
+
+    .error--text .v-input__control > .v-input__slot:before  {
+      position: absolute;
+      display: inline-block;
+      bottom: -1px;
+      content: '';
+      left: 0;
+      border: 1px solid #ef4d37;
+      transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
+      width: 100%;
+    }
+  }
+
+  .v-input__slot {
+    border: none;
+  }
+}

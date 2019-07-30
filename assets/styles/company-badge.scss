@@ -1,0 +1,29 @@
+.company-badge {
+  display: none;
+  max-width: 324px;
+  padding: 8px 24px 8px 0;
+  @media only screen and (min-width: 1360px) {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  &__name {
+    width: 100%;
+    font-family: Roboto Slab, Times New Roman, Times, serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 18px;
+    text-align: right;
+    color: #07101C;
+  }
+
+  &__category {
+    font-family: Lato, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: normal;
+    text-align: right;
+    color: #8995AF;
+  }
+}
