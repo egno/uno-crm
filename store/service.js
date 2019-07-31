@@ -3,7 +3,7 @@ import { makeAlert } from '~/api/utils'
 
 const state = () => ({
   serviceGroups: [],
-  serviceList: [],
+  serviceList: []
 })
 
 const getters = {
@@ -16,7 +16,7 @@ const mutations = {
   },
   LOAD_SERVICE_LIST (state, payload) {
     state.serviceList = payload
-  },
+  }
 }
 
 const actions = {
@@ -25,21 +25,21 @@ const actions = {
     Api()
       .get(path)
       .then(res => res.data)
-      .then(res => {
+      .then((res) => {
         commit('SET_SERVICE_GROUPS', res)
       })
-      .catch(err => commit('ADD_ALERT', makeAlert(err)))
+      .catch(err => commit('alerts/ADD_ALERT', makeAlert(err), { root: true }))
   },
   loadServiceList ({ commit }) {
     const path = 'service'
     Api()
       .get(path)
       .then(res => res.data)
-      .then(res => {
+      .then((res) => {
         commit('LOAD_SERVICE_LIST', res)
       })
-      .catch(err => commit('ADD_ALERT', makeAlert(err)))
-  },
+      .catch(err => commit('alerts/ADD_ALERT', makeAlert(err), { root: true }))
+  }
 }
 
 export default {

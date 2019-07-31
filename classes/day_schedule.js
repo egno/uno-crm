@@ -9,7 +9,7 @@ function formatTime (val) {
 
 class DaySchedule extends ApiObject {
   set jsonObject (newVal) {
-    if (newVal && Array.isArray(newVal) && newVal.length % 2 == 1) {
+    if (newVal && Array.isArray(newVal) && newVal.length % 2 === 1) {
       newVal.push('00:00')
     }
     this._data = (newVal && newVal.data) || []

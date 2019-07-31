@@ -1,19 +1,8 @@
 <template>
   <VCard class="avatar-editor">
-    <VLayout
-      align-center
-      justify-space-around
-      row
-    >
-      <VLayout
-        align-center
-        justify-space-around
-        column
-      >
-        <VFlex
-          justify-center
-          pb-3
-        >
+    <VLayout align-center justify-space-around row>
+      <VLayout align-center justify-space-around column>
+        <VFlex justify-center pb-3>
           <VueAvatar
             ref="vueavatar"
             :width="width"
@@ -28,11 +17,7 @@
           />
         </VFlex>
         <VFlex>
-          <VLayout
-            v-if="scale"
-            column
-            fill-height
-          >
+          <VLayout v-if="scale" column fill-height>
             <VFlex class="avatar-editor__text">
               Подберите миниатюру под нужный размер и положение в круге
             </VFlex>
@@ -51,14 +36,9 @@
       </VLayout>
     </VLayout>
     <VCardActions>
-      <VBtn
-        xs12
-        color="primary"
-        class="button"
-        @click="finished"
-      >
+      <v-btn xs12 color="primary" class="button" @click="finished">
         Сохранить
-      </VBtn>
+      </v-btn>
     </VCardActions>
   </VCard>
 </template>
@@ -136,40 +116,40 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '~/assets/styles/button.scss';
+@import '~/assets/styles/button.scss';
 
-  .avatar-editor {
-    padding: 56px 47px 56px 48px;
+.avatar-editor {
+  padding: 56px 47px 56px 48px;
 
-    &__text {
-      padding: 10px 0;
-      font-family: Lato, sans-serif;
-      font-size: 14px;
-      line-height: normal;
-      text-align: center;
-      color: #8995AF;
-    }
+  &__text {
+    padding: 10px 0;
+    font-family: Lato, sans-serif;
+    font-size: 14px;
+    line-height: normal;
+    text-align: center;
+    color: #8995af;
+  }
 
-    &__scale {
-      .v-slider__thumb {
-        background: #FFFFFF !important;
-        box-shadow: 0px 0px 3px rgba(137, 149, 175, 0.35);
-      }
-    }
-
-    .v-card__actions {
-      padding: 0;
-      justify-content: center;
-    }
-
-    & button {
-      width: 280px !important;
-      height: 56px !important;
-      border-radius: 4px !important;
-    }
-
-    #avatarEditorCanvas {
-      display: block;
+  &__scale {
+    .v-slider__thumb {
+      background: #ffffff !important;
+      box-shadow: 0px 0px 3px rgba(137, 149, 175, 0.35);
     }
   }
+
+  .v-card__actions {
+    padding: 0;
+    justify-content: center;
+  }
+
+  & button {
+    width: 280px !important;
+    height: 56px !important;
+    border-radius: 4px !important;
+  }
+
+  #avatarEditorCanvas {
+    display: block;
+  }
+}
 </style>

@@ -5,10 +5,12 @@
       headerText: 'Пользователи',
       buttonText: 'Добавить'
     }"
-    @add="$router.push({
-      name: 'businessUser',
-      params: { id: businessId, user: 'new' }
-    })"
+    @add="
+      $router.push({
+        name: 'businessUser',
+        params: { id: businessId, user: 'new' }
+      })
+    "
   >
     <template slot="content">
       <div class="clients">
@@ -22,10 +24,7 @@
           sort-icon="mdi-menu-down"
           hide-actions
         >
-          <template
-            slot="items"
-            slot-scope="props"
-          >
+          <template slot="items" slot-scope="props">
             <td>
               <v-layout
                 align-center
@@ -75,15 +74,16 @@
               </div>
             </td>
             <td>
-              <v-layout
-                v-if="props.item.business"
-                column
-              >
+              <v-layout v-if="props.item.business" column>
                 <v-flex>
                   <span>{{ props.item.business[0].name }}</span>
                 </v-flex>
-                <v-flex v-if="props.item.filialCount && (props.item.filialCount - 1)">
-                  <span class="second-row">+ еще {{ props.item.filialCount - 1 }}</span>
+                <v-flex
+                  v-if="props.item.filialCount && props.item.filialCount - 1"
+                >
+                  <span
+                    class="second-row"
+                  >+ еще {{ props.item.filialCount - 1 }}</span>
                 </v-flex>
               </v-layout>
             </td>
@@ -91,12 +91,7 @@
               <span v-if="props.item.j.notes">{{ props.item.j.notes }}</span>
             </td>
             <td>
-              <v-layout
-                row
-                align-center
-                fill-height
-                justify-start
-              >
+              <v-layout row align-center fill-height justify-start>
                 <DeleteButton
                   :is-dark="true"
                   @click.native.stop="onDelete(props.item)"
@@ -119,11 +114,14 @@
           :visible="edit"
           :client="item"
           :filial="businessId"
-          :company-id="businessInfo.parent? businessInfo.parent : businessId"
+          :company-id="businessInfo.parent ? businessInfo.parent : businessId"
           :create="!item.id"
           @onDelete="onDelete(item)"
           @onSave="onSave"
-          @close="edit=false; item={}"
+          @close="
+            edit = false
+            item = {}
+          "
         />
         <Modal
           :visible="deleteConfirm"
@@ -132,20 +130,21 @@
             rightButton: 'УДАЛИТЬ'
           }"
           @rightButtonClick="deleteItem"
-          @leftButtonClick="deleteConfirm = false; item = {}"
-          @close="deleteConfirm = false; item = {}"
+          @leftButtonClick="
+            deleteConfirm = false
+            item = {}
+          "
+          @close="
+            deleteConfirm = false
+            item = {}
+          "
         >
           <template slot="text">
-            <div
-              v-if="item.fullName"
-              class="uno-modal__text"
-            >
-              Удалить пользователя <span class="font-weight-bold">{{ item.fullName }}</span>?
+            <div v-if="item.fullName" class="uno-modal__text">
+              Удалить пользователя
+              <span class="font-weight-bold">{{ item.fullName }}</span>?
             </div>
-            <div
-              v-else
-              class="uno-modal__text"
-            >
+            <div v-else class="uno-modal__text">
               Удалить пользователя?
             </div>
           </template>
@@ -156,17 +155,17 @@
 </template>
 
 <script>
-import Api from '~/api/backend'
 import { mapActions, mapGetters } from 'vuex'
+import { debounce } from 'lodash'
+import { filials } from '../components/business/mixins'
+import Api from '~/api/backend'
 import Avatar from '~/components/avatar/Avatar.vue'
 import UserCardEdit from '~/components/user/UserCardEdit.vue'
 import User from '~/classes/user'
-import { filials } from '../components/business/mixins'
 import DeleteButton from '~/components/common/DeleteButton'
 import Users from '~/mixins/users'
 import PageLayout from '~/components/common/PageLayout.vue'
 import Modal from '~/components/common/Modal'
-import { debounce } from 'lodash'
 
 export default {
   components: {
@@ -224,7 +223,7 @@ export default {
       return `j->name->>fullname.ilike.*${this.searchString.trim()}*`
     },
     pages () {
-      if (!this.pagination.rowsPerPage || !this.totalItems) return 0
+      if (!this.pagination.rowsPerPage || !this.totalItems) { return 0 }
 
       return Math.ceil(this.totalItems / this.pagination.rowsPerPage)
     }
@@ -261,7 +260,7 @@ export default {
   },
   beforeDestroy () {},
   methods: {
-    ...mapActions({addClientsCounter: 'business/addClientsCounter'}),
+    ...mapActions({ addClientsCounter: 'business/addClientsCounter' }),
     userEdit (item) {
       this.$router.push({
         name: 'businessUser',
@@ -281,14 +280,17 @@ export default {
       }
     },
     fetchData (force = false) {
-      if (!this.businessId) return
+      if (!this.businessId) { return }
 
       const { sortBy, descending, page, rowsPerPage } = this.pagination
-      let filter = [`company_id.eq.${this.businessId}`, this.querySearchString]
+      const filter = [
+        `company_id.eq.${this.businessId}`,
+        this.querySearchString
+      ]
         .filter(x => !!x)
         .join(',')
-      let filterString = `and=(${filter})`
-      let params = [filterString]
+      const filterString = `and=(${filter})`
+      const params = [filterString]
 
       if (sortBy) {
         params.push(
@@ -301,7 +303,7 @@ export default {
       if (page > 1) {
         params.push(`offset=${(page - 1) * rowsPerPage}`)
       }
-      if (force || (this.lastQuery !== params.filter(x => !!x).join('&'))) {
+      if (force || this.lastQuery !== params.filter(x => !!x).join('&')) {
         this.lastQuery = params.filter(x => !!x).join('&')
 
         this.progressQuery = true
@@ -309,7 +311,7 @@ export default {
 
         Api()
           .get(`user?${this.lastQuery}`)
-          .then(res => {
+          .then((res) => {
             if (res.headers && res.headers['content-range']) {
               const r = res.headers['content-range'].match(/^\d*-\d*\/(\d*)$/)
               if (r) {
@@ -318,10 +320,10 @@ export default {
             }
             return res.data
           })
-          .then(res => {
+          .then((res) => {
             this.items = res.filter(x => !!x.j).map(x => new User(x))
           })
-          .catch(e => {
+          .catch((e) => {
             console.error(e)
           })
           .finally(() => {
@@ -335,13 +337,13 @@ export default {
         ? this.businessInfo && this.businessInfo.parent
         : this.businessId
 
-      if (!id) return
-      this.getFilialsOf(id).then(res => {
+      if (!id) { return }
+      this.getFilialsOf(id).then((res) => {
         this.branchesList = res
       })
     },
     onClientChange () {
-      if (!this.userId) return
+      if (!this.userId) { return }
       this.item = new User({ id: this.userId })
       this.item.load(this.userId).then(() => {
         this.edit = true
@@ -377,8 +379,8 @@ export default {
     onSave (item) {
       const newItem = item instanceof User ? item : new User(item)
       newItem.save().then(() => {
-          this.fetchData(true)
-          this.edit = false
+        this.fetchData(true)
+        this.edit = false
       })
     }
   }
@@ -601,4 +603,3 @@ $left-panel: 240px;
   }
 }
 </style>
-

@@ -1,7 +1,7 @@
 <template>
   <div class="login-form">
     <Spinner v-if="isLoading" />
-    <VCard v-if="loaded && loggedIn===true">
+    <VCard v-if="loaded && loggedIn === true">
       <VCardTitle primary-title>
         <div>
           <div>
@@ -16,16 +16,16 @@
         </div>
       </VCardTitle>
     </VCard>
-    <div v-if="!isLoading && loaded && loggedIn===false">
+    <div v-if="!isLoading && loaded && loggedIn === false">
       <VForm class="businesscard-form _login" autocomplete="on">
         <VTextField
           v-model="flogin"
           name="username"
           label="Логин"
           type="text"
-          browser-autocomplete="username"
+          autocomplete="username"
           class="businesscard-form__field"
-          :rules="[ rules.required ]"
+          :rules="[rules.required]"
         />
         <VTextField
           id="password"
@@ -33,30 +33,28 @@
           name="password"
           label="Пароль"
           type="password"
-          browser-autocomplete="current-password"
+          autocomplete="current-password"
           class="businesscard-form__field"
-          :rules="[ rules.required ]"
+          :rules="[rules.required]"
         />
         <div>
-          <a
-            class="login-form__restore-link"
-            @click="goRestorePassword"
-          >
+          <a class="login-form__restore-link" @click="goRestorePassword">
             Забыли пароль?
           </a>
         </div>
         <MainButton
           type="button"
-          :class="['button', 'save-info', { button_disabled: !flogin || !fpassword }]"
+          :class="[
+            'button',
+            'save-info',
+            { button_disabled: !flogin || !fpassword }
+          ]"
           @click.native.stop="sendLogin"
         >
           Вход
         </MainButton>
       </VForm>
-      <router-link
-        :to="{ name: 'register'}"
-        class="login-page__no-account"
-      >
+      <router-link :to="{ name: 'register' }" class="login-page__no-account">
         Ещё нет аккаунта? Зарегистрировать
       </router-link>
     </div>
@@ -90,7 +88,7 @@ export default {
     isLoading: false
   }),
   computed: {
-    ...mapGetters({userID: 'user/userID'}),
+    ...mapGetters({ userID: 'user/userID' }),
     loaded () {
       return this.userInfo !== undefined
     }
@@ -109,18 +107,18 @@ export default {
     ...mapActions({
       login: 'user/login',
       logout: 'user/logout',
-      loadMyBusinessList: 'user/loadMyBusinessList',
+      loadMyBusinessList: 'user/loadMyBusinessList'
     }),
     goRestorePassword () {
       this.$router.push({ name: 'restorePassword' })
     },
     loadBusiness () {
-      if (!this.loggedIn) return
+      if (!this.loggedIn) { return }
 
       this.isLoading = true
 
       this.loadMyBusinessList()
-        .then(res => {
+        .then((res) => {
           // todo replace into App.vue
           this.businessCount = res.length
           if (this.userRole === 'manager' || this.userRole === 'admin') {
@@ -163,7 +161,6 @@ export default {
               name: 'businessCard',
               params: { id: company.id }
             })
-            return
           }
         })
         .finally(() => {

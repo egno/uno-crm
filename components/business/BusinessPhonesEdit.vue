@@ -1,14 +1,10 @@
 <template>
   <div>
-    <div
-      v-for="(phone, i) in newPhones"
-      :key="i"
-      class="phone-input"
-    >
+    <div v-for="(phone, i) in newPhones" :key="i" class="phone-input">
       <PhoneEdit
         :phone="phone"
         :removable="i !== 0"
-        :label="i === 0? 'Телефон*' : 'Телефон'"
+        :label="i === 0 ? 'Телефон*' : 'Телефон'"
         @onEdit="onEdit(i, $event)"
         @deletePhone="deletePhone(i)"
       />
@@ -19,10 +15,22 @@
       :disabled="hasEmptyPhone || hasWrongPhone || newPhones.length >= 4"
       @click="newPhones.push('')"
     >
-      <svg width="10" height="10" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path fill-rule="evenodd" clip-rule="evenodd" d="M9 0H7V7H0V9H7V16H9V9H16V7H9V0Z" fill="#8995AF" fill-opacity="1" />
+      <svg
+        width="10"
+        height="10"
+        viewBox="0 0 16 16"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M9 0H7V7H0V9H7V16H9V9H16V7H9V0Z"
+          fill="#8995AF"
+          fill-opacity="1"
+        />
       </svg>
-      <span>Добавить телефон</span>      
+      <span>Добавить телефон</span>
     </button>
   </div>
 </template>
@@ -69,10 +77,10 @@ export default {
       this.$emit('onEdit', this.newPhones)
     },
     deletePhone (index) {
-      this.newPhones.splice(index,1)
+      this.newPhones.splice(index, 1)
       this.$emit('onEdit', this.newPhones)
     },
-    update () { 
+    update () {
       this.newPhones = this.phones
       if (!this.newPhones.length) {
         this.newPhones.push('')
@@ -82,6 +90,5 @@ export default {
 }
 </script>
 <style lang="scss">
-  @import '~/assets/styles/phone-input.scss';
-
+@import '~/assets/styles/phone-input.scss';
 </style>

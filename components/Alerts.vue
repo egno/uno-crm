@@ -1,12 +1,6 @@
 <template>
   <div>
-    <v-snackbar
-      v-if="alert"
-      :value="alert"
-      multi-line
-      bottom
-      right
-    >
+    <v-snackbar v-if="alert" :value="alert" multi-line bottom right>
       {{ alert.message }}
     </v-snackbar>
   </div>

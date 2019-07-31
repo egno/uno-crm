@@ -46,7 +46,7 @@ export default {
     deleteText: {
       type: String,
       default: 'Удалить'
-    },
+    }
   }
 }
 </script>

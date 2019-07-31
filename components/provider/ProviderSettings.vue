@@ -1,24 +1,11 @@
 <template>
-  <v-layout
-    align-left
-    column
-  >
+  <v-layout align-left column>
     <v-flex pb-4>
-      <v-layout
-        row
-        wrap
-        fill-height
-      >
-        <v-flex
-          xs12
-          sm6
-        >
+      <v-layout row wrap fill-height>
+        <v-flex xs12 sm6>
           <SelectedProviderInfoCard :provider="currentProvider" />
         </v-flex>
-        <v-flex
-          xs12
-          sm6
-        >
+        <v-flex xs12 sm6>
           <ProviderParams
             v-show="currentProvider"
             :values="provider"
@@ -29,14 +16,10 @@
       </v-layout>
     </v-flex>
     <v-flex>
-      <ProviderList
-        :providers="providers"
-        @change="setProvider($event)"
-      />
+      <ProviderList :providers="providers" @change="setProvider($event)" />
     </v-flex>
   </v-layout>
 </template>
-
 
 <script>
 import Api from '~/api/backend'
@@ -76,7 +59,7 @@ export default {
     loadProviders () {
       Api()
         .get('sms_providers?order=name')
-        .then(res => {
+        .then((res) => {
           this.providers = res.data
         })
     },

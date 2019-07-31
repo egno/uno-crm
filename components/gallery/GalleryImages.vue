@@ -6,7 +6,7 @@
       @onFilesUpload="$emit('filesUploaded', $event)"
     />
     <image-card
-      v-for="(image,index) in images"
+      v-for="(image, index) in images"
       :key="image.id"
       :src="imagePath(image.id)"
       :title="image.service"
@@ -31,14 +31,14 @@ export default {
     editMode: { type: Boolean, default: false }
   },
   computed: {
-    ...mapGetters({ businessId: 'business/businessId'}),
+    ...mapGetters({ businessId: 'business/businessId' })
   },
   methods: {
     imagePath (imageId) {
       return imagePath(imageId, this.businessId)
     },
     deleteImage (image) {
-      if (!(image && image.id)) return
+      if (!(image && image.id)) { return }
       this.$emit('deleteImage', image.id)
     },
     fullName (emp) {
@@ -48,34 +48,33 @@ export default {
       this.$emit('showSlider', {
         selected: index
       })
-    },
+    }
   }
 }
 </script>
 
-
 <style lang="scss" scoped>
-  @import '~/assets/styles/common.scss';
+@import '~/assets/styles/common.scss';
 
-  .add-photo {
-    background: url('~assets/images/svg/plus.svg') no-repeat center ;
-    border: 1px solid rgba(137, 149, 175, 0.2);
+.add-photo {
+  background: url('~assets/images/svg/plus.svg') no-repeat center;
+  border: 1px solid rgba(137, 149, 175, 0.2);
 
-    &__button {
-      display: flex;
-      height: 100%;
-      justify-content: stretch;
-    }
+  &__button {
+    display: flex;
+    height: 100%;
+    justify-content: stretch;
   }
+}
 
-  .image-card {
-    width: 130px;
-    height: 130px;
-    margin: 0 20px 20px 0;
-    @media only screen and (min-width : $desktop) {
-      width: 150px;
-      height: 150px;
-      margin: 0 12px 18px 0;
-    }
+.image-card {
+  width: 130px;
+  height: 130px;
+  margin: 0 20px 20px 0;
+  @media only screen and (min-width: $desktop) {
+    width: 150px;
+    height: 150px;
+    margin: 0 12px 18px 0;
   }
+}
 </style>

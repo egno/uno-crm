@@ -70,17 +70,16 @@ export default {
       paymentPagination: { rowsPerPage: 10 },
       paymentTotalItems: 0,
       statuses: {
-          'success': 'Платёж проведён'
+        success: 'Платёж проведён'
       }
     }
   },
   computed: {
     page () {
-        return this.paymentPagination.page || 1
+      return this.paymentPagination.page || 1
     },
     paymentPages () {
-      if (!this.paymentPagination.rowsPerPage || !this.paymentTotalItems)
-        return 0
+      if (!this.paymentPagination.rowsPerPage || !this.paymentTotalItems) { return 0 }
 
       return Math.ceil(
         this.paymentTotalItems / this.paymentPagination.rowsPerPage
@@ -97,33 +96,38 @@ export default {
     })
   },
   methods: {
-        displayRESTDate (ts) {
-          return displayRESTDate(ts)
-      },
-      displayRESTTime (ts) {
-          return displayRESTTime(ts)
-      },    
-      getData () {
-       this.paymentItems=[]
+    displayRESTDate (ts) {
+      return displayRESTDate(ts)
+    },
+    displayRESTTime (ts) {
+      return displayRESTTime(ts)
+    },
+    getData () {
+      this.paymentItems = []
       if (!this.businessId) {
         return
       }
-      BillingApi().get(`business_payments/${this.businessId}?order=ts.desc&limit=${this.paymentPagination.rowsPerPage}&offset=${(this.page - 1) * this.paymentPagination.rowsPerPage}`).then(res => {
+      BillingApi()
+        .get(
+          `business_payments/${this.businessId}?order=ts.desc&limit=${
+            this.paymentPagination.rowsPerPage
+          }&offset=${(this.page - 1) * this.paymentPagination.rowsPerPage}`
+        )
+        .then((res) => {
           if (res && res.data) {
-              this.paymentItems = res.data
-              if (res.headers && res.headers['content-range']) {
-                const r = res.headers['content-range'].match(/^\d*-\d*\/(\d*)$/)
-                if (r) {
+            this.paymentItems = res.data
+            if (res.headers && res.headers['content-range']) {
+              const r = res.headers['content-range'].match(/^\d*-\d*\/(\d*)$/)
+              if (r) {
                 this.paymentTotalItems = +r[1]
-                }
+              }
             }
           }
-      })
+        })
     },
     statusText (status) {
-        return this.statuses[status] || status
+      return this.statuses[status] || status
     }
   }
 }
 </script>
-

@@ -1,4 +1,5 @@
 <template>
+  <div />
   <!--<gallery-layout>
     <template slot="breadcrumbs">
       <v-breadcrumbs :items="breadcrumbs" divider=" " />
@@ -41,14 +42,14 @@
 </template>
 
 <script>
-  import { mapGetters, mapActions } from 'vuex'
-  import Gallery from '~/components/gallery/gallery'
-  import AddCover from '~/components/gallery/AddCover.vue'
-  import { makeAlert } from '~/api/utils'
-  import Api from '~/api/backend'
+/* import { mapGetters, mapActions } from 'vuex'
+import Gallery from '~/components/gallery/gallery'
+import AddCover from '~/components/gallery/AddCover.vue'
+import { makeAlert } from '~/api/utils'
+import Api from '~/api/backend' */
 
-  export default {
-    /*components: { AddCover },
+export default {
+  /* components: { AddCover },
     mixins: [ Gallery ],
     data () {
       return {
@@ -134,12 +135,12 @@
             this.alert(makeAlert(err))
           })
       }
-    }*/
-  }
+    } */
+}
 </script>
 
 <style lang="scss">
-  .card-wrapper {
-    margin: 0 24px 42px 0;
-  }
+.card-wrapper {
+  margin: 0 24px 42px 0;
+}
 </style>

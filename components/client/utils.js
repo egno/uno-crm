@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 function newClientName () {
   return { forename: undefined, surname: undefined }
 }
@@ -38,7 +39,7 @@ export function clientToAPI (client) {
 }
 
 export function clientFromAPI (data) {
-  let o = clientPrefill(data.j)
+  const o = clientPrefill(data.j)
   return {
     id: data.id,
     business_id: data.business_id,

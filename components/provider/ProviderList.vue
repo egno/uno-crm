@@ -1,9 +1,5 @@
 <template>
-  <v-card
-    flat
-    color="grey lighten-3"
-    class="card-rounded"
-  >
+  <v-card flat color="grey lighten-3" class="card-rounded">
     <v-card-text>
       <v-switch
         v-model="showProviders"
@@ -17,16 +13,8 @@
     <template v-if="showProviders">
       <v-divider class="card-divider" />
       <v-card-text>
-        <v-layout
-          row
-          wrap
-          fill-height
-        >
-          <v-flex
-            v-for="provider in providers"
-            :key="provider.name"
-            pa-2
-          >
+        <v-layout row wrap fill-height>
+          <v-flex v-for="provider in providers" :key="provider.name" pa-2>
             <ProviderCard
               :provider="provider"
               @click="$emit('change', provider)"
@@ -67,4 +55,3 @@ export default {
   border-color: rgba(255, 255, 255, 1);
 }
 </style>
-

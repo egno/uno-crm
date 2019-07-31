@@ -1,13 +1,24 @@
 <template>
   <div
-    :class="['service-card', { '_not-hoverable': !hoverable, '_responsive': responsive, '_selected': isSelected }]"
+    :class="[
+      'service-card',
+      {
+        '_not-hoverable': !hoverable,
+        _responsive: responsive,
+        _selected: isSelected
+      }
+    ]"
     :style="{ 'background-image': `url(${imagePath}service_group/${image}` }"
     @click="$emit('click')"
   >
     <div class="service-card__top">
       <div class="service-card__left">
         <h2 class="service-card__title">
-          {{ service.name.length > 70? service.name.substring(0, 70) + '...' : service.name }}
+          {{
+            service.name.length > 70
+              ? service.name.substring(0, 70) + '...'
+              : service.name
+          }}
         </h2>
         <div v-if="service.j.duration" class="service-card__subtitle _duration">
           {{ service.j.duration }} мин.
@@ -56,12 +67,12 @@ export default {
     },
     isSelected: { type: Boolean, default: false },
     hoverable: { type: Boolean, default: true },
-    responsive: { type: Boolean, default: false },
+    responsive: { type: Boolean, default: false }
   },
   computed: {
-    ...mapGetters({serviceGroups: 'service/serviceGroups'}),
+    ...mapGetters({ serviceGroups: 'service/serviceGroups' }),
     imagePath () {
-      return  process.env.VUE_APP_IMAGES || '/images/'
+      return process.env.VUE_APP_IMAGES || '/images/'
     },
     image () {
       const group = this.serviceGroups.find(
@@ -98,7 +109,7 @@ export default {
   background-position: right top;
   background-repeat: no-repeat;
   background-color: #fff;
-  @media only screen and (min-width : 1360px) {
+  @media only screen and (min-width: 1360px) {
     padding-left: 24px;
   }
   &:hover {
@@ -195,7 +206,8 @@ export default {
 
     .service-card__selection {
       display: block;
-      background: url('~assets/images/svg/selection.svg') center no-repeat #5699ff;
+      background: url('~assets/images/svg/selection.svg') center no-repeat
+        #5699ff;
     }
   }
 }

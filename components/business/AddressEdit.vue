@@ -7,10 +7,7 @@
         :prepend-icon="prependIcon"
       />
     </v-flex>
-    <v-flex
-      v-if="address"
-      width="20em"
-    >
+    <v-flex v-if="address" width="20em">
       <AddressMap :address="address" />
     </v-flex>
   </v-layout>

@@ -5,10 +5,7 @@
         Адрес
       </span>
       &nbsp;
-      <AddressLink
-        v-if="address.point"
-        :address="addressName"
-      />
+      <AddressLink v-if="address.point" :address="addressName" />
       <span v-else>
         {{ addressName }}
       </span>

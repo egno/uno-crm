@@ -2,10 +2,7 @@
   <v-card width="30em">
     <v-card-title>
       <v-layout column>
-        <v-flex
-          class="caption font-weight-medium grey--text"
-          pa-0
-        >
+        <v-flex class="caption font-weight-medium grey--text" pa-0>
           {{ subtitle }}
         </v-flex>
         <v-flex pa-0>

@@ -3,7 +3,7 @@ import { uuidv4 } from '~/components/utils'
 
 export default () => {
   const requestId = uuidv4()
-  let options = {
+  const options = {
     baseURL: process.env.VUE_APP_API,
     withCredentials: false,
     headers: {

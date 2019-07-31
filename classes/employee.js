@@ -1,8 +1,15 @@
 import ApiObject from '~/classes/api_object'
 import Api from '~/api/backend'
-import store from '~/store'
 import { makeAlert, responseGetId } from '~/api/utils'
 import { imagePath } from '~/components/gallery/utils'
+
+let store
+
+if (process.browser) {
+  window.onNuxtReady(({ $store }) => {
+    store = $store
+  })
+}
 /* import DaySchedule from '~/classes/day_schedule'
 
 class ScheduleTemplate extends ApiObject {
@@ -72,7 +79,7 @@ class ScheduleTemplate extends ApiObject {
       }
     ]
   }
-}*/
+} */
 
 // class Service extends ApiObject {
 //   set jsonObject (newVal) {
@@ -238,13 +245,13 @@ class Employee extends ApiObject {
   // API methods
 
   load (id) {
-    if (!id || id === 'new') return Promise.resolve()
+    if (!id || id === 'new') { return Promise.resolve() }
     return Api()
       .get(`employee?id=eq.${id}`)
       .then(res => res.data[0])
-      .then(res => {
+      .then((res) => {
         this.jsonObject = res
-        store.dispatch('setEmployeeItem', res)
+        store.dispatch('employee/setEmployeeItem', res)
       })
   }
 
@@ -254,7 +261,7 @@ class Employee extends ApiObject {
       return Api()
         .post(`employee?`, this.jsonObject)
         .then(res => responseGetId(res))
-        .catch(err => {
+        .catch((err) => {
           store.dispatch('alerts/alert', makeAlert(err))
         })
     } else {
@@ -263,7 +270,7 @@ class Employee extends ApiObject {
         .then(() => {
           store.dispatch('setEmployeeItem', this.jsonObject)
         })
-        .catch(err => {
+        .catch((err) => {
           store.dispatch('alerts/alert', makeAlert(err))
         })
     }

@@ -55,7 +55,6 @@ export default {
   },
   mounted () {
     this.data = this.manager
-  },
-
+  }
 }
 </script>

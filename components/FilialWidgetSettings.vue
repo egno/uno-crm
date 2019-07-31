@@ -1,9 +1,5 @@
 <template>
-  <v-card
-    flat
-    color="grey lighten-3"
-    class="card-rounded"
-  >
+  <v-card flat color="grey lighten-3" class="card-rounded">
     <v-card-text>
       <v-switch
         v-model="showDetails"
@@ -17,24 +13,32 @@
     <template v-if="showDetails">
       <v-divider class="card-divider" />
       <v-card-text>
-        <v-layout
-          row
-          wrap
-        >
-          <v-flex
-            pa-2
-          >
+        <v-layout row wrap>
+          <v-flex pa-2>
             <v-layout column>
               <v-flex v-for="filial in filials" :key="filial.id" py-3>
-                <v-layout row wrap align-start fill-height justify-space-between>
+                <v-layout
+                  row
+                  wrap
+                  align-start
+                  fill-height
+                  justify-space-between
+                >
                   <v-flex xs12 md4>
-                    {{ (filial.j && filial.j.name ) || `<${filial.id}>` }}
+                    {{ (filial.j && filial.j.name) || `<${filial.id}>` }}
                   </v-flex>
                   <v-flex xs12 md5>
                     {{ filial.j && filial.j.address && filial.j.address.name }}
                   </v-flex>
                   <v-flex xs12 md3>
-                    <v-btn small ripple round color="primary" outline @click="copyLink(filial.id)">
+                    <v-btn
+                      small
+                      ripple
+                      round
+                      color="primary"
+                      outline
+                      @click="copyLink(filial.id)"
+                    >
                       Скопировать
                     </v-btn>
                   </v-flex>
@@ -51,7 +55,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import Api from '~/api/backend'
-import {widgetHost} from '~/components/utils'
+import { widgetHost } from '~/components/utils'
 
 export default {
   props: {
@@ -60,11 +64,11 @@ export default {
   data () {
     return {
       showDetails: false,
-      filials:[]
+      filials: []
     }
   },
   computed: {
-    ...mapGetters({ businessId: 'business/businessId'})
+    ...mapGetters({ businessId: 'business/businessId' })
   },
   watch: {
     businessId: 'load'
@@ -74,21 +78,22 @@ export default {
   },
   methods: {
     load () {
-      if (!this.businessId) return
-      Api().get(`business?parent=eq.${this.businessId}&order=id&limit=10`)
-      .then(res => {
-        this.filials = res.data
-      })
+      if (!this.businessId) { return }
+      Api()
+        .get(`business?parent=eq.${this.businessId}&order=id&limit=10`)
+        .then((res) => {
+          this.filials = res.data
+        })
     },
     link (id) {
       return `${widgetHost()}?b=${id}`
     },
     copyLink (id) {
       const el = document.createElement('textarea')
-        el.value = this.link(id)
-        document.body.appendChild(el)
-        el.select()
-        document.execCommand('copy')
+      el.value = this.link(id)
+      document.body.appendChild(el)
+      el.select()
+      document.execCommand('copy')
       document.body.removeChild(el)
     }
   }
@@ -129,4 +134,3 @@ export default {
   margin-right: 0.5em;
 }
 </style>
-

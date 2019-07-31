@@ -1,8 +1,5 @@
 <template>
-  <VLayout
-    column
-    class="calendar-wrapper"
-  >
+  <VLayout column class="calendar-wrapper">
     <VFlex
       v-if="showHeader"
       class="month-header"
@@ -11,12 +8,7 @@
       @mouseenter="tooltip = true"
       @mouseleave="tooltip = false"
     >
-      <VLayout
-        align-center
-        justify-space-between
-        row
-        class="cal-month"
-      >
+      <VLayout align-center justify-space-between row class="cal-month">
         <div class="cal-head display-3">
           {{ dateMonthHeader }}
         </div>
@@ -25,7 +17,7 @@
           <v-btn
             class="cal-next-prev"
             depressed
-            flat
+            text
             small
             color="#ffffff"
             @click.stop="addMonth(-1)"
@@ -36,7 +28,7 @@
             class="cal-next-prev"
             color="#ffffff"
             depressed
-            flat
+            text
             small
             @click.stop="addMonth(1)"
           >
@@ -57,18 +49,14 @@
     <VFlex v-if="calendarMonth">
       <VContainer class="calendar-container" :class="{ _expanded: expanded }">
         <VLayout
-          v-show="period==='month'"
+          v-show="period === 'month'"
           align-space-between
           justify-center
           fill-height
           column
         >
           <VFlex>
-            <VLayout
-              justify-center
-              row
-              class="week-wrapper dow"
-            >
+            <VLayout justify-center row class="week-wrapper dow">
               <VFlex
                 v-for="(d, i) in dow"
                 :key="i"
@@ -77,36 +65,21 @@
                 row
                 class="text-xs-center"
               >
-                <span
-                  class="dow"
-                  :class="{ weekend: i > 4 }"
-                >
+                <span class="dow" :class="{ weekend: i > 4 }">
                   {{ d }}
                 </span>
               </VFlex>
             </VLayout>
           </VFlex>
-          <VFlex
-            v-for="(week,i) in calendarMonth"
-            :key="i"
-          >
-            <VLayout
-              justify-center
-              row
-              class="week-wrapper"
-            >
-              <VFlex
-                v-for="(day, di) in week"
-                :key="di"
-                xs2
-                justify-center
-              >
+          <VFlex v-for="(week, i) in calendarMonth" :key="i">
+            <VLayout justify-center row class="week-wrapper">
+              <VFlex v-for="(day, di) in week" :key="di" xs2 justify-center>
                 <CalendarDayBtn
                   v-if="kind === 'mini'"
                   :counter="getBusinessDayVisits(day.dateKey)"
                   :day="day"
                   :holiday="isFilialHoliday(day.dateKey)"
-                  :weekend="(di > 4)"
+                  :weekend="di > 4"
                   @onClickDate="goDate($event)"
                 />
                 <CalendarDayCard
@@ -125,18 +98,18 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
 import CalendarDayBtn from '~/components/calendar/CalendarDayBtn.vue'
 import CalendarDayCard from '~/components/calendar/CalendarDayCard.vue'
 import { visitInit } from '~/components/calendar/utils'
-import { mapActions, mapGetters } from 'vuex'
 import calendarMixin from '~/mixins/calendar'
 
 export default {
   components: {
     CalendarDayBtn,
-    CalendarDayCard, 
+    CalendarDayCard
   },
-  mixins: [ calendarMixin ],
+  mixins: [calendarMixin],
   props: {
     employee: {
       type: Array,
@@ -169,7 +142,7 @@ export default {
     }),
     currentEmployee () {
       return this.employee[0] || this.businessId
-    },
+    }
   },
   watch: {
     workDate: 'fetchData',
@@ -189,8 +162,7 @@ export default {
       return cnt
     },
     isFilialHoliday (dt) {
-      if (!(this.calendar && this.calendar.filter(d => d.dt === dt).length))
-        return
+      if (!(this.calendar && this.calendar.filter(d => d.dt === dt).length)) { return }
       return this.calendar.filter(d => d.dt === dt)[0].j.holiday
     },
     onCloseEdit () {
@@ -208,7 +180,7 @@ export default {
   }
 }
 </script>
-<style lang="scss" >
+<style lang="scss">
 .dow {
   font-family: Lato;
   font-style: normal;
@@ -229,7 +201,8 @@ export default {
   display: flex;
   align-items: center;
   padding: 0 37px 0 39px;
-  background: url('~assets/images/svg/calendar.svg') 199px center no-repeat, linear-gradient(270deg, #c9a15d -9.86%, #ba9462 103.49%);
+  background: url('~assets/images/svg/calendar.svg') 199px center no-repeat,
+    linear-gradient(270deg, #c9a15d -9.86%, #ba9462 103.49%);
   height: 40px;
   cursor: pointer;
 
@@ -277,7 +250,7 @@ export default {
   height: 16px;
   border-radius: 50%;
   &:hover {
-    background-color: rgba(255,255,255,0.3);
+    background-color: rgba(255, 255, 255, 0.3);
   }
   i {
     font-size: 16px;

@@ -1,26 +1,16 @@
 <template>
   <VCard flat>
     <VCardTitle>Учетная запись</VCardTitle>
-    <VLayout
-      align-center
-      justify-center
-      row
-      fill-height
-    >
+    <VLayout align-center justify-center row fill-height>
       <VFlex align-self-center>
-        <VBtn
-          fab
-          left
-          large
-          @click="avatarEdit = !avatarEdit"
-        >
+        <v-btn fab left large @click="avatarEdit = !avatarEdit">
           <Avatar
             v-if="email"
             size="4em"
             :name="data.data.name || data.data.email"
             :src="avatar"
           />
-        </VBtn>
+        </v-btn>
       </VFlex>
       <VFlex>
         <VLayout column>
@@ -30,7 +20,7 @@
               label="E-mail"
               prepend-icon="email"
               type="text"
-              browser-autocomplete="username"
+              autocomplete="username"
             />
           </VFlex>
         </VLayout>
@@ -43,26 +33,23 @@
 
     <VCardActions>
       <VSpacer />
-      <VBtn
-        color="primary"
-        @click="sendData"
-      >
+      <v-btn color="primary" @click="sendData">
         Сохранить
-      </VBtn>
+      </v-btn>
     </VCardActions>
   </VCard>
 </template>
 
 <script>
+import axios from 'axios'
 import Avatar from '~/components/avatar/Avatar.vue'
 import VueAvatarEditor from '~/components/avatar/VueAvatarEditor.vue'
 import Api from '~/api/backend'
-import axios from 'axios'
 
 export default {
   components: {
-    VueAvatarEditor: VueAvatarEditor,
-    Avatar: Avatar
+    VueAvatarEditor,
+    Avatar
   },
   data () {
     return {
@@ -90,22 +77,22 @@ export default {
         .get(`business?id=eq.${this.id}`)
         .then(res => res.data)
         .then(res => res[0])
-        .then(res => {
+        .then((res) => {
           this.data = res
         })
     },
     saveImage (img) {
       this.avatarEdit = false
-      var blobBin = atob(img.toDataURL().split(',')[1])
-      var array = []
-      for (var i = 0; i < blobBin.length; i++) {
+      const blobBin = atob(img.toDataURL().split(',')[1])
+      const array = []
+      for (let i = 0; i < blobBin.length; i++) {
         array.push(blobBin.charCodeAt(i))
       }
-      var file = new Blob([new Uint8Array(array)], { type: 'image/png' })
-      let formData = new FormData()
-      let newFileName = `${this.uuidv4()}.png`
+      const file = new Blob([new Uint8Array(array)], { type: 'image/png' })
+      const formData = new FormData()
+      const newFileName = `${this.uuidv4()}.png`
       formData.append('file', file, newFileName)
-      let vm = this
+      const vm = this
       axios
         .post(process.env.VUE_APP_UPLOAD, formData, {
           headers: {
@@ -122,15 +109,15 @@ export default {
         })
     },
     sendData () {
-      //this.saveImage();
+      // this.saveImage();
       Api().patch(`business?id=eq.${this.id}`, this.data)
     },
     uuidv4 () {
       return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (
         c
       ) {
-        var r = (Math.random() * 16) | 0,
-          v = c == 'x' ? r : (r & 0x3) | 0x8
+        const r = (Math.random() * 16) | 0
+        const v = c == 'x' ? r : (r & 0x3) | 0x8
         return v.toString(16)
       })
     }

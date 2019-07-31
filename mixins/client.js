@@ -6,10 +6,10 @@ export default {
   data () {
     return {
       clientDisplay (c) {
-        return `${ c.j.name.fullname }${ c.j.phone? c.j.phone : c.j.phones[0] }`
+        return `${c.j.name.fullname}${c.j.phone ? c.j.phone : c.j.phones[0]}`
       },
       nameInput: '',
-      suggestedClients: [],
+      suggestedClients: []
     }
   },
   created () {
@@ -18,9 +18,13 @@ export default {
   methods: {
     getClientsByName (companyId, val) {
       Api()
-        .get(`client?company_id=eq.${companyId}&j->name->>fullname=ilike.*${val}*`)
+        .get(
+          `client?company_id=eq.${companyId}&j->name->>fullname=ilike.*${val}*`
+        )
         .then(({ data }) => {
-          this.suggestedClients = data.filter(c => c.business_id !== this.filial)
+          this.suggestedClients = data.filter(
+            c => c.business_id !== this.filial
+          )
         })
     },
     onInputName (companyId, val) {
@@ -31,7 +35,7 @@ export default {
 
       const match = val.match(/[а-яА-ЯёЁ ]+/g)
 
-      val = match? match[0] : ''
+      val = match ? match[0] : ''
       this.$refs.clientFullName.lazySearch = val
       if (!val || val.length < 3) {
         this.suggestedClients = []
@@ -39,6 +43,6 @@ export default {
       }
       this.debouncedGetClients(companyId, val)
       return val
-    },
+    }
   }
 }

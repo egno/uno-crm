@@ -3,7 +3,7 @@ import Visit from '~/classes/visit'
 // Safari fix
 export function dateFromISO (s) {
   const a = s.split(/[^0-9]/)
-  let d = new Date (a[0],a[1]-1,a[2],a[3],a[4],a[5] )
+  const d = new Date(a[0], a[1] - 1, a[2], a[3], a[4], a[5])
   return d
 }
 
@@ -32,12 +32,12 @@ export function fixLocalTimeZone (date, tz) {
 }
 
 export function getISOTimeZoneOffset (s) {
-  let t = s.slice(-6)
+  const t = s.slice(-6)
   return +(t.slice(0, 1) + '1') * (+t.slice(1, 3) * 60 + +t.slice(-2))
 }
 
 export function getISODate (s) {
-  let t = s.slice(-6)
+  const t = s.slice(-6)
   return +(t.slice(0, 1) + '1') * (+t.slice(1, 3) * 60 + +t.slice(-2))
 }
 
@@ -47,8 +47,8 @@ export function valueDate (value) {
 
 // converts Date instance to yyyy-mm-dd String
 export function formatDate (date) {
-  if (!date) return
-  let d = date
+  if (!date) { return }
+  const d = date
   return [
     d.getFullYear(),
     ('0' + (d.getMonth() + 1)).slice(-2),
@@ -58,8 +58,8 @@ export function formatDate (date) {
 
 // converts Date instance to dd.mm.yyyy String
 function displayDate (date) {
-  if (!date) return
-  let d = date
+  if (!date) { return }
+  const d = date
   return [
     ('0' + d.getDate()).slice(-2),
     ('0' + (d.getMonth() + 1)).slice(-2),
@@ -68,8 +68,8 @@ function displayDate (date) {
 }
 
 export function formatTime (date) {
-  if (!date) return
-  let d = date
+  if (!date) { return }
+  const d = date
 
   return [
     ('0' + d.getHours()).slice(-2),
@@ -101,13 +101,17 @@ export function getRESTTime (s) {
 }
 
 export function displayRESTDate (s) {
-  if (!s) {return}
+  if (!s) {
+    return
+  }
   const d = dateFromISO(s)
   return displayDate(d)
 }
 
 export function displayRESTTime (s) {
-  if (!s) {return}
+  if (!s) {
+    return
+  }
   const d = dateFromISO(s)
   return formatTime(d)
 }
@@ -142,7 +146,7 @@ export function getWeeks (year, month) {
   }
 
   // define day states
-  days.forEach(day => {
+  days.forEach((day) => {
     day.today = areSameDates(day.date, today)
     day.display = day.date.getDate()
     day.dateKey = formatDate(day.date)
@@ -184,7 +188,7 @@ export function visitStatus (status, time) {
 
 // converts yyyy-mm-dd String to Date instance
 export function hyphensStringToDate (str) {
-  if (!str) return
+  if (!str) { return }
 
   const arr = str.split('-')
   const year = arr[0]
@@ -202,10 +206,10 @@ export function hyphensStringToDate (str) {
   } Object
 */
 export function hyphenStrToDay (str) {
-  if (!str) return
+  if (!str) { return }
 
   const today = new Date()
-  let day = {
+  const day = {
     date: hyphensStringToDate(str)
   }
 
@@ -235,6 +239,5 @@ export function ceilMinutes (date, interval = 15) {
   const oldMin = date.getMinutes()
   const integerPart = Math.floor(oldMin / interval)
 
-  return newDate.setHours(date.getHours(), integerPart * interval + interval, 0)  
+  return newDate.setHours(date.getHours(), integerPart * interval + interval, 0)
 }
-

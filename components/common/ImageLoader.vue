@@ -1,9 +1,6 @@
 <template>
   <div>
-    <form
-      enctype="multipart/form-data"
-      novalidate
-    >
+    <form enctype="multipart/form-data" novalidate>
       <input
         type="file"
         :multiple="multiple"
@@ -11,7 +8,10 @@
         :disabled="!!status"
         accept="image/*"
         class="input-file"
-        @change="filesChange($event.target.name, $event.target.files); fileCount = $event.target.files.length"
+        @change="
+          filesChange($event.target.name, $event.target.files)
+          fileCount = $event.target.files.length
+        "
       >
       <p v-if="placeText && !hasSlot && !status">
         {{ placeText }}
@@ -33,7 +33,7 @@ export default {
     placeText: { type: String, default: 'Перетащите файлы сюда' },
     src: { type: String, default: undefined },
     placeHolder: { type: String, default: undefined },
-    hasSlot:  { type: Boolean, default: false },
+    hasSlot: { type: Boolean, default: false }
   },
   data () {
     return {
@@ -43,14 +43,14 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({businessId: 'business/businessId'})
+    ...mapGetters({ businessId: 'business/businessId' })
   },
   methods: {
     filesChange (fieldName, fileList) {
       const formData = new FormData()
-      let fileNames = []
-      if (!fileList.length) return
-      Array.from(Array(fileList.length).keys()).map(x => {
+      const fileNames = []
+      if (!fileList.length) { return }
+      Array.from(Array(fileList.length).keys()).map((x) => {
         const newFile = { file: fileList[x].name, path: uuidv4() }
         fileNames.push(newFile)
         formData.append(fieldName, fileList[x], newFile.path)
@@ -59,8 +59,8 @@ export default {
     },
     saveImage (formData, fileNames) {
       this.status = 'process'
-      let vm = this
-      if (!this.businessId) return
+      const vm = this
+      if (!this.businessId) { return }
       axios
         .post(process.env.VUE_APP_UPLOAD, formData, {
           headers: {
@@ -68,7 +68,7 @@ export default {
             businessid: this.businessId
           }
         })
-        .then(res => {
+        .then((res) => {
           if (res.status === 200) {
             this.$emit('onFilesUpload', { formData, fileNames })
           }
@@ -86,21 +86,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  form {
-    position: relative;
-    width: 100%;
-    height: 100%;
+form {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+input[type='file'] {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  &:hover {
+    cursor: pointer;
   }
-  input[type="file"] {
-    position: absolute;
-    left: 0;
-    top: 0;
-    display: block;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    &:hover {
-      cursor: pointer;
-    }
-  }
+}
 </style>

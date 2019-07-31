@@ -29,7 +29,7 @@
               Адрес
             </div>
             <div class="infocard__field-value">
-              {{ address.name }}{{ office? ', оф. ' + office : '' }}
+              {{ address.name }}{{ office ? ', оф. ' + office : '' }}
             </div>
           </div>
 
@@ -57,21 +57,26 @@
             <div v-if="businessInfo.j.links.vk" class="soc__value _vk">
               {{ businessInfo.j.links.vk }}
             </div>
-            <div v-if="businessInfo.j.links.others && businessInfo.j.links.others.length">
+            <div
+              v-if="
+                businessInfo.j.links.others &&
+                  businessInfo.j.links.others.length
+              "
+            >
               <div
                 v-for="(site, ind) in businessInfo.j.links.others"
                 :key="ind"
               >
-                <div
-                  v-if="site.uri"
-                  class="soc__value"
-                >
+                <div v-if="site.uri" class="soc__value">
                   {{ site.uri }}
                 </div>
               </div>
             </div>
           </div>
-          <div v-if="businessInfo.j && businessInfo.j.description" class="top-bordered">
+          <div
+            v-if="businessInfo.j && businessInfo.j.description"
+            class="top-bordered"
+          >
             <div class="infocard__field-title">
               Описание
             </div>
@@ -104,7 +109,7 @@ export default {
       default () {
         return {}
       }
-    },
+    }
   },
   data () {
     return {
@@ -152,13 +157,12 @@ export default {
     },
     INN () {
       return this.businessInfo && this.businessInfo.j && this.businessInfo.j.inn
-    },
+    }
   },
-  methods: {
-  }
+  methods: {}
 }
 </script>
 
 <style lang="scss">
-  @import '~/assets/styles/infocard.scss';
+@import '~/assets/styles/infocard.scss';
 </style>

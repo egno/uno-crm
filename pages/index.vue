@@ -1,678 +1,637 @@
 <template>
-  <VApp app>
-    <top-bar />
-    <Navigation v-if="isMenuVisible" @onAction="onAction" />
-    <VContent app>
-      <RouterView />
-    </VContent>
-    <Alerts />
-    <UserProfileModal :show="profileDrawer" />
-  </VApp>
+  <Layout>
+    <section class="main-page__first">
+      <div class="main-page__first-top">
+        <div class="content">
+          <div class="text-wrapper">
+            <h2 class="main-page__subheading">
+              Оптимизируйте процессы – <br>
+              и занимайтесь любимым делом
+            </h2>
+            <h1 class="main-page__heading">
+              НОВАЯ СИСТЕМА УЧЕТА ДЛЯ&nbsp;ИНДУСТРИИ КРАСОТЫ
+            </h1>
+            <router-link
+              :to="{ name: 'register' }"
+              class="main-page__register-link"
+            >
+              ПОЛЬЗУЙТЕСЬ БЕСПЛАТНО
+            </router-link>
+            <a v-smooth-scroll href="/#product" class="main-page__scroll">
+              <span>УЗНАЙТЕ БОЛЬШЕ</span>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="main-page__first-bottom">
+        <div class="content">
+          <div class="text-wrapper">
+            <Socials />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="fits" class="fits">
+      <div class="content">
+        <div class="target-audience">
+          <h2 class="main-page__heading">
+            КОМУ ПОДОЙДЕТ <br>
+            СИСТЕМА UNO.CRM?
+          </h2>
+          <ul class="target-audience__list">
+            <li class="target-audience__item beauty">
+              <div>САЛОНЫ КРАСОТЫ</div>
+            </li>
+            <li class="target-audience__item spa _one-line">
+              <div>SPA-ЦЕНТРЫ</div>
+            </li>
+            <li class="target-audience__item cosmetic">
+              <div>КЛИНИКИ КОСМЕТОЛОГИИ</div>
+            </li>
+            <li class="target-audience__item hairdressers _one-line">
+              <div>ПАРИКМАХЕРСКИЕ</div>
+            </li>
+            <li class="target-audience__item barbershop _one-line">
+              <div>БАРБЕРШОПЫ</div>
+            </li>
+            <li class="target-audience__item massage">
+              <div>КАБИНЕТЫ МАССАЖА</div>
+            </li>
+            <li class="target-audience__item tattoo _one-line">
+              <div>ТАТУ-САЛОНЫ</div>
+            </li>
+            <li class="target-audience__item lash">
+              <div>LASH- И BROW-КАБИНЕТЫ</div>
+            </li>
+            <li class="target-audience__item manicure">
+              <div>МАНИКЮРНЫЕ САЛОНЫ</div>
+            </li>
+            <li class="target-audience__item epilation">
+              <div>КАБИНЕТЫ ЭПИЛЯЦИИ</div>
+            </li>
+            <li class="target-audience__item individual">
+              <div>ЧАСТНЫЕ МАСТЕРА</div>
+            </li>
+            <li class="target-audience__item solarium">
+              <div>СТУДИИ ЗАГАРА</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="product" class="pricing type-1">
+      <div class="content">
+        <div class="text-wrapper layer-1">
+          <div class="main-page__heading">
+            ПОЛЬЗУЙТЕСЬ<br>БЕСПЛАТНО!
+          </div>
+          <div class="subheader">
+            Мы любим своих клиентов.<br>
+            Никакого навязанного сервиса.
+          </div>
+          <div class="text">
+            Пройдите простую регистрацию и&nbsp;получите возможности развития
+            и&nbsp;оптимизации ваших бизнес-процессов.<br>
+            <ul>
+              <li>Управляйте сотрудниками онлайн</li>
+              <li>Ведите запись в&nbsp;онлайн-журнале</li>
+              <li>Уведомляйте клиентов о&nbsp;новой записи</li>
+              <li>Храните историю записей клиентов</li>
+              <li>Контролируйте рабочие процессы из&nbsp;любой точки мира</li>
+            </ul>
+            <div class="desktop">
+              Все это и другие полезные инструменты уже ждут вас в&nbsp;базовой
+              версии UNO.CRM. А если вам не хватит стандартного функционала,
+              просто добавьте действительно нужные вам платные модули
+              и&nbsp;не&nbsp;платите за&nbsp;подписки и&nbsp;каждого мастера
+              отдельно.
+            </div>
+          </div>
+          <router-link :to="{ name: 'register' }" class="inner-link layer-1">
+            ПОЛУЧИТЕ ДОСТУП УЖЕ СЕЙЧАС
+          </router-link>
+        </div>
+      </div>
+    </section>
+
+    <section class="integration-time type-2">
+      <div class="content">
+        <div class="text-wrapper layer-1">
+          <div class="main-page__heading">
+            ВНЕДРЕНИЕ<br>ВСЕГО ЗА 2 ЧАСА
+          </div>
+          <div class="subheader">
+            Экономия времени и&nbsp;сил.
+          </div>
+          <p class="text">
+            Мы создали систему максимально простой и&nbsp;удобной, чтобы ваши
+            сотрудники смогли легко освоить ее, даже если до этого они никогда
+            не&nbsp;работали в&nbsp;CRM.
+            <br><br>
+            А если вам понадобится помощь, просто напишите в&nbsp;поддержку. Наш
+            менеджер свяжется с&nbsp;вами и&nbsp;поможет разобраться
+            со&nbsp;всеми вопросами.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="clients type-3">
+      <div class="content">
+        <div class="text-wrapper layer-1">
+          <div class="main-page__heading">
+            О КЛИЕНТАХ<br>В ПЕРВУЮ ОЧЕРЕДЬ
+          </div>
+          <div class="subheader">
+            Они скажут вам&nbsp;«Спасибо!» за&nbsp;заботу.
+          </div>
+          <div class="text">
+            В нашем мире невозможно все держать в&nbsp;голове. Поэтому мы
+            разработали несколько инструментов, которые помогут вам держать свою
+            базу клиентов в&nbsp;актуальном состоянии, расширять ее
+            и&nbsp;удерживать.
+          </div>
+          <router-link
+            :to="{ name: 'features', hash: '#sms-notifications' }"
+            class="inner-link layer-1"
+          >
+            ПОДРОБНЕЕ О РАБОТЕ С&nbsp;КЛИЕНТАМИ БИЗНЕСА
+          </router-link>
+        </div>
+      </div>
+    </section>
+  </Layout>
 </template>
 
 <script>
-  import UserProfileModal from '@/components/user/UserProfileModal.vue'
-  import Navigation from '@/components/Navigation.vue'
-  import TopBar from '@/components/TopBar.vue'
-  import Alerts from '@/components/Alerts.vue'
-  import router from '@/router'
-  import { mapActions, mapGetters } from 'vuex'
-  import { setTimeout, clearTimeout } from 'timers'
+import { setTimeout, clearTimeout } from 'timers'
+import { mapActions, mapGetters } from 'vuex'
+import Layout from '~/components/home/Layout.vue'
+import Socials from '~/components/home/Socials.vue'
 
-  export default {
-    metaInfo () {
-      return {
-        title: this.title
+export default {
+  components: {
+    Layout,
+    Socials
+  },
+  head () {
+    return {
+      title: this.title
+    }
+  },
+  data () {
+    return {
+      tokenTimerId: undefined
+    }
+  },
+  computed: {
+    ...mapGetters({
+      actions: 'common/actions',
+      actualDate: 'common/actualDate',
+      appTitle: 'common/appTitle',
+      businessName: 'business/businessName',
+      businessInfo: 'business/businessInfo',
+      loggedIn: 'user/loggedIn',
+      userID: 'user/userID',
+      userRole: 'user/userRole',
+      myBusinessList: 'user/myBusinessList',
+      navBarVisible: 'common/navBarVisible',
+      messageWindow: 'common/messageWindow',
+      profileDrawer: 'common/profileDrawer'
+    }),
+    businessId () {
+      return this.$route && this.$route.params && this.$route.params.id
+    },
+    defaultAction () {
+      if (!this.actions) {
+        return
       }
+      return this.actions.filter(x => x.default)[0]
     },
-    name: 'App',
-    components: {
-      Alerts,
-      Navigation,
-      TopBar,
-      UserProfileModal
-    },
-    data () {
-      return {
-        tokenTimerId: undefined
+    title () {
+      if (!this.appTitle) {
+        return 'UNO'
       }
-    },
-    computed: {
-      ...mapGetters([
-        'actions',
-        'actualDate',
-        'appTitle',
-        'businessName',
-        'businessInfo',
-        'loggedIn',
-        'navBarVisible',
-        'messageWindow',
-        'profileDrawer',
-        'userID',
-        'userRole',
-        'myBusinessList'
-      ]),
-      businessId () {
-        return this.$route && this.$route.params && this.$route.params.id
-      },
-      defaultAction () {
-        if (!this.actions) {
-          return
-        }
-        return this.actions.filter(x => x['default'])[0]
-      },
-      title () {
-        if (!this.appTitle) {
-          return 'UNO'
-        }
-        if (this.businessName) {
-          return `${this.appTitle}. ${this.businessName}`
-        }
-        if (this.userRole) {
-          return `${this.appTitle} ${this.userRole}`
-        }
-        return this.appTitle
-      },
-      isMenuVisible () {
-        if (!this.$route || !this.$route.name) {
-          return false
-        }
-        return this.$route.name !== 'home' && this.$route.name !== 'login' && this.$route.name !== 'restorePassword'
-          && this.$route.name !== 'register' && this.$route.name !== 'features' && this.$route.name !== 'news'
+      if (this.businessName) {
+        return `${this.appTitle}. ${this.businessName}`
       }
-    },
-    watch: {
-      '$route.params': {
-        handler: 'loadBusiness',
-        deep: true
-      },
-      actualDate: 'loadVisits',
-      loggedIn (newVal) {
-        if (newVal) {
-          this.loadMyBusinessList()
-        }
+      if (this.userRole) {
+        return `${this.appTitle} ${this.userRole}`
       }
+      return this.appTitle
+    }
+  },
+  watch: {
+    '$route.params': {
+      handler: 'loadBusiness',
+      deep: true
     },
-    mounted () {
-      this.loadApiTime()
-      this.setActions()
-      this.loadFromStorage()
-      this.loadServiceList()
-      this.loadServiceGroups()
-      this.checkDate()
-      this.loadEmployeeCategories()
-      this.tokenTimer()
-    },
-    methods: {
-      ...mapActions([
-        'loadApiTime',
-        'loadDayVisits',
-        'loadEmployeeCategories',
-        'loadFromStorage',
-        'loadMyBusinessList',
-        'loadServiceList',
-        'loadServiceGroups',
-        'refreshToken',
-        'setActions',
-        'setActualDate',
-        'setBusiness',
-        'navBar'
-      ]),
-      checkDate () {
-        this.setActualDate()
-      },
-      goHome () {
-        router.push({ name: 'home' })
-      },
-      loadBusiness () {
-        if (!this.businessId || this.businessId === 'new') {
-          return
-        }
-        this.setBusiness(this.businessId)
-      },
-      loadVisits () {
-        if (!this.actualDate) return
-        const month = this.actualDate.replace(/\d{2}$/, '01')
-        this.loadDayVisits({
-          business: this.businessId,
-          month: month
-        })
-      },
-      onAction (payload) {
-        this.$root.$emit('onAction', payload)
-      },
-      tokenTimer () {
-        let vm = this
-        clearTimeout(this.tokenTimerId)
-        this.tokenTimerId = setTimeout(function () {
-          vm.refreshToken()
-          vm.tokenTimer()
-        }, 1000 * 60 * 45)
+    actualDate: 'loadVisits',
+    loggedIn (newVal) {
+      if (newVal) {
+        this.loadMyBusinessList()
       }
     }
+  },
+  mounted () {
+    this.loadApiTime()
+    this.setActions()
+    this.loadFromStorage()
+    this.loadServiceList()
+    this.loadServiceGroups()
+    this.checkDate()
+    this.loadEmployeeCategories()
+    this.tokenTimer()
+  },
+  methods: {
+    ...mapActions({
+      loadApiTime: 'common/loadApiTime',
+      loadDayVisits: 'business/loadDayVisits',
+      loadEmployeeCategories: 'employee/loadEmployeeCategories',
+      loadFromStorage: 'common/loadFromStorage',
+      loadMyBusinessList: 'user/loadMyBusinessList',
+      loadServiceList: 'service/loadServiceList',
+      loadServiceGroups: 'service/loadServiceGroups',
+      refreshToken: 'common/refreshToken',
+      setActions: 'common/setActions',
+      setActualDate: 'common/setActualDate',
+      setBusiness: 'business/setBusiness',
+      navBar: 'layout/navBar'
+    }),
+    checkDate () {
+      this.setActualDate()
+    },
+    goHome () {
+      this.$router.push({ name: 'index' })
+    },
+    loadBusiness () {
+      if (!this.businessId || this.businessId === 'new') {
+        return
+      }
+      this.setBusiness(this.businessId)
+    },
+    loadVisits () {
+      if (!this.actualDate) { return }
+      const month = this.actualDate.replace(/\d{2}$/, '01')
+      this.loadDayVisits({
+        business: this.businessId,
+        month
+      })
+    },
+    tokenTimer () {
+      const vm = this
+      clearTimeout(this.tokenTimerId)
+      this.tokenTimerId = setTimeout(function () {
+        vm.refreshToken()
+        vm.tokenTimer()
+      }, 1000 * 60 * 45)
+    }
   }
+}
 </script>
 
 <style lang="scss">
-  @import '~lato-font/scss/_public-api.scss';
-  $lato-font-path: '~lato-font/fonts';
-  @include lato-include-font('light');
-  @include lato-include-font('normal');
-  @include lato-include-font('bold');
-  @include lato-include-font('heavy');
+@import '~/assets/styles/common.scss';
 
-  @import './assets/styles/common';
+$header-height: 80px;
+$header-desktop-height: 146px;
+$padding-top: 53px;
+$min-height: 667px;
 
-  #amoforms_action_btn {
-    display: none !important;
-  }
-  #amoforms_overlay {
-    position: fixed !important;
-    iframe {
-      max-height: 726px !important;
-      overflow: hidden !important;
-    }
-  }
-  .application {
-    line-height: normal;
-  }
-  #app {
-    .main-cont {
-      padding: 40px 56px;
-    }
-    .mb-20 {
-      margin-bottom: 20px;
-    }
-    .mb-35 {
-      margin-bottom: 35px;
-    }
-    .topsearch {
-      display: none;
-      padding-left: 32px;
-      background: url('assets/images/svg/search.svg') no-repeat left 0px center;
-      background-size: 24px;
-      font-family: $lato;
-      font-style: normal;
-      font-weight: 300;
-      line-height: normal;
-      font-size: 11px;
-      .v-input--is-focused {
-        .v-input__slot {
-          &:after {
-            display: none !important;
-          }
-        }
-      }
-      .v-input__slot {
-        border: none;
-        &:after {
-          display: none !important;
-        }
-        &:before {
-          display: none !important;
-        }
-      }
+$saloons: beauty spa cosmetic hairdressers barbershop massage tattoo lash
+  manicure epilation individual solarium;
 
-      @media only screen and (min-width: $desktop) {
-        display: flex;
-      }
-    }
-    .blue-link {
-      font-family: Lato;
-      font-style: normal;
-      font-weight: normal;
-      line-height: normal;
-      font-size: 13px;
-      color: #5699ff;
-      outline: none;
-    }
-    .v-menu__content {
-      box-shadow: none;
-      border: 1px solid #f3f4f7;
-      border-top: none;
-    }
-    .topbar {
-      z-index: 5;
-      box-shadow: none;
-      border-bottom: 1px solid #f4f5f7;
-      .v-toolbar__content {
-        background: #fff;
-        padding-right: 0;
-        padding-left: 0;
-        @media only screen and (min-width: $desktop) {
-          padding-left: 16px;
-        }
-      }
-    }
-    .v-btn {
-      box-shadow: none !important;
-      &:hover {
-        &:before {
-          display: none;
-        }
-      }
-      .v-ripple__container {
-        display: none !important;
-      }
-      &.back {
-        width: 16px;
-        height: 16px;
-        background: url('assets/back.svg') no-repeat center center;
-      }
-      &.equal {
-        width: 16px;
-        height: 16px;
-        border-radius: 0;
-        background: url('assets/equal.svg') no-repeat center center;
-        &:hover {
-          &:before {
-            display: none;
-          }
-        }
-      }
-      &.close {
-        width: 16px;
-        height: 16px;
-        border-radius: 0;
-        background: url('assets/close.svg') no-repeat center center;
-      }
-      &.success {
-        width: 240px;
-        height: 56px;
-        background: linear-gradient(270deg, #c9a15d -9.86%, #ba9462 103.49%);
-        transition: none;
-        &:hover {
-          background: #07101c !important;
-          box-shadow: none !important;
-        }
-        &:active {
-          background: #142941 !important;
-          box-shadow: none !important;
-        }
-        .v-ripple__container {
-          display: none !important;
-        }
-      }
-      &.avatar {
-        box-shadow: none !important;
-      }
-      &.delete {
-        width: 20px;
-        min-width: 20px;
-        max-width: 20px;
-        height: 20px;
-        background: url('assets/del.svg') no-repeat center center;
-        background-size: 12px 20px;
-        &:before {
-          display: none;
-        }
-        &:hover {
-          background: url('assets/delh.svg') no-repeat center center;
-        }
-      }
-      &.transparent {
-        color: #8995af;
-        box-shadow: none !important;
-        background: transparent;
-        text-transform: none;
-        font-weight: normal;
-        height: 20px;
-        .v-ripple__container {
-          display: none !important;
-        }
-        &:before {
-          display: none;
-        }
-        &:hover {
-          box-shadow: none !important;
-          background: transparent;
-        }
-        &.add {
-          padding-left: 22px;
-          margin-left: 0;
-          &:after {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 1px;
-            background: url('assets/plus.svg') no-repeat center center;
-            width: 16px;
-            height: 16px;
-            background-size: 12px 20px;
-          }
-        }
-        &.v-btn--disabled {
-          background: transparent !important;
-        }
-      }
-    }
-    .v-select__slot {
-      position: relative;
-
-      .v-input__icon {
-        height: 22px;
-      }
-
-      .v-input__append-inner {
-        position: absolute;
-        right: 0;
-        top: 0;
-        bottom: 0;
-        margin-top: -2px;
-        display: flex;
-        align-items: center;
-        .mdi-menu-down:before {
-          content: '';
-          width: 10px;
-          height: 6px;
-          background: url('./assets/images/down.png') center no-repeat;
-        }
-      }
-    }
-    .v-input__slot {
-      margin-bottom: 0;
-    }
-    .title {
-      font-size: 18px !important;
-    }
-    .businesscard__h1 {
-      font: 24px Roboto Slab, Times New Roman, Times, serif;
-    }
-    .workmode-wrap {
-      margin: 0;
-      padding-left: 7px;
-      padding-right: 7px;
-      height: 24px;
-      border-left: 1px solid #8995af;
-      border-right: 1px solid #8995af;
-      width: 95px;
-      max-width: 95px;
+.main-page-sections {
+  section {
+    &.main-page__first {
+      height: calc(100vh - #{$header-height});
       display: flex;
+      flex-direction: column;
       justify-content: space-between;
-      position: relative;
-      .v-input--is-focused {
-        border-bottom: 1px solid #5699ff !important;
+      align-items: center;
+      background: $white-fill,
+        url('~assets/images/bg_intro.png') center bottom/230%auto no-repeat #fff;
+      @media only screen and (min-aspect-ratio: 768/1024) and (min-width: $tablet) {
+        background: $white-fill,
+          url('~assets/images/bg_home_first_tablet.png') right bottom/230% auto
+            no-repeat #fff;
       }
-      &:before {
-        content: '';
-        position: absolute;
-        width: 7px;
-        height: 1px;
-        background: #8995af;
-        top: 58%;
-        left: 45%;
+      @media only screen and (min-aspect-ratio: 1024/768) and (min-width: $tablet) {
+        background: $white-fill,
+          url('~assets/images/bg_home_first_tablet.png') 60% bottom/160% auto
+            no-repeat #fff;
       }
-      .close {
-        width: 10px;
-        height: 10px;
-        background: url('./assets/close.svg');
-        position: absolute;
-        right: -18px;
-        top: 8px;
+      @media only screen and (min-aspect-ratio: 1366/666) and (min-width: $desktop) {
+        background: $white-fill,
+          url('~assets/images/bg_home_first_desktop.png') 60% bottom/100% auto
+            no-repeat #fff;
+      }
+      @media only screen and (min-height: $min-height) {
+        height: calc(100vh - #{$header-desktop-height});
+      }
+      @media only screen and (min-width: $desktop) and (min-height: $min-height) {
+        position: relative;
+        background: url('~assets/images/bg_home_first_desktop.png') 70%
+          bottom/auto 100% no-repeat #fff;
+      }
+      @media only screen and (min-width: $wide) and (min-height: $min-height) {
+        background: url('~assets/images/bg_home_first_wide.png') center
+          bottom/auto 100% no-repeat #fff;
+      }
+      @media screen and (min-height: 1023px) {
+        padding-bottom: 2vh;
+      }
+      .content {
+        justify-content: center;
+        overflow: visible;
+      }
+      .text-wrapper {
+        max-width: 100%;
+        text-align: center;
+        @media only screen and (min-width: $tablet) {
+          padding: 0;
+          text-align: left;
+        }
+      }
+
+      .main-page__first-top {
+        display: flex;
+        flex-grow: 1;
+        width: 100%;
+        align-items: center;
+
+        .content {
+          width: 100%;
+          @media only screen and (min-width: $tablet) {
+            justify-content: flex-start;
+          }
+        }
+      }
+      .main-page__first-bottom {
+        width: 100%;
+        .content {
+          @media only screen and (min-width: $tablet) {
+            justify-content: flex-start;
+          }
+        }
+      }
+      .main-page__container {
+        position: relative;
+        padding-left: 48px;
+        @media only screen and (min-width: $tablet) {
+          padding-left: 0;
+        }
+      }
+      .main-page__heading {
+        margin-bottom: 5vh;
+        @media only screen and (min-width: $tablet) and (min-height: $min-height) {
+          max-width: 570px;
+        }
+        @media only screen and (min-width: $desktop) and (min-height: $min-height) {
+          max-width: none;
+          margin-bottom: 45px;
+        }
+      }
+      .main-page__subheading {
+        font-size: 16px;
+        font-weight: 300;
+        margin-bottom: 2vh;
+        @media only screen and (min-width: $tablet) and (min-height: $min-height) {
+          margin-bottom: 50px;
+          font-size: 24px;
+        }
+      }
+      .main-page__register-link {
+        display: inline-flex;
+        width: 100%;
+        max-width: 280px;
+        height: 68px;
+        margin: 0;
+        padding: 0 25px;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(90deg, #c9a15d 0%, #ba9462 100%) #b69768;
+        color: #ffffff;
+        text-decoration: none;
+        text-align: center;
+        font-size: 16px;
+        font-weight: 600;
+        transition: background-color 0.6s 0s;
+        &:hover {
+          background-color: #07101c;
+          background-image: none;
+          text-decoration: none !important;
+        }
+      }
+      .main-page__scroll {
+        display: none;
+        align-items: baseline;
+        justify-content: center;
+        width: 100%;
+        max-width: 280px;
+        margin-top: 6vh;
+        text-align: center;
+        font-weight: 600;
+        font-size: 16px;
+        color: #07101c !important;
+        text-decoration: none !important;
+        &:after {
+          display: block;
+          content: '';
+          height: 7px;
+          width: 7px;
+          margin-left: 5px;
+          border: 2px solid #07101c;
+          transform: rotate(45deg) translate(-2px, -1px);
+          border-left: none;
+          border-bottom: none;
+        }
+        @media screen and (min-height: 568px) {
+          display: inline-flex;
+        }
+      }
+      .main-page__links {
+        display: none;
+        margin: 4vh 0 !important;
+        padding: 4vh 0;
+        @media screen and (min-height: $min-height) {
+          display: flex;
+        }
       }
     }
 
-    .section-add-button {
-      position: fixed;
-      top: 99px;
-      right: 0px;
-      margin-right: 13px;
-      background: url('./assets/images/svg/plus-white.svg') no-repeat center/16px #ef4d37;
-      span {
-        display: none;
+    &.fits {
+      .content {
+        overflow: visible;
+      }
+    }
+
+    &.pricing {
+      height: 820px;
+      background: url('~assets/images/home/bg_pricing_mobile.png') right
+        bottom/auto 50% no-repeat #fff;
+      @media only screen and (min-width: $tablet) {
+        height: 728px;
+        background: url('~assets/images/home/bg_pricing.png') 95% bottom/auto
+          600px no-repeat #fff;
       }
       @media only screen and (min-width: $desktop) {
-        position: static;
-        background-image: none;
-        span {
-          display: inline;
+        height: 978px;
+        background-size: auto 90%;
+        background-position: 90% bottom;
+      }
+      @media only screen and (min-width: $wide) {
+        height: 1000px;
+        background-size: 750px auto;
+        background-position: 80% bottom;
+      }
+    }
+
+    &.integration-time {
+      background: url('~assets/images/home/time.png') -20px top/contain no-repeat;
+      @media screen and (min-width: $tablet) {
+        height: 550px;
+        background: url('~assets/images/home/bg_integration.png') left
+          top/contain no-repeat;
+      }
+      @media screen and (min-width: $desktop) {
+        background-position: 10% top;
+      }
+      @media screen and (min-width: $wide) {
+        background-position: 20% top;
+      }
+    }
+
+    &.clients {
+      height: 500px;
+      background: url('~assets/images/home/bg_clients_mobile.png') 180px
+        bottom/78% no-repeat #fff;
+      @media screen and (min-width: $tablet) {
+        height: 550px;
+        background-position: right bottom;
+        background-size: 45%;
+      }
+      @media screen and (min-width: $desktop) {
+        height: 755px;
+        background: url('~assets/images/home/bg_clients.png') 180px bottom/43%
+          no-repeat #fff;
+      }
+      @media screen and (min-width: $wide) {
+        background: url('~assets/images/home/bg_clients_wide.png') 80%
+          bottom/contain no-repeat #fff;
+      }
+      .subheader {
+        max-width: 80%;
+        @media screen and (min-width: $tablet) {
+          max-width: none;
+        }
+      }
+      .text-wrapper {
+        @media screen and (min-width: $tablet) {
+          max-width: 77%;
+        }
+      }
+      .text {
+        max-width: 60%;
+        @media screen and (min-width: $tablet) {
+          max-width: none;
         }
       }
     }
-
-    .filter-results {
-      padding-left: 5px;
-      &__group-name {
-        margin: 40px 0 32px;
-        padding-right: 11px;
-        font-family: Roboto Slab, serif;
-        font-style: normal;
-        font-weight: normal;
-        font-size: 18px;
-        color: #07101c;
-      }
-
-      &__cards {
-        display: flex;
-        flex-wrap: wrap;
-      }
-    }
-    .v-pagination__navigation {
-      box-shadow: none;
-      background: transparent;
-      &--disabled i {
-        color: rgba(137, 149, 175, 0.1);
-      }
-
-      i {
-        font-size: 16px;
-      }
-    }
-    .v-pagination__item {
-      min-width: 20px;
-      height: 20px;
-      box-shadow: none;
-      color: #8995af;
-      background: transparent;
-      outline: none;
-      &--active {
-        color: #07101c;
-      }
-    }
   }
-  .filters {
+}
+
+.target-audience {
+  $item-margin: 11px;
+  $item-margin-desktop: 3%;
+  $item-margin-wide: 19px;
+  padding: 100px 6px 0;
+
+  @media only screen and (min-width: $tablet) {
+    margin-top: 55px;
+    padding: 100px 0 0;
+  }
+  @media only screen and (min-width: $desktop) {
+    margin-bottom: 30px;
+    padding-top: 150px;
+  }
+  &__list {
     display: flex;
+    max-width: 1286px;
     flex-wrap: wrap;
-    flex-grow: 0;
-    &__item {
-      @extend %filter;
+    margin: 0 auto 42px;
+    padding: 0;
+    justify-content: space-around;
+    list-style: none;
+    @media only screen and (min-width: $tablet) {
+      margin: 0 (-$item-margin * 4);
+      justify-content: center;
+    }
+    @media only screen and (min-width: $desktop) {
+      margin: 0 (-$item-margin-desktop * 2);
+    }
+    @media only screen and (min-width: $wide) {
+      margin: 0 (-$item-margin-wide);
     }
   }
-  .menu-button {
-    width: 55px;
-    height: 55px;
-    margin: 0 !important;
-    border-radius: 0;
-    border-right: 1px solid rgba(137, 149, 175, 0.1);
-    background: url('./assets/images/svg/menu.svg') center no-repeat;
-    .v-icon.mdi-menu {
-      display: none;
-    }
-  }
-  .v-text-field {
-    %text-input-placeholder {
-      color: rgba(137, 149, 175, 0.8) !important;
-      font-size: 14px;
-    }
-    textarea {
-      padding-top: 8px;
-      padding-left: 16px;
-      font-family: Lato;
-      font-style: normal;
-      font-weight: normal;
-      line-height: normal;
-      font-size: 14px;
-      color: #07101c;
-      &::placeholder {
-        @extend %text-input-placeholder;
-      }
-    }
-    .v-text-field__prefix {
-      font-size: 13px;
-      font-family: Lato;
-      font-style: normal;
-      font-weight: 300;
-      line-height: normal;
-    }
-    input,
-    label {
-      max-width: 100%;
-      font-size: 14px;
-      font-style: normal;
-      line-height: normal;
-      background: #fff;
-      &.v-label {
-        display: inline-block;
-        margin-left: 12px;
-        padding: 0 4px;
-        color: rgba(137, 149, 175, 0.8) !important;
-        letter-spacing: 25%;
-        animation: none !important;
-        z-index: 1;
-      }
-      &.v-label--active {
-        font-size: 12px;
-        transform: scale(1) translateY(-19px);
-      }
-    }
-    input {
-      color: #07101c;
-      padding-left: 16px;
-      &::placeholder {
-        @extend %text-input-placeholder;
-      }
-    }
-    .v-input__slot {
-      border: 1px solid rgba(137, 149, 175, 0.8);
-      border-radius: 1px;
-    }
-    .v-input__slot:before,
-    .v-input__slot:after {
-      display: none;
-      content: none;
-    }
-    &.error--text {
-      label {
-        color: #EF4D37 !important;
-      }
-      .v-input__slot {
-        border: 1px solid #EF4D37;
-      }
-    }
-    &.v-input--is-focused {
-      .v-input__slot {
-        border-color:  #5699ff;
-      }
-      .v-label {
-        color: #5699ff !important;
-      }
-
-    }
-    &.centered-input {
-      text-transform: uppercase !important;
-      input,
-      label {
-        text-align: center;
-        &.v-label--active {
-          text-align: center;
-          font-size: 11px;
-        }
-      }
-    }
-
-    &.workmode {
-      width: 34px;
-      height: 24px;
-      padding: 0;
-      margin: 0;
-      overflow: hidden;
-      margin-top: -1px;
-      &.error--text {
-        input {
-          color: #ef4d37;
-        }
-      }
-      .v-input__slot {
-        &:before,
-        &:after {
-          display: none;
-        }
-      }
-    }
-  }
-
-  .v-tooltip__content {
-    background: #1c2f44;
-    box-shadow: 1px 2px 7px rgba(0, 0, 0, 0.04);
-    padding: 15px 20px;
-    border-radius: 0;
+  &__item {
+    width: 158px;
+    margin: 0 $item-margin 57px;
+    font-weight: 600;
+    font-size: 16px;
     text-align: center;
-    .text-secondary {
-      line-height: 17px;
-      color: rgba(255, 255, 255, 0.5);
+    @media only screen and (min-width: $desktop) {
+      width: 10%;
+      margin: 0 $item-margin-desktop 57px;
     }
-    .text-primary {
-      line-height: 24px;
+    @media only screen and (min-width: $wide) {
+      margin: 0 $item-margin-wide 57px;
     }
-  }
-
-  .v-navigation-drawer {
-    z-index: 11;
-  }
-  .span-main-text {
-    padding-left: 0.5em;
-  }
-
-  .fill-height .flex {
-    display: flex;
-  }
-  .fill-height .flex .v-card {
-    flex: 1 1 auto;
-  }
-  .hidden-button:hover {
-    text-decoration: underline;
-    cursor: pointer;
-  }
-  .v-breadcrumbs {
-    padding-left: 0;
-  }
-  .v-breadcrumbs__item {
-    font-family: Lato;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 12px;
-    line-height: normal;
-    color: #07101c;
-  }
-  .v-breadcrumbs .v-breadcrumbs__divider {
-    border: 1px solid #8995af;
-    border-radius: 50%;
-    background: #8995af;
-    padding: 0 !important;
-    margin: 0 8px;
-  }
-  .v-breadcrumbs__item--disabled {
-    color: #8995af;
-  }
-  .v-counter {
-    order: -1;
-    margin-top: 5px;
-    font-size: 14px;
-  }
-  .v-chip__close .v-icon {
-    color: transparent !important;
-    background: url('./assets/images/svg/cross.svg') center no-repeat transparent;
-    opacity: 1;
     &:before {
-      width: 20px;
-      height: 20px;
+      display: inline-block;
+      width: 90px;
+      height: 90px;
+      margin-bottom: 13px;
       content: '';
+      border-radius: 50%;
+      box-shadow: 0px 7px 20px rgba(0, 0, 0, 0.05);
+    }
+    @each $saloon in $saloons {
+      &.#{$saloon}:before {
+        background: url('~assets/images/svg/#{$saloon}.svg')
+          center/contain
+          no-repeat;
+      }
+    }
+
+    div {
+      height: 38px;
+    }
+
+    &._one-line {
+      div {
+        padding-top: 1px;
+      }
+    }
+    &.beauty,
+    &.individual,
+    &.solarium {
+      padding: 0 15px;
     }
   }
-  .v-select .v-chip {
-    background: rgba(137, 149, 175, 0.1);
+  .main-page__heading {
+    margin-bottom: 30px;
+    padding-left: 42px;
+    text-align: left;
+    @media only screen and (min-width: $tablet) {
+      margin-bottom: 95px;
+      padding-left: 0;
+    }
   }
-  .v-content {
-    z-index: 1;
+  .main-page__register-link {
+    margin: 0 auto;
   }
+}
 </style>

@@ -1,10 +1,15 @@
 import ApiObject from '~/classes/api_object'
 import Api from '~/api/backend'
-import store from '~/store'
 import { makeAlert, responseGetId } from '~/api/utils'
 
-/*
-Example 
+let store
+
+if (process.browser) {
+  window.onNuxtReady(({ $store }) => {
+    store = $store
+  })
+}
+/* Example
 
 settings = {
   notifications: {
@@ -22,8 +27,7 @@ settings = {
       name: 'SMS gorod'
     }
   }
-};
-*/
+}; */
 
 class Event extends ApiObject {
   set jsonObject (newVal) {
@@ -43,7 +47,7 @@ class Event extends ApiObject {
     }
   }
   get jsonObject () {
-    let res = super.jsonObject
+    const res = super.jsonObject
     if (this._phone) {
       res.phone = this._phone
     }
@@ -61,15 +65,14 @@ class Event extends ApiObject {
   }
 
   set phone (newVal) {
-    this._phone = newVal ? newVal : null
+    this._phone = newVal || null
   }
   get phone () {
     return this._phone
   }
 
-
   set amount (newVal) {
-    this._amount = newVal ? newVal : null
+    this._amount = newVal || null
   }
   get amount () {
     return this._amount
@@ -84,7 +87,7 @@ class Events extends ApiObject {
     })
     this.new_visit_client = new Event({
       ...{
-        title: 'Уведомлять клиента о новой онлайн-записи',
+        title: 'Уведомлять клиента о новой онлайн-записи'
       },
       ...(newVal && newVal.new_visit_client)
     })
@@ -98,7 +101,6 @@ class Events extends ApiObject {
     this.cancel_visit = new Event({
       ...{ title: 'Уведомлять сотрудника об отмене онлайн-записи', phone: null },
       ...(newVal && newVal.cancel_visit)
-      
     })
     this.time_visit = new Event({
       ...{ title: 'Напоминать клиенту о предстоящем визите' },
@@ -168,11 +170,11 @@ class BusinessSettings extends ApiObject {
   // API methods
 
   load (id) {
-    if (!id || id === 'new') return
+    if (!id || id === 'new') { return }
     return Api()
       .get(`business_settings?id=eq.${id}`)
       .then(res => res.data[0])
-      .then(res => {
+      .then((res) => {
         this.jsonObject = res
       })
   }
@@ -182,7 +184,7 @@ class BusinessSettings extends ApiObject {
       return Api()
         .post(`business_settings?`, this.jsonObject)
         .then(res => responseGetId(res))
-        .catch(err => {
+        .catch((err) => {
           store.dispatch('alerts/alert', makeAlert(err))
           return false
         })
@@ -192,7 +194,7 @@ class BusinessSettings extends ApiObject {
         .then(() => {
           store.dispatch('alerts/alert', makeAlert('Сохранено успешно'))
         })
-        .catch(err => {
+        .catch((err) => {
           store.dispatch('alerts/alert', makeAlert(err))
           return false
         })

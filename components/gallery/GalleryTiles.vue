@@ -7,25 +7,15 @@
       fill-height
       pa-2
     >
-      <v-layout
-        row
-        wrap
-      >
+      <v-layout row wrap>
         <v-flex
           v-for="(image, n) in currentImages"
           :key="n"
           xs4
           @click="showSlider(n)"
         >
-          <v-card
-            flat
-            tile
-            class="d-flex"
-          >
-            <v-img
-              :src="image"
-              aspect-ratio="1"
-            >
+          <v-card flat tile class="d-flex">
+            <v-img :src="image" aspect-ratio="1">
               <v-layout
                 slot="placeholder"
                 fill-height
@@ -33,35 +23,18 @@
                 justify-center
                 ma-0
               >
-                <v-progress-circular
-                  indeterminate
-                  color="grey lighten-5"
-                />
+                <v-progress-circular indeterminate color="grey lighten-5" />
               </v-layout>
             </v-img>
           </v-card>
         </v-flex>
-        <v-flex
-          v-if="more"
-          xs4
-        >
-          <v-btn
-            block
-            depressed
-            large
-            @click="onClickMore"
-          >
+        <v-flex v-if="more" xs4>
+          <v-btn block depressed large @click="onClickMore">
             Ещё {{ imagesArray.length - currentImages.length }}
           </v-btn>
         </v-flex>
-        <v-flex
-          v-if="addPlace"
-          xs4
-        >
-          <form
-            enctype="multipart/form-data"
-            novalidate
-          >
+        <v-flex v-if="addPlace" xs4>
+          <form enctype="multipart/form-data" novalidate>
             <div class="dropbox">
               <input
                 type="file"
@@ -70,7 +43,10 @@
                 :disabled="!isInitial"
                 accept="image/*"
                 class="input-file"
-                @change="filesChange($event.target.name, $event.target.files); fileCount = $event.target.files.length"
+                @change="
+                  filesChange($event.target.name, $event.target.files)
+                  fileCount = $event.target.files.length
+                "
               >
               <p v-if="isInitial">
                 Перетащите фалы сюда
@@ -113,7 +89,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({ businessId: 'business/businessId'}),
+    ...mapGetters({ businessId: 'business/businessId' }),
     addPlace () {
       return (
         this.employee && this.service && !this.fixed && this.edit && !this.more
@@ -123,7 +99,7 @@ export default {
       return this.company || this.businessId
     },
     currentImages () {
-      if (!this.imagesArray) return
+      if (!this.imagesArray) { return }
       if (!this.full) {
         return this.imagesArray.slice(
           0,
@@ -169,9 +145,9 @@ export default {
   methods: {
     filesChange (fieldName, fileList) {
       const formData = new FormData()
-      let fileNames = []
-      if (!fileList.length) return
-      Array.from(Array(fileList.length).keys()).map(x => {
+      const fileNames = []
+      if (!fileList.length) { return }
+      Array.from(Array(fileList.length).keys()).map((x) => {
         const newFile = { file: fileList[x].name, path: uuidv4() }
         fileNames.push(newFile)
         formData.append(fieldName, fileList[x], newFile.path)
@@ -183,8 +159,8 @@ export default {
         this.data = this.images
         return
       }
-      if (!this.currentCompany) return
-      let cond = [`business_id.eq.${this.currentCompany}`]
+      if (!this.currentCompany) { return }
+      const cond = [`business_id.eq.${this.currentCompany}`]
       if (this.service) {
         cond.push(`services.cs.{${this.service}}`)
       }
@@ -192,16 +168,16 @@ export default {
         cond.push(`employees.cs.{${this.employee}}`)
       }
       let filterString = `and=(${cond.join(',')})`
-      if (!filterString) return
+      if (!filterString) { return }
       if (this.fixed) {
         filterString = `${filterString}&limit=${this.maxImages}`
       }
-      let vm = this
+      const vm = this
       Api()
         .get(`gallery?${filterString}`)
         .then(res => res.data)
-        .then(res => {
-          vm.data = res.map(x => {
+        .then((res) => {
+          vm.data = res.map((x) => {
             return { id: x.id, j: x.j }
           })
         })
@@ -219,8 +195,8 @@ export default {
 
     saveImage (formData, fileNames) {
       this.isInitial = false
-      let vm = this
-      if (!this.businessId) return
+      const vm = this
+      if (!this.businessId) { return }
       axios
         .post(process.env.VUE_APP_UPLOAD, formData, {
           headers: {
@@ -229,8 +205,8 @@ export default {
           }
         })
         .then(() => {
-          let url = 'gallery'
-          let payload = fileNames.map(x => {
+          const url = 'gallery'
+          const payload = fileNames.map((x) => {
             return {
               id: x.path,
               business_id: this.businessId,

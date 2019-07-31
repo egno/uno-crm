@@ -8,26 +8,23 @@
   >
     <div class="menu-item-container">
       <div class="menu-item-left" :class="{ _active: isActiveItem }">
-        <VListTile :to="item.route">
-          <VListTileContent>
-            <VListTileTitle>
+        <VListItem :to="item.route">
+          <VListItemContent>
+            <VListItemTitle>
               {{ item.title }}
-            </VListTileTitle>
-          </VListTileContent>
-          <VListTileAction>
-            <span
-              v-if="item.count && !isActiveItem"
-              class="list-item--count"
-            >
+            </VListItemTitle>
+          </VListItemContent>
+          <VListItemAction>
+            <span v-if="item.count && !isActiveItem" class="list-item--count">
               {{ item.count }}
             </span>
-          </VListTileAction>
-        </VListTile>
+          </VListItemAction>
+        </VListItem>
       </div>
       <div
         v-show="item.action && isActiveItem"
         class="add-btn"
-        @click="$emit('onAction',item.action)"
+        @click="$emit('onAction', item.action)"
       >
         <v-icon color="white">
           add
@@ -49,7 +46,7 @@ export default {
   },
   computed: {
     isActiveItem () {
-      return this.item.route && (this.item.route.name === this.$route.name)
+      return this.item.route && this.item.route.name === this.$route.name
     }
   }
 }
@@ -64,6 +61,6 @@ export default {
 
   &._active {
     background: rgba(137, 149, 175, 0.2);
-   }
+  }
 }
 </style>

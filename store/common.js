@@ -1,7 +1,7 @@
-//import Vue from 'vue'
-//import axios from 'axios'
+// import Vue from 'vue'
+// import axios from 'axios'
 // import VueAxios from 'vue-axios'
-//import VueCacheData from 'vue-cache-data'
+// import VueCacheData from 'vue-cache-data'
 import Api from '~/api/backend'
 import { formatDate, getISOTimeZoneOffset } from '~/components/calendar/utils'
 import { makeAlert } from '~/api/utils'
@@ -36,7 +36,7 @@ export const getters = {
   actualDate: state => state.actualDate,
   calendarMonth: state => state.calendarMonth,
   apiTime: state => state.apiTime,
-  apiTimeZone: state => {
+  apiTimeZone: (state) => {
     if (!state.apiTime) {
       return
     }
@@ -53,7 +53,7 @@ export const getters = {
   searchString: state => state.searchString,
   selectedBreak: state => state.selectedBreak,
   selectedVisit: state => state.selectedVisit,
-  token: state => {
+  token: (state) => {
     return state.token
     // window.localStorage.accessToken;
   }
@@ -68,16 +68,20 @@ export const mutations = {
   },
   MESSAGE_WINDOW (state, payload) {
     if (payload) {
-      const elem = document.getElementById("amoforms_overlay")
-      elem.style.display='block'
-      elem.style.zIndex='999'
+      const elem = document.getElementById('amoforms_overlay')
+      elem.style.display = 'block'
+      elem.style.zIndex = '999'
 
       if (!state.helpListener) {
         state.helpListener = true
-        elem.addEventListener("click", function () {
-          const elem = document.getElementById("amoforms_overlay")
-          elem.style.display = 'none'
-        }, {capture: true})
+        elem.addEventListener(
+          'click',
+          function () {
+            const elem = document.getElementById('amoforms_overlay')
+            elem.style.display = 'none'
+          },
+          { capture: true }
+        )
       }
     }
   },
@@ -85,7 +89,7 @@ export const mutations = {
     state.profileDrawer = !!payload
   },
   NAVBAR (state, payload) {
-    var status = payload == undefined ? !state.navBarVisible : payload
+    const status = payload === undefined ? !state.navBarVisible : payload
     state.navBarVisible = status
   },
   SELECT_BREAK (state, payload) {
@@ -142,22 +146,22 @@ export const actions = {
     commit('SELECT_VISIT', payload)
   },
   sendMessage ({ commit }, payload) {
-    if (!payload) return
+    if (!payload) { return }
     const path = 'rpc/send_message'
     Api()
       .post(path, payload)
       .then(res => res.data)
-      .then(res => {
+      .then((res) => {
         if (res.status === 'sended') {
-          commit('ADD_ALERT', {
+          commit('alerts/ADD_ALERT', {
             message:
               'Мы уже решаем эту проблему! При необходимости мы свяжемся с вами'
           })
         } else {
-          commit('ADD_ALERT', res)
+          commit('alerts/ADD_ALERT', res)
         }
       })
-      .catch(err => commit('ADD_ALERT', makeAlert(err)))
+      .catch(err => commit('alerts/ADD_ALERT', makeAlert(err), { root: true }))
   },
   setActions ({ commit }, payload) {
     commit('SET_ACTIONS', payload)
@@ -177,7 +181,7 @@ export const actions = {
       Object.keys(state.calendar).length === 0
     ) {
       const from = `${payload.slice(0, 7)}-01`
-      let d1 = new Date()
+      const d1 = new Date()
       d1.setDate(1)
       d1.setYear(payload.slice(0, 4))
       d1.setMonth(payload.slice(5, 7))
@@ -187,7 +191,7 @@ export const actions = {
           dates: [from, formatDate(d1)]
         })
       } else {
-        state.calendar = []
+        commit('LOAD_CALENDAR', [])
       }
     }
     commit('SET_ACTUAL_DATE', payload)
@@ -202,10 +206,10 @@ export const actions = {
     Api()
       .get('info')
       .then(res => res.data[0])
-      .then(res => {
+      .then((res) => {
         commit('SET_API_TIME', res.current_timestamp)
       })
-      .catch(err => commit('ADD_ALERT', makeAlert(err)))
+      .catch(err => commit('alerts/ADD_ALERT', makeAlert(err), { root: true }))
   },
   loadCalendar ({ commit }, payload) {
     if (!payload.business) {
@@ -217,25 +221,26 @@ export const actions = {
     Api()
       .get(path)
       .then(res => res.data)
-      .then(res => {
+      .then((res) => {
         commit('LOAD_SCHEDULE', res)
       })
-      .catch(err => commit('ADD_ALERT', makeAlert(err)))
+      .catch(err => commit('alerts/ADD_ALERT', makeAlert(err), { root: true }))
+    // eslint-disable-next-line camelcase
     const c_path = `calendar?and=(dt.gte.${payload.dates[0]},dt.lte.${
       payload.dates[1]
     })`
     Api()
       .get(c_path)
       .then(res => res.data)
-      .then(res => {
+      .then((res) => {
         commit('LOAD_CALENDAR', res)
       })
-      .catch(err => commit('ADD_ALERT', makeAlert(err)))
+      .catch(err => commit('alerts/ADD_ALERT', makeAlert(err), { root: true }))
   },
 
   loadFromStorage ({ commit, dispatch }) {
     commit('SET_TOKEN', localStorage.getItem('accessToken'))
-    dispatch('user/loadUserInfo')
+    dispatch('user/loadUserInfo', null, { root: true })
   },
   navBar ({ commit }, payload) {
     commit('NAVBAR', payload)
@@ -256,32 +261,31 @@ export const actions = {
       .then(res => res.data)
       .then(res => res[0])
       .then(res => res.token)
-      .then(token => {
+      .then((token) => {
         commit('SET_TOKEN', token)
       })
-      .catch(err => {
-        commit('ADD_ALERT', makeAlert(err))
+      .catch((err) => {
+        commit('alerts/ADD_ALERT', makeAlert(err), { root: true })
         commit('SET_TOKEN', undefined)
       })
   },
   register ({ commit, dispatch }, payload) {
     const registerPath = 'rpc/register'
-    
+
     return Api()
       .post(registerPath, payload)
-      .then(res => {
+      .then((res) => {
         return res.data
       })
       .then(res => res[0])
       .then(res => res.token)
-      .then(token => {
+      .then((token) => {
         commit('SET_TOKEN', token)
-        dispatch('user/loadUserInfo')
+        dispatch('user/loadUserInfo', null, { root: true })
       })
-      .catch(err => {
+      .catch((err) => {
         console.log('err', err)
-        commit('ADD_ALERT', makeAlert(err))
+        commit('alerts/ADD_ALERT', makeAlert(err), { root: true })
       })
   }
 }
-

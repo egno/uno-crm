@@ -1,7 +1,16 @@
+/* eslint-disable no-mixed-operators */
 import ApiObject from '~/classes/api_object'
 import Api from '~/api/backend'
-import store from '~/store'
 import { makeAlert } from '~/api/utils'
+
+let store
+
+if (process.browser) {
+  window.onNuxtReady(({ $store }) => {
+    store = $store
+  })
+}
+// todo remove store, add dispatching 'alerts/alert' in Vue intsances
 
 const roles = [
   'Администратор компании',
@@ -10,7 +19,6 @@ const roles = [
 ]
 
 class User extends ApiObject {
-
   // Main object
 
   /**
@@ -46,6 +54,7 @@ class User extends ApiObject {
    * @param {any} newVal
    */
   set fullName (newVal) {
+    // eslint-disable-next-line prefer-const
     let parts = newVal.split(' ')
     this.j.name = parts[0]
     parts.splice(0, 1)
@@ -90,26 +99,25 @@ class User extends ApiObject {
   // API methods
 
   load (id) {
-    if (!id || id === 'new') return Promise.resolve()
+    if (!id || id === 'new') { return Promise.resolve() }
     return Api()
       .get(`user?user_id=eq.${id}`)
       .then(res => res.data[0])
-      .then(res => {
+      .then((res) => {
         this.jsonObject = res
       })
   }
 
   save () {
-    if (!this.company_id) return Promise.resolve()
+    if (!this.company_id) { return Promise.resolve() }
     return Api()
       .post(`user?`, this.jsonObject)
-      .catch(err => {
+      .catch((err) => {
         store.dispatch('alerts/alert', makeAlert(err))
         return false
       })
-
   }
 }
 
 export default User
-export {roles}
+export { roles }

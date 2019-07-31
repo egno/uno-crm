@@ -37,7 +37,7 @@ export default {
   },
   render () {},
   mounted () {
-    for (let prop in this.$props) {
+    for (const prop in this.$props) {
       this.unwatchArr.push(
         this.$watch(prop, (newVal, oldVal) =>
           compareValues(newVal, oldVal, this.ymapEventBus)

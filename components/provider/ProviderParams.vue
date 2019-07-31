@@ -1,14 +1,8 @@
 <template>
   <v-card>
     <v-card-text>
-      <v-layout
-        column
-        justify-start
-      >
-        <v-flex
-          v-for="param in params"
-          :key="param.code"
-        >
+      <v-layout column justify-start>
+        <v-flex v-for="param in params" :key="param.code">
           <v-text-field
             v-model="values[param.code]"
             :label="param.title"
@@ -73,7 +67,7 @@ export default {
         this.provider.j &&
         this.provider.j.services &&
         this.provider.j.services.sms &&
-        this.provider.j.services.sms.params.map(x => {
+        this.provider.j.services.sms.params.map((x) => {
           return { ...{ code: x.name }, ...this.paramsInfo[x.name] }
         })
       )

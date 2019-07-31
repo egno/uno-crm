@@ -1,4 +1,5 @@
 <template>
+  <div />
   <!--<gallery-layout>
     <template slot="content">
       <v-layout wrap>
@@ -37,12 +38,12 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex'
-  import { fullName } from '~/components/business/utils'
-  import Gallery from '~/components/gallery/gallery'
+/* import { mapGetters } from 'vuex'
+import { fullName } from '~/components/business/utils'
+import Gallery from '~/components/gallery/gallery' */
 
-  export default {
-    /*mixins: [ Gallery ],
+export default {
+  /* mixins: [ Gallery ],
     computed: {
       ...mapGetters({employees: 'employee/employees', allEmployeesServices: 'employee/allEmployeesServices'}),
       empList () {
@@ -73,12 +74,12 @@
           this.imagesData.filter(x => x.employees && x.employees.some(e => !!e))
         )
       },
-    },*/
-  }
+    }, */
+}
 </script>
 
 <style lang="scss">
-  .card-wrapper {
-    margin: 0 24px 42px 0;
-  }
+.card-wrapper {
+  margin: 0 24px 42px 0;
+}
 </style>

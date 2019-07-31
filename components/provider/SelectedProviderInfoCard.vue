@@ -1,10 +1,6 @@
 <template>
   <v-card flat>
-    <v-layout
-      column
-      align-center
-      class="text-xs-center"
-    >
+    <v-layout column align-center class="text-xs-center">
       <v-flex class="pa-3">
         <v-avatar size="10em">
           <v-img

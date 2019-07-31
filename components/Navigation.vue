@@ -11,34 +11,19 @@
     class="navigation"
     @input="onInput($event)"
   >
-    <VToolbar
-      flat
-      :dark="!mini"
-      height="55"
-      class="pa-0"
-    >
+    <VToolbar flat :dark="!mini" height="55" class="pa-0">
       <VList class="logo-wrap">
         <!--<v-list-tile-content>
           <v-list-tile-title overflow-hidden>
-            <router-link :to="{ name: 'home' }">
+            <router-link :to="{ name: 'index' }">
               <div class="logo" />
             </router-link>
           </v-list-tile-title>
         </v-list-tile-content>-->
       </VList>
-      <v-list-tile-action
-        v-if="isManagerMenu"
-        class="title-action"
-      >
-        <v-btn
-          icon
-          :class="{ 'menu-button': mini }"
-          @click.stop="mini = !mini"
-        >
-          <v-icon
-            v-if="!mini"
-            class="blind"
-          >
+      <v-list-tile-action v-if="isManagerMenu" class="title-action">
+        <v-btn icon :class="{ 'menu-button': mini }" @click.stop="mini = !mini">
+          <v-icon v-if="!mini" class="blind">
             close
           </v-icon>
         </v-btn>
@@ -47,10 +32,7 @@
 
     <VCalendar v-if="isCalendarVisible" />
     <AddMenu v-if="loggedIn && isManagerMenu" />
-    <VList
-      v-if="!mini"
-      class="nav-menu"
-    >
+    <VList v-if="!mini" class="nav-menu">
       <nav-powered-item
         v-for="item in menu"
         :key="item.title"
@@ -70,15 +52,15 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
+import { filials } from './business/mixins'
 import AddMenu from '~/components/AddMenu.vue'
 import NavPoweredItem from '~/components/NavPoweredItem.vue'
 import VCalendar from '~/components/calendar/VCalendar.vue'
-import { mapActions, mapGetters } from 'vuex'
 import { isBusinessRoute } from '~/utils'
 import { formatDate } from '~/components/calendar/utils'
 import Users from '~/mixins/users'
-import { filials } from './business/mixins'
-import {roles} from '~/classes/user'
+import { roles } from '~/classes/user'
 
 export default {
   components: { AddMenu, NavPoweredItem, VCalendar },
@@ -122,7 +104,9 @@ export default {
       return isBusinessRoute(this.$route.name)
     },
     isCalendarVisible () {
-      return this.hasSalonLevelAccess && this.isBusinessCard && this.isEditorUser
+      return (
+        this.hasSalonLevelAccess && this.isBusinessCard && this.isEditorUser
+      )
     },
     isManagerMenu () {
       return (
@@ -144,16 +128,12 @@ export default {
     },
     hasSalonLevelAccess () {
       return (
-        this.loggedIn &&
-        this.businessInfo &&
-        this.businessInfo.type === null
+        this.loggedIn && this.businessInfo && this.businessInfo.type === null
       )
     },
     hasName () {
       return (
-        this.businessInfo &&
-        this.businessInfo.j &&
-        this.businessInfo.j.name
+        this.businessInfo && this.businessInfo.j && this.businessInfo.j.name
       )
     },
     menu () {
@@ -170,8 +150,7 @@ export default {
             (this.userRole === 'manager' ||
               this.userRole === 'admin' ||
               this.user.role === roles[0] ||
-              (this.user.role === roles[1] &&
-                this.businessIsFilial)) &&
+              (this.user.role === roles[1] && this.businessIsFilial)) &&
             !this.isManagerMenu
         },
         {
@@ -199,7 +178,10 @@ export default {
             name: 'filialList',
             params: { id: this.businessId }
           },
-          show: this.hasCompanyLevelAccess && this.hasName && !this.businessIsFilial,
+          show:
+            this.hasCompanyLevelAccess &&
+            this.hasName &&
+            !this.businessIsFilial,
           action: {
             label: 'Добавить филиал',
             action: 'newFilial',
@@ -229,11 +211,11 @@ export default {
             name: 'services',
             params: { id: this.businessId }
           },
-          show: 
-            this.hasSalonLevelAccess && 
+          show:
+            this.hasSalonLevelAccess &&
             this.hasName &&
             this.user.role !== roles[2] &&
-            !this.isManagerMenu ,
+            !this.isManagerMenu,
           action: {
             label: 'Добавить услугу',
             action: 'newService',
@@ -278,9 +260,9 @@ export default {
             name: 'businessClientsTable',
             params: { id: this.businessId }
           },
-          show: 
-            this.hasSalonLevelAccess && 
-            this.hasName && 
+          show:
+            this.hasSalonLevelAccess &&
+            this.hasName &&
             this.user.role !== roles[2] &&
             this.isEditorUser,
           action: {
@@ -313,11 +295,14 @@ export default {
             name: 'widgetSettings',
             params: { id: this.businessId }
           },
-          show: !this.businessIsFilial &&
+          show:
+            !this.businessIsFilial &&
             this.hasName &&
             !this.isManagerMenu &&
             this.loggedIn &&
-            (this.userRole === 'manager' || this.userRole === 'admin' || this.user.role === 'Администратор компании')
+            (this.userRole === 'manager' ||
+              this.userRole === 'admin' ||
+              this.user.role === 'Администратор компании')
         },
         {
           title: 'Настройки',
@@ -326,7 +311,8 @@ export default {
             name: 'businessSettings',
             params: { id: this.businessId }
           },
-          show:  (this.hasCompanyLevelAccess) &&
+          show:
+            this.hasCompanyLevelAccess &&
             this.hasName &&
             !this.isManagerMenu &&
             (this.userRole === 'manager' ||
@@ -400,13 +386,13 @@ export default {
     },
     getFilialsCount () {
       if (this.businessIsFilial) {
-        this.getFilialsOf(this.businessInfo.parent).then(filials => {
+        this.getFilialsOf(this.businessInfo.parent).then((filials) => {
           this.parentFilialsCount = filials.length
         })
       }
     },
     goHome () {
-      this.$router.push({ name: 'home' })
+      this.$router.push({ name: 'index' })
     },
     onAction (action) {
       if (action && action.to) {

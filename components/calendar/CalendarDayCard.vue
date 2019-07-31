@@ -1,7 +1,7 @@
 <template>
   <v-card
     height="8em"
-    :color="day.outOfRange ? 'grey': ''"
+    :color="day.outOfRange ? 'grey' : ''"
     @click="onClickDate(day.dateKey)"
   >
     <v-card-title>
@@ -49,4 +49,3 @@ export default {
   }
 }
 </script>
-

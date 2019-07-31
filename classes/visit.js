@@ -108,15 +108,15 @@ class Visit {
   getCurrentStatus (date = new Date()) {
     const now = date
     const t1 = dateFromISO(this.ts_begin)
-    const t2 = this.ts_end? dateFromISO(this.ts_end) : 0
+    const t2 = this.ts_end ? dateFromISO(this.ts_end) : 0
 
     if (this.status) {
       return this.statuses.find(x => x.code === this.status)
     }
 
     return now < t1
-        ? this.statuses[4]
-        : t2 && t2 < now
+      ? this.statuses[4]
+      : t2 && t2 < now
         ? this.statuses[2]
         : this.statuses[3]
   }

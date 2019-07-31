@@ -1,11 +1,7 @@
 <template>
   <div class="">
     <div class="colors-list">
-      <div
-        v-for="c in colors"
-        :key="c"
-        class=""
-      >
+      <div v-for="c in colors" :key="c" class="">
         <input
           :id="c"
           v-model="active"
@@ -14,10 +10,7 @@
           :value="`#${c}`"
           @click="$emit('click', `#${c}`)"
         >
-        <label
-          :for="c"
-          class="color-label"
-        >
+        <label :for="c" class="color-label">
           <div :style="{ background: `#${c}` }" />
         </label>
       </div>
@@ -58,10 +51,9 @@ export default {
 }
 </script>
 
-
 <style scoped>
 .colors-list {
-    max-width: 250px;
+  max-width: 250px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;

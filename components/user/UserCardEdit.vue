@@ -18,7 +18,7 @@
         @click="$emit('close')"
       />
       <div class="right-attached-panel__header">
-        {{ create? 'Добавить пользователя' : 'Информация о пользователе' }}
+        {{ create ? 'Добавить пользователя' : 'Информация о пользователе' }}
       </div>
       <div class="businesscard-form__field">
         <div class="phone-input">
@@ -28,20 +28,14 @@
             label="Телефон"
             placeholder=""
             :disabled="!!client.phone"
-            :class="{ 'no-default': !client.phone && (filledPhones.length > 1) }"
+            :class="{ 'no-default': !client.phone && filledPhones.length > 1 }"
             @onEdit="checkPhone($event)"
           />
           <template v-if="seekComplete">
-            <div
-              v-if="foundedUser"
-              class="success--text"
-            >
+            <div v-if="foundedUser" class="success--text">
               Пользователь найден
             </div>
-            <div
-              v-else
-              class="success--text"
-            >
+            <div v-else class="success--text">
               Будет создан новый пользователь с этим номером телефона.
             </div>
           </template>
@@ -56,19 +50,21 @@
           required
         />
       </div>
-      <div
-        v-if="roles.length > 1"
-        class="businesscard-form__field"
-      >
+      <div v-if="roles.length > 1" class="businesscard-form__field">
         <v-select
           v-model="role"
           :items="roles"
-          :item-disabled="function(x){console.log(x); return true}"
+          :item-disabled="
+            function itemDisabledLogger (x) {
+              console.log(x)
+              return true
+            }
+          "
           label="Роль пользователя"
         />
       </div>
       <div
-        v-if="roles.length > 1 && (role===roles[1] || role===roles[2])"
+        v-if="roles.length > 1 && (role === roles[1] || role === roles[2])"
         class="businesscard-form__field"
       >
         <v-select
@@ -97,7 +93,10 @@
       <div>
         <MainButton
           class="button save-info"
-          :class="{ button_disabled: !(seekComplete || client.phone) || !fullName || !checkRole }"
+          :class="{
+            button_disabled:
+              !(seekComplete || client.phone) || !fullName || !checkRole
+          }"
           @click="onSave"
         >
           Сохранить
@@ -108,12 +107,12 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import MainButton from '~/components/common/MainButton.vue'
 import PhoneEdit from '~/components/common/PhoneEdit.vue'
 import Api from '~/api/backend'
 import User from '~/classes/user'
-import {roles} from '~/classes/user'
-import { mapGetters } from 'vuex'
+const { roles } = User
 
 export default {
   components: { MainButton, PhoneEdit },
@@ -180,7 +179,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({businessId: 'business/businessId', businessFilialCount: 'business/businessFilialCount'}),
+    ...mapGetters({
+      businessId: 'business/businessId',
+      businessFilialCount: 'business/businessFilialCount'
+    }),
     checkRole () {
       return (
         (this.roles.length > 1 &&
@@ -191,7 +193,7 @@ export default {
       )
     },
     roles () {
-      return roles.filter(x => x === roles[0] || this.businessFilialCount )
+      return roles.filter(x => x === roles[0] || this.businessFilialCount)
     }
   },
   watch: {
@@ -246,8 +248,8 @@ export default {
       } else {
         Api()
           .get(`/business?select=id,j->>name&parent=eq.${this.businessId}`)
-          .then(res => {
-            this.companyFilials = res.data.map(x => {
+          .then((res) => {
+            this.companyFilials = res.data.map((x) => {
               x.name = x.name || `<без названия ${x.id.slice(-4)}>`
               return x
             })
@@ -261,7 +263,7 @@ export default {
         this.phone = newPhone
         Api()
           .post(`/rpc/find_user`, { phone: `7${newPhone}` })
-          .then(res => {
+          .then((res) => {
             this.seekComplete = true
             if (res.data && res.data.id) {
               this.foundedUser = res.data
@@ -305,17 +307,20 @@ export default {
     },
     onSave () {
       setTimeout(() => {
-        let parts = this.fullName.split(' ')
-        let name = parts[0]
+        const parts = this.fullName.split(' ')
+        const name = parts[0]
         parts.splice(0, 1)
-        let surname = parts.join(' ')
-        let userInfo = {
+        const surname = parts.join(' ')
+        const userInfo = {
           user_id: this.foundedUser && this.foundedUser.id,
           company_id: this.businessId,
-          business: this.role === roles[0] ? [] : this.filials.filter(b => b.id !== this.companyId),
+          business:
+            this.role === roles[0]
+              ? []
+              : this.filials.filter(b => b.id !== this.companyId),
           j: {
-            name: name,
-            surname: surname,
+            name,
+            surname,
             notes: this.notes,
             role: this.role === roles[2] ? 'busman' : ''
           },
@@ -449,8 +454,8 @@ export default {
   }
   .no-default {
     .v-text-field__slot {
-      background: url('~assets/images/svg/attention.svg') 10% center
-        no-repeat transparent !important;
+      background: url('~assets/images/svg/attention.svg') 10% center no-repeat
+        transparent !important;
     }
   }
   .default {
@@ -465,8 +470,8 @@ export default {
       width: 12px;
       height: 12px;
       margin-right: 3px;
-      background: url('~assets/images/svg/selection-grey.svg') center
-        no-repeat transparent;
+      background: url('~assets/images/svg/selection-grey.svg') center no-repeat
+        transparent;
     }
   }
   .make-default {
@@ -476,4 +481,3 @@ export default {
   }
 }
 </style>
-

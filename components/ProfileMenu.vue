@@ -13,43 +13,40 @@
     open-on-hover
     :close-on-content-click="false"
   >
-    <VBtn
-      slot="activator"
-      flat
-    >
-      <VLayout
-        align-center
-        justify-space-between
-      >
-        <Avatar
-          :new-message="newMessage"
-          :size="avatarSize"
-          :name="displayName"
-          :src="avatar"
-        />
-        <div class="profile-expand-more" />
-      </VLayout>
-    </VBtn>
+    <template v-slot:activator="{ on }">
+      <v-btn text v-on="on">
+        <VLayout align-center justify-space-between>
+          <Avatar
+            :new-message="newMessage"
+            :size="avatarSize"
+            :name="displayName"
+            :src="avatar"
+          />
+          <div class="profile-expand-more" />
+        </VLayout>
+      </v-btn>
+    </template>
     <VList class="menu-list">
       <template v-for="(item, index) in menuList">
-        <VListTile
+        <VListItem
           v-if="!item.hide"
           :key="index"
           :to="item.route"
           @click="menuHandler(item.action)"
         >
-          <VListTileTitle :class="{ _bold: item.count && item.title === 'Сообщения' }">
+          <VListItemTitle
+            :class="{ _bold: item.count && item.title === 'Сообщения' }"
+          >
             {{ item.title }}
-          </VListTileTitle>
+          </VListItemTitle>
           <span
             v-if="item.count"
             class="caption count"
             :class="{ attention: item.count === '!' }"
-            flat
           >
             {{ item.count }}
           </span>
-        </VListTile>
+        </VListItem>
       </template>
     </VList>
   </VMenu>
@@ -64,7 +61,7 @@
     max-width="300"
     :close-on-content-click="false"
   >
-    <VBtn
+    <v-btn
       slot="activator"
       flat
     >
@@ -77,7 +74,7 @@
           {{ "Войти" }}
         </VFlex>
       </VLayout>
-    </VBtn>
+    </v-btn>
     <VList>
       <Login @loggedIn="menu = false" />
     </VList>
@@ -85,13 +82,12 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
 import Avatar from '~/components/avatar/Avatar.vue'
 // import Login from "../components/Login"
 
-import { mapGetters, mapActions } from 'vuex'
-
 export default {
-  components: { Avatar, /*Login*/ },
+  components: { Avatar },
   props: {
     source: { type: String, default: () => '' }
   },
@@ -110,8 +106,8 @@ export default {
   computed: {
     ...mapGetters({
       loggedIn: 'user/loggedIn',
-      avatar: 'userAvatar',
-      userID: 'userLogin',
+      avatar: 'user/userAvatar',
+      userID: 'user/userLogin',
       userInfo: 'user/userInfo'
     }),
     menuList () {
@@ -142,7 +138,7 @@ export default {
       ]
     },
     displayName () {
-      if (!this.userID) return
+      if (!this.userID) { return }
 
       return (
         (this.userInfo &&
@@ -162,7 +158,7 @@ export default {
         newVal &&
         newVal.role === 'manager' &&
         newVal.role !== (oldVal && oldVal.role) &&
-        this.$route.name === 'home'
+        this.$route.name === 'index'
       ) {
         this.$router.push({ name: 'myBusinessList' })
         return
@@ -173,13 +169,15 @@ export default {
         newVal.role !== (oldVal && oldVal.role) &&
         this.$route.name === 'register'
       ) {
-        this.$router.push({ name: 'home' })
-        return
+        this.$router.push({ name: 'index' })
       }
     }
   },
   methods: {
-    ...mapActions({logout: 'user/logout', openProfileDrawer: 'common/openProfileDrawer'}),
+    ...mapActions({
+      logout: 'user/logout',
+      openProfileDrawer: 'common/openProfileDrawer'
+    }),
     menuHandler (action) {
       this.menu = false
       switch (action) {
@@ -192,7 +190,7 @@ export default {
           break
         default:
       }
-    },
+    }
   }
 }
 </script>
@@ -200,7 +198,7 @@ export default {
 .v-menu.profile-menu {
   border-left: 1px solid rgba(137, 149, 175, 0.1);
   box-sizing: border-box;
-  @media only screen and (min-width : 1360px) {
+  @media only screen and (min-width: 1360px) {
     width: 100px;
   }
 

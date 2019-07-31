@@ -1,16 +1,8 @@
 <template>
-  <v-card
-    hover
-    class="image-card"
-    @click="$emit('click')"
-  >
+  <v-card hover class="image-card" @click="$emit('click')">
     <v-card-actions v-if="editMode">
       <v-spacer />
-      <v-btn
-        flat
-        icon
-        @click="deleteImage"
-      >
+      <v-btn text icon @click="deleteImage">
         <v-icon>delete</v-icon>
       </v-btn>
     </v-card-actions>
@@ -35,22 +27,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '~/assets/styles/common.scss';
+@import '~/assets/styles/common.scss';
 
-  .pic-title {
+.pic-title {
   font-size: 0.7em;
   color: #fff;
   text-shadow: 0 0 0.3em #000;
 }
 
-  .image-card {
-    width: 130px;
-    height: 130px;
-    margin: 0 20px 20px 0;
-    @media only screen and (min-width : $desktop) {
-      width: 150px;
-      height: 150px;
-      margin: 0 12px 18px 0;
-    }
+.image-card {
+  width: 130px;
+  height: 130px;
+  margin: 0 20px 20px 0;
+  @media only screen and (min-width: $desktop) {
+    width: 150px;
+    height: 150px;
+    margin: 0 12px 18px 0;
   }
+}
 </style>

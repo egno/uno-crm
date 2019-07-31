@@ -1,7 +1,14 @@
 import ApiObject from '~/classes/api_object'
 import Api from '~/api/backend'
-import store from '~/store'
 import { makeAlert, responseGetId } from '~/api/utils'
+
+let store
+
+if (process.browser) {
+  window.onNuxtReady(({ $store }) => {
+    store = $store
+  })
+}
 
 class Address extends ApiObject {
   set jsonObject (newVal) {
@@ -35,6 +42,7 @@ class Business extends ApiObject {
     this.j = (newVal && newVal.j) || {}
 
     this.address = new Address(newVal && newVal.j && newVal.j.address)
+    // eslint-disable-next-line no-mixed-operators
     this.name = newVal && newVal.name || this.j.name
   }
 
@@ -142,7 +150,7 @@ class Business extends ApiObject {
 
   set name (newVal) {
     if (newVal) {
-      this.j.name = newVal.slice(0,50)
+      this.j.name = newVal.slice(0, 50)
     } else {
       delete this.j.name
     }
@@ -229,11 +237,11 @@ class Business extends ApiObject {
   // API methods
 
   load (id) {
-    if (!id || id === 'new') return
+    if (!id || id === 'new') { return }
     return Api()
       .get(`business?id=eq.${id}`)
       .then(res => res.data[0])
-      .then(res => {
+      .then((res) => {
         this.jsonObject = res
       })
   }
@@ -243,14 +251,14 @@ class Business extends ApiObject {
       return Api()
         .post(`business?`, this.jsonObject)
         .then(res => responseGetId(res))
-        .catch(err => {
+        .catch((err) => {
           store.dispatch('alerts/alert', makeAlert(err))
           return false
         })
     } else {
       return Api()
         .patch(`business?id=eq.${this.id}`, this.jsonObject)
-        .catch(err => {
+        .catch((err) => {
           store.dispatch('alerts/alert', makeAlert(err))
           return false
         })

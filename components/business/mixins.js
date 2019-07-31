@@ -24,7 +24,7 @@ export const businessMixins = {
   },
   methods: {
     prependHttpToUrl (url) {
-      if (url.indexOf('http://') == 0 || url.indexOf('https://') == 0) {
+      if (url.indexOf('http://') === 0 || url.indexOf('https://') === 0) {
         return url
       } else {
         return 'http://' + url
@@ -73,8 +73,8 @@ export const businessMixins = {
       return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (
         c
       ) {
-        var r = (Math.random() * 16) | 0,
-          v = c == 'x' ? r : (r & 0x3) | 0x8
+        const r = (Math.random() * 16) | 0
+        const v = c === 'x' ? r : (r & 0x3) | 0x8
         return v.toString(16)
       })
     }
@@ -118,8 +118,8 @@ export const scheduleMixin = {
   },
   methods: {
     setDays () {
-      let weekSchedule = this.newWeekSchedule && this.newWeekSchedule.data
-      let days = []
+      const weekSchedule = this.newWeekSchedule && this.newWeekSchedule.data
+      const days = []
 
       if (!weekSchedule) {
         return
@@ -169,7 +169,9 @@ export const scheduleMixin = {
       return errors
     },
     getTimeArray (timeString) {
-      return (!timeString) ? [null,null] : timeString.split(':').map(str => parseInt(str))
+      return !timeString
+        ? [null, null]
+        : timeString.split(':').map(str => parseInt(str))
     }
   }
 }
@@ -182,20 +184,23 @@ export const filials = {
         return
       }
 
-      if (newBusinessInfo.name
-        && newBusinessInfo.j.address && newBusinessInfo.j.address.name
-        && newBusinessInfo.j.phones && newBusinessInfo.j.phones.length && newBusinessInfo.j.phones.some(p => p.length >= 10)
-        && (!newBusinessInfo.parent || newBusinessInfo.j.category)
+      if (
+        newBusinessInfo.name &&
+        newBusinessInfo.j.address &&
+        newBusinessInfo.j.address.name &&
+        newBusinessInfo.j.phones &&
+        newBusinessInfo.j.phones.length &&
+        newBusinessInfo.j.phones.some(p => p.length >= 10) &&
+        (!newBusinessInfo.parent || newBusinessInfo.j.category)
       ) {
         this.infoTab = false
       }
     },
     getFilialsOf (id) {
-      if (!id) return []
+      if (!id) { return [] }
       return Api()
         .get(`business?parent=eq.${id}`)
         .then(res => res.data)
-
-    },
+    }
   }
 }

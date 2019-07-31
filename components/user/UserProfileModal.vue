@@ -11,22 +11,17 @@
       temporary
       right
       width="440"
-      @input="v => v || closeProfileDrawer()"
+      @input="(v) => v || closeProfileDrawer()"
     >
-      <VBtn
-        class="close"
-        fab
-        depressed
-        @click="closeProfileDrawer"
-      />
+      <v-btn class="close" fab depressed @click="closeProfileDrawer" />
       <UserProfile @close="closeProfileDrawer" />
     </v-navigation-drawer>
   </div>
 </template>
 
 <script>
-import UserProfile from '~/components/user/UserProfile.vue'
 import { mapActions } from 'vuex'
+import UserProfile from '~/components/user/UserProfile.vue'
 
 export default {
   components: { UserProfile },
@@ -51,13 +46,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .drawer {
-    padding: 53px 80px;
-  }
-  .close {
-    position: absolute;
-    left: 19px;
-    top: 19px;
-    margin: 0;
-  }
+.drawer {
+  padding: 53px 80px;
+}
+.close {
+  position: absolute;
+  left: 19px;
+  top: 19px;
+  margin: 0;
+}
 </style>

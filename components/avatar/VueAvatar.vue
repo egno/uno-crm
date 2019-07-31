@@ -1,15 +1,8 @@
 <template>
-  <div :style="{width: canvasWidth+'px', height: canvasHeight+'px'}">
-    <div
-      v-if="background"
-      class="pic-background"
-    >
-      <div :style="{margin: canvasBorder+'px'}">
-        <v-img
-          :width="width"
-          :height="height"
-          :src="background"
-        />
+  <div :style="{ width: canvasWidth + 'px', height: canvasHeight + 'px' }">
+    <div v-if="background" class="pic-background">
+      <div :style="{ margin: canvasBorder + 'px' }">
+        <v-img :width="width" :height="height" :src="background" />
       </div>
     </div>
     <div class="pic-editor">
@@ -136,19 +129,19 @@ export default {
     }
   },
   mounted () {
-    let self = this
+    const self = this
     this.canvas = this.$refs.avatarEditorCanvas
     this.context = this.canvas.getContext('2d')
     this.paint()
 
     if (!this.image) {
-      var placeHolder = this.svgToImage(
+      const placeHolder = this.svgToImage(
         '<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 65 65"><defs><style>.cls-1{fill:#000;}</style></defs><title>Upload_Upload</title><path class="cls-1" d="M32.5,1A31.5,31.5,0,1,1,1,32.5,31.54,31.54,0,0,1,32.5,1m0-1A32.5,32.5,0,1,0,65,32.5,32.5,32.5,0,0,0,32.5,0h0Z"/><polygon class="cls-1" points="41.91 28.2 32.59 18.65 23.09 28.39 24.17 29.44 31.87 21.54 31.87 40.05 33.37 40.05 33.37 21.59 40.83 29.25 41.91 28.2"/><polygon class="cls-1" points="40.66 40.35 40.66 44.35 24.34 44.35 24.34 40.35 22.34 40.35 22.34 44.35 22.34 46.35 24.34 46.35 40.66 46.35 42.66 46.35 42.66 44.35 42.66 40.35 40.66 40.35"/></svg>'
       )
 
       placeHolder.onload = function () {
-        var x = self.canvasWidth / 2 - this.width / 2
-        var y = self.canvasHeight / 2 - this.height / 2
+        const x = self.canvasWidth / 2 - this.width / 2
+        const y = self.canvasHeight / 2 - this.height / 2
         self.context.drawImage(placeHolder, x, y, this.width, this.height)
       }
     } else {
@@ -198,16 +191,16 @@ export default {
       }
     },
     svgToImage (rawSVG) {
-      let svg = new Blob([rawSVG], { type: 'image/svg+xml;charset=utf-8' })
-      let domURL = self.URL || self.webkitURL || self
-      let url = domURL.createObjectURL(svg)
-      let img = new Image()
+      const svg = new Blob([rawSVG], { type: 'image/svg+xml;charset=utf-8' })
+      const domURL = self.URL || self.webkitURL || self
+      const url = domURL.createObjectURL(svg)
+      const img = new Image()
       img.src = url
       return img
     },
     setState (state1) {
-      var min = Math.ceil(1)
-      var max = Math.floor(10000)
+      const min = Math.ceil(1)
+      const max = Math.floor(10000)
 
       this.state = state1
       this.state.cnt = 'HELLO' + Math.floor(Math.random() * (max - min)) + min
@@ -279,9 +272,9 @@ export default {
       this.state.mx = null
       this.state.my = null
       this.cursor = 'cursorGrabbing'
-      let eventSubject = document
+      const eventSubject = document
       let hasMoved = false
-      let handleMouseUp = event => {
+      const handleMouseUp = (event) => {
         this.onDragEnd(event)
         if (!hasMoved && event.targetTouches) {
           e.target.click()
@@ -291,7 +284,7 @@ export default {
         eventSubject.removeEventListener('touchend', handleMouseUp)
         eventSubject.removeEventListener('touchmove', handleMouseMove)
       }
-      let handleMouseMove = event => {
+      const handleMouseMove = (event) => {
         hasMoved = true
         this.onMouseMove(event)
       }
@@ -315,7 +308,7 @@ export default {
       this.dragged = true
       this.changed = true
 
-      let imageState = this.state.image
+      const imageState = this.state.image
       const lastX = imageState.x
       const lastY = imageState.y
 
@@ -346,17 +339,17 @@ export default {
       // this.setState(newState)
     },
     replaceImageInBounds () {
-      let imageState = this.state.image
+      const imageState = this.state.image
       imageState.y = this.getBoundedY(imageState.y, this.scale)
       imageState.x = this.getBoundedX(imageState.x, this.scale)
     },
     loadImage (imageURL) {
-      let imageObj = new Image()
-      let self = this
+      const imageObj = new Image()
+      const self = this
 
       // imageObj.onload = () => this.handleImageReady(imageObj);
       imageObj.onload = () => {
-        let imageState = self.getInitialSize(imageObj.width, imageObj.height)
+        const imageState = self.getInitialSize(imageObj.width, imageObj.height)
         self.state.image.x = 0
         self.state.image.y = 0
         self.state.image.resource = imageObj
@@ -406,9 +399,9 @@ export default {
       )
     },
     getBoundedX (x, scale) {
-      var image = this.state.image
-      var dimensions = this.getDimensions()
-      let width =
+      const image = this.state.image
+      const dimensions = this.getDimensions()
+      const width =
         Math.abs(image.width * Math.cos(this.rotationRadian)) +
         Math.abs(image.height * Math.sin(this.rotationRadian))
       let widthDiff = Math.floor((width - dimensions.width / scale) / 2)
@@ -416,9 +409,9 @@ export default {
       return Math.max(-widthDiff, Math.min(x, widthDiff))
     },
     getBoundedY (y, scale) {
-      var image = this.state.image
-      var dimensions = this.getDimensions()
-      let height =
+      const image = this.state.image
+      const dimensions = this.getDimensions()
+      const height =
         Math.abs(image.width * Math.sin(this.rotationRadian)) +
         Math.abs(image.height * Math.cos(this.rotationRadian))
       let heightDiff = Math.floor((height - dimensions.height / scale) / 2)
@@ -427,10 +420,10 @@ export default {
     },
     paintImage (context, image, border) {
       if (image.resource) {
-        var position = this.calculatePosition(image, border)
+        const position = this.calculatePosition(image, border)
         context.save()
         context.globalCompositeOperation = 'destination-over'
-        let dimensions = this.getDimensions()
+        const dimensions = this.getDimensions()
         context.translate(
           dimensions.canvas.width / 2,
           dimensions.canvas.height / 2
@@ -451,21 +444,21 @@ export default {
       }
     },
     transformDataWithRotation (x, y) {
-      let radian = -this.rotationRadian
-      let rx = x * Math.cos(radian) - y * Math.sin(radian)
-      let ry = x * Math.sin(radian) + y * Math.cos(radian)
+      const radian = -this.rotationRadian
+      const rx = x * Math.cos(radian) - y * Math.sin(radian)
+      const ry = x * Math.sin(radian) + y * Math.cos(radian)
       return [rx, ry]
     },
     calculatePosition (image, border) {
       image = image || this.state.image
-      var dimensions = this.getDimensions()
-      let width = image.width * this.scale
-      let height = image.height * this.scale
-      var widthDiff = (width - dimensions.width) / 2
-      var heightDiff = (height - dimensions.height) / 2
-      var x = image.x * this.scale // - widthDiff;
-      var y = image.y * this.scale; // - heightDiff;
-      [x, y] = this.transformDataWithRotation(x, y)
+      const dimensions = this.getDimensions()
+      const width = image.width * this.scale
+      const height = image.height * this.scale
+      const widthDiff = (width - dimensions.width) / 2
+      const heightDiff = (height - dimensions.height) / 2
+      let x = image.x * this.scale // - widthDiff;
+      let y = image.y * this.scale // - heightDiff;
+      ;[x, y] = this.transformDataWithRotation(x, y)
       x += border - widthDiff
       y += border - heightDiff
       return {
@@ -548,7 +541,7 @@ export default {
       }
     },
     fileSelected (e) {
-      var files = e.target.files || e.dataTransfer.files
+      const files = e.target.files || e.dataTransfer.files
       this.$emit('select-file', files)
 
       if (!files.length) {
@@ -556,7 +549,7 @@ export default {
       }
 
       // var image = new Image();
-      var reader = new FileReader()
+      const reader = new FileReader()
 
       this.changed = true
       reader.onload = e => this.loadImage(e.target.result)
@@ -567,31 +560,30 @@ export default {
 </script>
 
 <style>
-  .cursorPointer {
-    cursor: pointer;
-  }
+.cursorPointer {
+  cursor: pointer;
+}
 
-  .cursorGrab {
-    cursor: grab;
-    cursor: -webkit-grab;
-    cursor: -moz-grab;
-  }
+.cursorGrab {
+  cursor: grab;
+  cursor: -webkit-grab;
+  cursor: -moz-grab;
+}
 
-  .cursorGrabbing {
-    cursor: grabbing;
-    cursor: -webkit-grabbing;
-    cursor: -moz-grabbing;
-  }
+.cursorGrabbing {
+  cursor: grabbing;
+  cursor: -webkit-grabbing;
+  cursor: -moz-grabbing;
+}
 
-  .pic-editor {
-    position: absolute;
-    z-index: 1;
-  }
+.pic-editor {
+  position: absolute;
+  z-index: 1;
+}
 
-  .pic-background {
-    position: absolute;
-    opacity: 0.2;
-    z-index: 0;
-  }
+.pic-background {
+  position: absolute;
+  opacity: 0.2;
+  z-index: 0;
+}
 </style>
-

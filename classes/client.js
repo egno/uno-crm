@@ -1,12 +1,22 @@
+/* eslint-disable camelcase */
+/* eslint-disable no-mixed-operators */
 import ApiObject from '~/classes/api_object'
 import Api from '~/api/backend'
-import store from '~/store'
 import { makeAlert, responseGetId } from '~/api/utils'
 import Name from '~/classes/name'
 import Visit from '~/classes/visit'
 
-class Client extends ApiObject {
+let store
 
+if (process.browser) {
+  window.onNuxtReady(({ $store }) => {
+    store = $store
+  })
+}
+
+// todo remove store, add dispatching 'alerts/alert' in Vue intsances
+
+class Client extends ApiObject {
   // Main object
 
   /**
@@ -135,7 +145,7 @@ class Client extends ApiObject {
    * @param {String} newVal
    */
   set phones (newVal) {
-    this.j.phones = newVal? newVal : ['']
+    this.j.phones = newVal || ['']
   }
 
   get phones () {
@@ -146,7 +156,7 @@ class Client extends ApiObject {
    * @param {any} newVal
    */
   set lastVisit (newVal) {
-    if (!newVal) return
+    if (!newVal) { return }
     this._lastVisit = new Visit(newVal)
   }
 
@@ -191,31 +201,31 @@ class Client extends ApiObject {
   // API methods
 
   load (id) {
-    if (!id || id === 'new') return Promise.resolve()
+    if (!id || id === 'new') { return Promise.resolve() }
     return Api()
       .get(`client?id=eq.${id}`)
       .then(res => res.data[0])
-      .then(res => {
+      .then((res) => {
         this.jsonObject = res
       })
   }
 
   save () {
-    if (!this.business_id) return
+    if (!this.business_id) { return }
     if (!this.id || this.id === 'new') {
       this.id = null
       return Api()
         .post(`client?`, this.jsonObject)
         .then(res => responseGetId(res))
-        .catch(err => {
-          store.dispatch('alerts/alert', makeAlert(err))
+        .catch((err) => {
+          store && store.dispatch('alerts/alert', makeAlert(err))
           return false
         })
     } else {
       return Api()
         .patch(`client?id=eq.${this.id}`, this.jsonObject)
-        .catch(err => {
-          store.dispatch('alerts/alert', makeAlert(err))
+        .catch((err) => {
+          store && store.dispatch('alerts/alert', makeAlert(err))
           return false
         })
     }

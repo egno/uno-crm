@@ -43,7 +43,6 @@
         </template>
       </Accordion>
 
-
       <Accordion class="widget">
         <template slot="heading">
           Виджет Онлайн-записи
@@ -51,7 +50,9 @@
         <template slot="content">
           <ul>
             <li>
-              <p>Для простоты восприятия убраны предложения ближайшего времени</p>
+              <p>
+                Для простоты восприятия убраны предложения ближайшего времени
+              </p>
             </li>
             <li>
               <p>Виджет для сайта теперь располагается в центре</p>
@@ -70,23 +71,22 @@
 </template>
 
 <script>
-import Accordion from '~/components/common/Accordion.vue'
 import { Slide } from 'vue-carousel'
+import Accordion from '~/components/common/Accordion.vue'
 
 export default {
-    components: {
-        Accordion,
-        Slide
-    },
-    data () {
-        return {
-            newsIndicators: [
-            { class: 'critical', color: '#EF4D37', active: true },
-            { class: 'visual', color: '#5BCD5E', active: true },
-            { class: 'widget', color: '#b35dc9', active: true }
-          ]
-        }
+  components: {
+    Accordion,
+    Slide
+  },
+  data () {
+    return {
+      newsIndicators: [
+        { class: 'critical', color: '#EF4D37', active: true },
+        { class: 'visual', color: '#5BCD5E', active: true },
+        { class: 'widget', color: '#b35dc9', active: true }
+      ]
     }
+  }
 }
 </script>
-

@@ -24,6 +24,5 @@ export default {
       item: new Client(this.client)
     }
   }
-
 }
 </script>

@@ -1,9 +1,5 @@
 <template>
-  <v-card
-    flat
-    color="grey lighten-3"
-    class="card-rounded"
-  >
+  <v-card flat color="grey lighten-3" class="card-rounded">
     <v-card-text>
       <v-switch
         v-model="showDetails"
@@ -17,18 +13,15 @@
     <template v-if="showDetails">
       <v-divider class="card-divider" />
       <v-card-text>
-        <v-layout
-          row
-          wrap
-        >
-          <v-flex
-            pa-2
-            sm6
-          >
+        <v-layout row wrap>
+          <v-flex pa-2 sm6>
             <v-layout column>
               <v-flex pa-2>
                 <div>
-                  Кнопка <span>«Запись»</span> будет всегда доступна в правом нижнем углу экрана. Выберите подходящий цвет из представленных, чтобы ваши клиенты всегда могли быстро найти ее на сайте.
+                  Кнопка <span>«Запись»</span> будет всегда доступна в правом
+                  нижнем углу экрана. Выберите подходящий цвет из
+                  представленных, чтобы ваши клиенты всегда могли быстро найти
+                  ее на сайте.
                 </div>
               </v-flex>
               <v-flex pa-2>
@@ -47,7 +40,7 @@
                     'B88AB2',
                     '8589DF'
                   ]"
-                  @click="color=$event"
+                  @click="color = $event"
                 />
               </v-flex>
               <v-flex pa-5>
@@ -57,8 +50,7 @@
                       class="unoBtnBackground"
                       :style="{ background: `${color}` }"
                     />
-                    <div class="unoBtnText">запись
-                    </div>
+                    <div class="unoBtnText">запись</div>
                     <div class="unoBtnIcon" />
                   </a>
                 </div>
@@ -75,32 +67,41 @@
                 />
               </v-flex>
               <v-flex pa-2>
-                <v-btn small ripple round color="primary" outline @click="copyScript">
+                <v-btn
+                  small
+                  ripple
+                  round
+                  color="primary"
+                  outline
+                  @click="copyScript"
+                >
                   Скопировать код
                 </v-btn>
               </v-flex>
             </v-layout>
           </v-flex>
-          <v-flex
-            pa-2
-            sm6
-          >
+          <v-flex pa-2 sm6>
             <v-layout column>
               <v-flex pa-2>
                 <div class="red--text">
-                  <div><span class="rounded">?</span> <span class="font-weight-bold"> Как вставить кнопку "Запись" на сайт?</span></div>
+                  <div>
+                    <span class="rounded">?</span>
+                    <span class="font-weight-bold">
+                      Как вставить кнопку "Запись" на сайт?</span>
+                  </div>
                 </div>
               </v-flex>
               <v-flex pa-2>
-                <a href="https://docs.google.com/document/d/1Xhdy0qMvgOmD9AlBQALeG6nJF3i6NPH81K0DYcZQn7k" target="_blank">Скачать короткую инструкцию</a>
+                <a
+                  href="https://docs.google.com/document/d/1Xhdy0qMvgOmD9AlBQALeG6nJF3i6NPH81K0DYcZQn7k"
+                  target="_blank"
+                >Скачать короткую инструкцию</a>
               </v-flex>
               <v-flex pa-2 pt-4>
                 <span class="font-weight-bold">Возникла проблема?</span>
               </v-flex>
               <v-flex pa-2>
-                <div
-                  @click="openMessageWindow"
-                >
+                <div @click="openMessageWindow">
                   <a>Связаться с техподдержкой</a>
                 </div>
               </v-flex>
@@ -113,8 +114,8 @@
 </template>
 
 <script>
-import ColorSelector from '~/components/common/ColorSelector.vue'
 import { mapGetters, mapActions } from 'vuex'
+import ColorSelector from '~/components/common/ColorSelector.vue'
 
 export default {
   components: { ColorSelector },
@@ -128,7 +129,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({ businessId: 'business/businessId'}),
+    ...mapGetters({ businessId: 'business/businessId' }),
     unoBtnScript () {
       return `<script>var UNO_ID = '${
         this.businessId
@@ -182,4 +183,3 @@ export default {
   margin-right: 0.5em;
 }
 </style>
-

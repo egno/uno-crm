@@ -1,5 +1,5 @@
-import Api from '@/api/backend'
 import { mapGetters } from 'vuex'
+import Api from '@/api/backend'
 import GalleryLayout from '@/components/gallery/GalleryLayout.vue'
 import Card from '@/components/gallery/Card.vue'
 import { imagePath, isMobile } from '@/components/gallery/utils'
@@ -8,16 +8,19 @@ export default {
   components: { GalleryLayout, Card },
   data () {
     return {
-      imagesData: [],
+      imagesData: []
     }
   },
   computed: {
-    ...mapGetters({businessId: 'business/businessId', employees: 'employee/employees'}),
+    ...mapGetters({
+      businessId: 'business/businessId',
+      employees: 'employee/employees'
+    }),
     personalId () {
       return this.$route.params && this.$route.params.personalId
     },
     currentEmployee () {
-      if (!this.personalId || !this.employees) return
+      if (!this.personalId || !this.employees) { return }
       const emp = this.employees.find(emp => emp.id === this.personalId)
 
       return emp && emp.j
@@ -34,12 +37,12 @@ export default {
   },
   methods: {
     load () {
-      if (!this.businessId) return
+      if (!this.businessId) { return }
 
       Api()
         .get(`gallery?business_id=eq.${this.businessId}`)
         .then(res => res.data)
-        .then(res => {
+        .then((res) => {
           this.imagesData = res
         })
     },
@@ -52,8 +55,12 @@ export default {
         return []
       }
 
-      return this.imagesData && this.imagesData.filter(x => x.employees.some(e => e === personalId))
-        .filter(x => x.services && x.services.some(e => !!e))
-    },
+      return (
+        this.imagesData &&
+        this.imagesData
+          .filter(x => x.employees.some(e => e === personalId))
+          .filter(x => x.services && x.services.some(e => !!e))
+      )
+    }
   }
 }

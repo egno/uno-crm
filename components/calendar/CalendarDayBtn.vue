@@ -1,8 +1,5 @@
 <template>
-  <VBadge
-    :value="counter"
-    overlap
-  >
+  <VBadge :value="counter" overlap>
     <v-tooltip
       v-if="noWorkingDay"
       v-model="tooltip"
@@ -12,31 +9,28 @@
     >
       <span class="text-primary">
         Выходной день
-      </span> <br>
-      <a
-        class="blue-link"
-        href="#"
-        @click="tooltip = false"
-      >
+      </span>
+      <br>
+      <a class="blue-link" href="#" @click="tooltip = false">
         Сделать рабочим
       </a>
     </v-tooltip>
-    <VBtn
-      :class="{ weekend : weekend, badge : (counter > 0) }"
+    <v-btn
+      :class="{ weekend: weekend, badge: counter > 0 }"
       class="calendar-btn"
       fab
       small
       block
       depressed
-      flat
+      text
       :color="color"
       :outline="day.today"
-      @click="onClickDate(day.dateKey);"
+      @click="onClickDate(day.dateKey)"
       @mouseup="move"
       @mouseleave="tooltip = false"
     >
       {{ day.display }}
-    </VBtn>
+    </v-btn>
   </VBadge>
 </template>
 
@@ -57,10 +51,10 @@ export default {
   },
   data () {
     return {
-      noWorkingDay: false, //для тултипа в нерабочих днях
+      noWorkingDay: false, // для тултипа в нерабочих днях
       tooltip: false,
       x: 0,
-      y: 0,
+      y: 0
     }
   },
   computed: {
@@ -77,8 +71,8 @@ export default {
   },
   methods: {
     move (e) {
-        console.log(51651)
-        console.log(e)
+      console.log(51651)
+      console.log(e)
       this.x = e.x + 10
       this.y = e.y + 20
     },
@@ -90,57 +84,57 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-  .calendar-btn {
-    width: 20px;
-    height: 20px;
-    font-size: 12px;
-    font-weight: 300;
-    border: none;
-    &:hover {
-      background-color: rgba(255, 255, 255, 0.3);
-    }
+.calendar-btn {
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
+  font-weight: 300;
+  border: none;
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+  }
 
-    &.v-btn--block {
-      color: #fff;
-      margin: 2px 0 !important;
-      line-height: 11px;
-      &.weekend {
-        &.red--text {
-          color: #8995AF !important;
-        }
-      }
+  &.v-btn--block {
+    color: #fff;
+    margin: 2px 0 !important;
+    line-height: 11px;
+    &.weekend {
       &.red--text {
-        color: #8995AF !important;
+        color: #8995af !important;
       }
-      &.grey--text {
-        color: rgba(137, 149, 175, 0.35) !important;
-      }
-      /*цвет для выходного для*/
-      &.v-btn--no-working {
-        color: #8995AF;
-      }
-      &.v-btn--outline {
-        background: #fff !important;
-        color: #142941;
-        font-weight: 900;
-        &.badge {
-          &:after {
-            top: 20px;
-          }
-        }
-      }
+    }
+    &.red--text {
+      color: #8995af !important;
+    }
+    &.grey--text {
+      color: rgba(137, 149, 175, 0.35) !important;
+    }
+    /*цвет для выходного для*/
+    &.v-btn--no-working {
+      color: #8995af;
+    }
+    &.v-btn--outline {
+      background: #fff !important;
+      color: #142941;
+      font-weight: 900;
       &.badge {
-        position: relative;
         &:after {
-          content: '';
-          position: absolute;
-          width: 4px;
-          height: 4px;
-          border-radius: 4px;
-          top: 16px;
-          background: #5699FF;
+          top: 20px;
         }
+      }
+    }
+    &.badge {
+      position: relative;
+      &:after {
+        content: '';
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        border-radius: 4px;
+        top: 16px;
+        background: #5699ff;
       }
     }
   }
+}
 </style>

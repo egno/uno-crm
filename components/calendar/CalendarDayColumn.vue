@@ -1,7 +1,5 @@
 <template>
-  <div
-    :class="['day-column', { today: isToday }]"
-  >
+  <div :class="['day-column', { today: isToday }]">
     <div class="day-column__employee">
       <template v-if="employee.j">
         <Avatar
@@ -15,59 +13,74 @@
             {{ employee.j.category }}
           </div>
           <h2 class="day-column__emp-name">
-            {{ employee.j.name && employee.j.name.length > 70? employee.j.name.substring(0, 70) + '...' : employee.j.name }}
+            {{
+              employee.j.name && employee.j.name.length > 70
+                ? employee.j.name.substring(0, 70) + '...'
+                : employee.j.name
+            }}
           </h2>
         </div>
       </template>
     </div>
-    
+
     <div
       v-for="(time, i) in times"
       :key="i"
       :class="{ 'day-column__item': true, 'in-view': i === slotInView }"
     >
       <div class="day-column__time">
-        <div
-          v-if="displayTimeStamp(i)"
-          class="time-mark"
-        >
+        <div v-if="displayTimeStamp(i)" class="time-mark">
           {{ time.begin.display }}
         </div>
       </div>
-      
+
       <div v-if="time.visit" class="slot">
         <VisitCard
           :now="now"
           :selected="selectVisit"
           :visit="time.visit"
-          :services="time.visit.services" 
+          :services="time.visit.services"
           @onDelete="onVisitDelete(time.visit.id)"
         />
       </div>
       <div
         v-else
-        :class="['slot', { working: isWorkingTime(i), clicked: time === selectedTime }]"
+        :class="[
+          'slot',
+          { working: isWorkingTime(i), clicked: time === selectedTime }
+        ]"
         @click="onSlotClick(time, i)"
       >
         <div class="slot__time">
           {{ time.begin.display }}
         </div>
         <div v-show="time === selectedTime" class="slot__container">
-          <div class="slot__add-visit" @click="$emit('onSlotClick', time.begin.date)">
+          <div
+            class="slot__add-visit"
+            @click="$emit('onSlotClick', time.begin.date)"
+          >
             +
           </div>
-          <div class="slot__add-break" @click="$emit('onBreakClick', time.begin.date)">
+          <div
+            class="slot__add-break"
+            @click="$emit('onBreakClick', time.begin.date)"
+          >
             Break
           </div>
         </div>
       </div>
     </div>
-    <div v-if="offsetTop > 0" class="day-column__now" :style="{ top: offsetTop + 'px'}" />
+    <div
+      v-if="offsetTop > 0"
+      class="day-column__now"
+      :style="{ top: offsetTop + 'px' }"
+    />
   </div>
 </template>
 
-
 <script>
+import { setInterval, clearInterval } from 'timers'
+import { mapGetters } from 'vuex'
 import VisitCard from '~/components/calendar/VisitCard.vue'
 import {
   areSameDates,
@@ -75,8 +88,6 @@ import {
   formatDate,
   formatTime
 } from '~/components/calendar/utils'
-import { mapGetters } from 'vuex'
-import { setInterval, clearInterval } from 'timers'
 import Avatar from '~/components/avatar/Avatar.vue'
 
 export default {
@@ -131,12 +142,12 @@ export default {
     const slotDuration = 15
 
     return {
-      headerHeight: 80, /* height of column header in pixels */
+      headerHeight: 80 /* height of column header in pixels */,
       hours: 24,
       minutes: 60,
       offsetTop: 0,
       slotDuration,
-      slotHeight: 56, /* slot height in pixels */
+      slotHeight: 56 /* slot height in pixels */,
       displayStep: 4,
       selectVisit: false,
       timeEditBlock: false,
@@ -148,17 +159,25 @@ export default {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
-        weekday: 'long',
+        weekday: 'long'
       }
     }
   },
   computed: {
-    ...mapGetters({apiTimeZone: 'common/apiTimeZone', calendar: 'common/calendar'}),
-    minuteHeight () { /* height in pixels */
-      return this.slotHeight / this.slotDuration 
+    ...mapGetters({
+      apiTimeZone: 'common/apiTimeZone',
+      calendar: 'common/calendar'
+    }),
+    minuteHeight () {
+      /* height in pixels */
+      return this.slotHeight / this.slotDuration
     },
     isDayOff () {
-      if (!this.employeeSchedule || !this.employeeSchedule[0] || !this.employeeSchedule[1]) {
+      if (
+        !this.employeeSchedule ||
+        !this.employeeSchedule[0] ||
+        !this.employeeSchedule[1]
+      ) {
         return true
       }
 
@@ -168,33 +187,36 @@ export default {
       return areSameDates(this.today, this.day.date)
     },
     times () {
-      const isVisible = time => {
-        if (!(this.displayFrom || this.displayTo)) return true
+      const isVisible = (time) => {
+        if (!(this.displayFrom || this.displayTo)) { return true }
 
-        return time.begin.display <= this.displayTo && time.end.display >= this.displayFrom
+        return (
+          time.begin.display <= this.displayTo &&
+          time.end.display >= this.displayFrom
+        )
       }
 
-      let times = [...Array((this.hours * this.minutes) / this.slotDuration)].map(
-        (x, i) => {
-          const dateTime = this.day.date.getTime()
-          const d1 = new Date(dateTime + 60000 * (i * this.slotDuration))
-          const d2 = new Date(dateTime + 60000 * ((i + 1) * this.slotDuration))
-          const displayTime1 = this.timeDisplay(d1)
-          const displayTime2 = this.timeDisplay(d2)
+      const times = [
+        ...Array((this.hours * this.minutes) / this.slotDuration)
+      ].map((x, i) => {
+        const dateTime = this.day.date.getTime()
+        const d1 = new Date(dateTime + 60000 * (i * this.slotDuration))
+        const d2 = new Date(dateTime + 60000 * ((i + 1) * this.slotDuration))
+        const displayTime1 = this.timeDisplay(d1)
+        const displayTime2 = this.timeDisplay(d2)
 
-          return {
-            begin: {
-              date: d1,
-              display: displayTime1
-            },
-            end: {
-              date: d2,
-              display: displayTime2
-            },
-            visit: this.visits.find(v => v.time === displayTime1)
-          }
+        return {
+          begin: {
+            date: d1,
+            display: displayTime1
+          },
+          end: {
+            date: d2,
+            display: displayTime2
+          },
+          visit: this.visits.find(v => v.time === displayTime1)
         }
-      )
+      })
 
       return times.filter(isVisible)
     },
@@ -209,16 +231,18 @@ export default {
     this.setTopOffset()
     if (this.offsetTop > 0) {
       const elem = this.$el.querySelector('.today.selected .in-view')
-      const top = elem && (this.documentOffsetTop(elem) - (window.innerHeight / 2)) || 0
+      const top =
+        (elem && this.documentOffsetTop(elem) - window.innerHeight / 2) || 0
 
-      if (!elem|| !top) {
+      if (!elem || !top) {
         return
       }
 
       if (window.innerWidth < 1360) {
         window.scrollTo({ top, behavior: 'smooth' })
       } else {
-        elem && elem.closest('.main-table').scrollTo({ top, behavior: 'smooth' })
+        elem &&
+          elem.closest('.main-table').scrollTo({ top, behavior: 'smooth' })
       }
     }
   },
@@ -227,14 +251,14 @@ export default {
   },
   methods: {
     displayTimeStamp (i) {
-      return this.showTime && !((i - 1)% this.displayStep)
+      return this.showTime && !((i - 1) % this.displayStep)
     },
     getMinutesOffset () {
       const startTime = this.parseTime(this.displayFrom)
       const currentTime = Date.now()
       const offset = currentTime - startTime
 
-      return offset / 60000 
+      return offset / 60000
     },
     setTopOffset () {
       if (!areSameDates(new Date(), this.day.date)) {
@@ -242,12 +266,12 @@ export default {
         return
       }
 
-      const minutes = this.getMinutesOffset() 
+      const minutes = this.getMinutesOffset()
       if (minutes / this.slotDuration > this.times.length) {
         this.offsetTop = 0
         return
       }
- 
+
       /* we show one slot before the first (displayFrom) slot, for the first time mark to be visible,
         so we have to add slot's height here */
       this.offsetTop = minutes * this.minuteHeight + this.slotHeight
@@ -260,23 +284,29 @@ export default {
 
       return this.isDayOff
         ? false
-        : (this.employeeSchedule[0] <= this.times[i].begin.display &&
-        (dayEnd === '00:00' ? '24:00' : dayEnd) >= this.times[i].end.display
-        // && !(
-        //   this.lunchTime.length &&
-        //   (this.lunchTime[0] <= this.times[i].begin.display &&
-        //     this.lunchTime[1] >= this.times[i].end.display)
-        // )
-      )
+        : this.employeeSchedule[0] <= this.times[i].begin.display &&
+            (dayEnd === '00:00' ? '24:00' : dayEnd) >= this.times[i].end.display
+      // && !(
+      //   this.lunchTime.length &&
+      //   (this.lunchTime[0] <= this.times[i].begin.display &&
+      //     this.lunchTime[1] >= this.times[i].end.display)
+      // )
     },
     documentOffsetTop (elem) {
-      return elem.offsetTop + (elem.offsetParent ? this.documentOffsetTop(elem.parentElement) : 0)
+      return (
+        elem.offsetTop +
+        (elem.offsetParent ? this.documentOffsetTop(elem.parentElement) : 0)
+      )
     },
     onClickDate (dt) {
       this.$emit('onClickDate', dt)
     },
     onSlotClick (time, i) {
-      if (!this.isDayOff && (time.begin.date.getTime() > Date.now()) && this.isWorkingTime(i)) {
+      if (
+        !this.isDayOff &&
+        time.begin.date.getTime() > Date.now() &&
+        this.isWorkingTime(i)
+      ) {
         this.selectedTime = time
       }
     },
@@ -294,10 +324,10 @@ export default {
 </script>
 
 <style lang="scss">
-  @import '~/assets/styles/common.scss';
+@import '~/assets/styles/common.scss';
 @mixin active-header {
-    background-color: rgba(137, 149, 175, 0.35);
-    border-radius: 4px;
+  background-color: rgba(137, 149, 175, 0.35);
+  border-radius: 4px;
 }
 
 .time-mark {
@@ -305,14 +335,14 @@ export default {
   right: 100%;
   top: -1px;
   font-size: 12px;
-  color: #8995AF;
+  color: #8995af;
   padding: 7px 8px 0 0;
-  border-top: 1px solid rgba(137, 149, 175, .20);
+  border-top: 1px solid rgba(137, 149, 175, 0.2);
 }
-.slot { 
-  height: 100%; 
-  border-right: 1px solid rgba(137, 149, 175, .10);
-  border-bottom: 1px solid rgba(137, 149, 175, .10);
+.slot {
+  height: 100%;
+  border-right: 1px solid rgba(137, 149, 175, 0.1);
+  border-bottom: 1px solid rgba(137, 149, 175, 0.1);
   font-size: 0.75em;
 
   &.working {
@@ -378,7 +408,7 @@ export default {
 }
 
 .day-column {
-  @media only screen and (min-width : $desktop) {
+  @media only screen and (min-width: $desktop) {
     width: 14.28%;
     flex-grow: 1;
     flex-shrink: 0;
@@ -400,7 +430,7 @@ export default {
     z-index: 0;
     right: 0;
     left: 0;
-    border-top: 2px solid #EF4D37;
+    border-top: 2px solid #ef4d37;
     pointer-events: none;
     &::before {
       position: absolute;
@@ -408,17 +438,17 @@ export default {
       left: -4px;
       width: 8px;
       height: 8px;
-      background-color: #EF4D37;
+      background-color: #ef4d37;
       content: '';
       border-radius: 50%;
     }
-    @media only screen and (min-width : $desktop) {
+    @media only screen and (min-width: $desktop) {
       margin-top: 80px;
     }
   }
   &__employee {
     display: none;
-    @media only screen and (min-width : $desktop) {
+    @media only screen and (min-width: $desktop) {
       position: sticky;
       top: 0;
       z-index: 1;
@@ -441,17 +471,16 @@ export default {
   }
   &__emp-title {
     font-size: 12px;
-    color: #8995AF;
+    color: #8995af;
   }
   &__emp-name {
     font-size: 14px;
-    color: #07101C;
+    color: #07101c;
     font-weight: 400;
     text-transform: capitalize;
   }
   .day-off {
-    color: #8995AF;
+    color: #8995af;
   }
-  
 }
 </style>

@@ -10,10 +10,12 @@ export function imagePath (imgId, businessId) {
 }
 
 export function deleteImage (id) {
-  if (!id)
+  if (!id) {
     return new Promise(function (resolve, reject) {
+    // eslint-disable-next-line prefer-promise-reject-errors
       reject('no ID')
     })
+  }
   return Api().delete(`gallery?id=eq.${id}`)
 }
 

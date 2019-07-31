@@ -1,13 +1,18 @@
 <template>
   <VDialog
     :value="visible"
-    content-class="right-attached-panel businesscard-form visit-edit" transition="slide"
+    content-class="right-attached-panel businesscard-form visit-edit"
+    transition="slide"
     @input="$emit('close')"
   >
     <VForm ref="visitEditForm" class="right-attached-panel__container">
-      <button type="button" class="right-attached-panel__close" @click="$emit('close')" />
+      <button
+        type="button"
+        class="right-attached-panel__close"
+        @click="$emit('close')"
+      />
       <div class="right-attached-panel__header">
-        {{ visit.id? 'Изменить запись' : 'Создать запись' }}
+        {{ visit.id ? 'Изменить запись' : 'Создать запись' }}
       </div>
       <template v-if="!visit.id || !visit.j.client.phone">
         <input
@@ -17,14 +22,17 @@
           value="express"
           class="filters__item right-attached-panel__sex"
         >
-        <label for="express" class="right-attached-panel__checkbox-label">Экспресс-запись</label>
+        <label
+          for="express"
+          class="right-attached-panel__checkbox-label"
+        >Экспресс-запись</label>
       </template>
       <div class="right-attached-panel__field-block">
         <!--todo filter employees by selected service if any -->
         <VSelect
           v-model="selectedEmployee"
           :items="employees"
-          :item-text="e => e.j.name"
+          :item-text="(e) => e.j.name"
           return-object
           label="имя и фамилия мастера"
         />
@@ -32,8 +40,20 @@
       <div class="right-attached-panel__field-block _service">
         <VSelect
           v-model="selectedServices"
-          :items="selectedEmployee? businessServices.filter(s => s.j.employees && s.j.employees.includes(selectedEmployee.id)) : businessServices"
-          :item-text="service => service.name.length > 30? service.name.substring(0, 30) + '...' : service.name"
+          :items="
+            selectedEmployee
+              ? businessServices.filter(
+                (s) =>
+                  s.j.employees && s.j.employees.includes(selectedEmployee.id)
+              )
+              : businessServices
+          "
+          :item-text="
+            (service) =>
+              service.name.length > 30
+                ? service.name.substring(0, 30) + '...'
+                : service.name
+          "
           :required="true"
           return-object
           multiple
@@ -50,10 +70,7 @@
         <VLayout row justify-space-between>
           <v-menu>
             <template v-slot:activator="{ on }">
-              <button
-                type="button"
-                v-on="on"
-              >
+              <button type="button" v-on="on">
                 {{ selectedDayFormatted }}
               </button>
             </template>
@@ -68,7 +85,15 @@
           </v-menu>
           <div v-if="selectedTime" class="visit-edit__time">
             <div>{{ selectedTime }}</div>
-            <button type="button" class="visit-edit__clear" @click="selectedTime = ''; message = ''; loadFreeTimes()" /> 
+            <button
+              type="button"
+              class="visit-edit__clear"
+              @click="
+                selectedTime = ''
+                message = ''
+                loadFreeTimes()
+              "
+            />
           </div>
         </VLayout>
       </div>
@@ -83,7 +108,10 @@
       <div v-if="message" class="error-message error--text">
         {{ message }}
       </div>
-      <div v-if="!expressRecord" class="right-attached-panel__field-block _client-name dropdown-select">
+      <div
+        v-if="!expressRecord"
+        class="right-attached-panel__field-block _client-name dropdown-select"
+      >
         <v-combobox
           v-if="visit.j"
           ref="clientFullName"
@@ -106,12 +134,18 @@
               {{ item.j.name.fullname }}
             </div>
             <div class="phone-number">
-              {{ normalizedPhone(item.j.phone? item.j.phone : item.j.phones[0]) | phoneFormat }}
+              {{
+                normalizedPhone(item.j.phone ? item.j.phone : item.j.phones[0])
+                  | phoneFormat
+              }}
             </div>
           </template>
         </v-combobox>
       </div>
-      <div v-if="!expressRecord" class="right-attached-panel__field-block _client-phone dropdown-select">
+      <div
+        v-if="!expressRecord"
+        class="right-attached-panel__field-block _client-phone dropdown-select"
+      >
         <PhoneEdit
           v-if="visit.j"
           :phone="phone"
@@ -121,18 +155,28 @@
           @onEdit="onInputPhone"
           @blur="suggestedClientsByPhone = []"
         />
-        <div v-if="suggestedClientsByPhone.length" class="custom-select__dropdown">
+        <div
+          v-if="suggestedClientsByPhone.length"
+          class="custom-select__dropdown"
+        >
           <div
             v-for="(client, clientIndex) in suggestedClientsByPhone"
             :key="clientIndex"
             class="custom-select__item"
-            @mousedown="selectClient('phone', client); suggestedClientsByPhone = []"
+            @mousedown="
+              selectClient('phone', client)
+              suggestedClientsByPhone = []
+            "
           >
             <div>
               {{ client.j.name.fullname }}
             </div>
             <div class="phone-number">
-              {{ normalizedPhone(client.j.phone? client.j.phone : client.j.phones[0]) | phoneFormat }}
+              {{
+                normalizedPhone(
+                  client.j.phone ? client.j.phone : client.j.phones[0]
+                ) | phoneFormat
+              }}
             </div>
           </div>
         </div>
@@ -160,10 +204,13 @@
           value="canceled"
         />
       </div>
-      <div v-if="!expressRecord" class="right-attached-panel__field-block _reminder">
+      <div
+        v-if="!expressRecord"
+        class="right-attached-panel__field-block _reminder"
+      >
         <VSelect
           v-model="visit.j.remind"
-          :items="reminders"            
+          :items="reminders"
           label="напоминание"
           attach=".right-attached-panel__field-block._reminder"
         />
@@ -172,7 +219,7 @@
         <v-textarea
           v-model="visit.j.notes"
           label="Комментарий"
-          maxlength="500" 
+          maxlength="500"
           counter="500"
           auto-grow
           rows="1"
@@ -183,8 +230,17 @@
           Цветовое выделение
         </div>
         <div class="visit-edit__colors">
-          <div v-for="color in colors" :key="color" class="visit-edit__color-block">
-            <input :id="color" v-model="visit.j.color" type="radio" :value="`#${color}`">
+          <div
+            v-for="color in colors"
+            :key="color"
+            class="visit-edit__color-block"
+          >
+            <input
+              :id="color"
+              v-model="visit.j.color"
+              type="radio"
+              :value="`#${color}`"
+            >
             <label :for="color" class="visit-edit__color-label">
               <div :style="{ background: `#${color}` }" />
             </label>
@@ -192,19 +248,32 @@
         </div>
       </div>
       <div class="right-attached-panel__buttons">
-        <button type="button" class="right-attached-panel__save" :class="{ _disabled: saveDisabled }" @click="onSave">
+        <button
+          type="button"
+          class="right-attached-panel__save"
+          :class="{ _disabled: saveDisabled }"
+          @click="onSave"
+        >
           Сохранить
         </button>
-        <button type="button" class="right-attached-panel__cancel" @click="$emit('close')">
+        <button
+          type="button"
+          class="right-attached-panel__cancel"
+          @click="$emit('close')"
+        >
           Отмена
         </button>
-        <button 
-          v-if="visit.status === 'canceled' || visit.status === 'unvisited' || visit.displayStatus === 'Завершен'" 
-          type="button" 
-          class="right-attached-panel__delete" 
+        <button
+          v-if="
+            visit.status === 'canceled' ||
+              visit.status === 'unvisited' ||
+              visit.displayStatus === 'Завершен'
+          "
+          type="button"
+          class="right-attached-panel__delete"
           @click="$emit('delete')"
         >
-          Удалить запись 
+          Удалить запись
         </button>
       </div>
     </VForm>
@@ -212,6 +281,8 @@
 </template>
 
 <script>
+import { mapState, mapGetters, mapActions } from 'vuex'
+import { isEqual, debounce } from 'lodash'
 import TimeSelect from '~/components/calendar/TimeSelect.vue'
 import {
   dateFromISO,
@@ -220,17 +291,15 @@ import {
   visitInit,
   hyphensStringToDate
 } from '~/components/calendar/utils'
-import { mapState, mapGetters, mapActions } from 'vuex'
 import Api from '~/api/backend'
-import { isEqual } from 'lodash'
 import { makeAlert } from '~/api/utils'
 import clientMixin from '~/mixins/client'
-import { debounce } from 'lodash'
+
 import PhoneEdit from '~/components/common/PhoneEdit.vue'
 
 export default {
   components: { PhoneEdit, TimeSelect },
-  mixins: [ clientMixin ],
+  mixins: [clientMixin],
   model: {
     prop: 'visible',
     event: 'close'
@@ -250,7 +319,8 @@ export default {
       }
     },
     page: { type: Number, default: null },
-    employees: { type: Array,
+    employees: {
+      type: Array,
       default () {
         return []
       }
@@ -260,36 +330,52 @@ export default {
       default () {
         return {}
       }
-    },
+    }
   },
   data () {
     return {
       active: 0,
-      colors: ['DFC497', 'F3AA57', '85CA86', '49C9B7', '5A96DF', 'F36B6B', 'F37F6B', 'DF8CB2', 'B88AB2', '8589DF'],
+      colors: [
+        'DFC497',
+        'F3AA57',
+        '85CA86',
+        '49C9B7',
+        '5A96DF',
+        'F36B6B',
+        'F37F6B',
+        'DF8CB2',
+        'B88AB2',
+        '8589DF'
+      ],
       error: '',
       expressRecord: false,
       freeTimes: [],
-      message: '', 
+      message: '',
       name: '',
       phone: '',
       reminders: [
         {
-          value: 60, 
+          value: 60,
           text: 'За час'
-        }, {
-          value: 180, 
+        },
+        {
+          value: 180,
           text: 'За 3 часа'
-        }, {
-          value: 360, 
+        },
+        {
+          value: 360,
           text: 'За 6 часов'
-        }, {
-          value: 720, 
+        },
+        {
+          value: 720,
           text: 'За 12 часов'
-        }, {
-          value: 1440, 
+        },
+        {
+          value: 1440,
           text: 'За сутки'
-        }, {
-          value: null, 
+        },
+        {
+          value: null,
           text: 'Не напоминать'
         }
       ],
@@ -303,36 +389,51 @@ export default {
   },
   computed: {
     ...mapState({
-      businessServices: state => state.business.businessServices,
+      businessServices: state => state.business.businessServices
     }),
-    ...mapGetters({businessId: 'business/businessId', businessServiceCategories: 'business/businessServiceCategories'}),
+    ...mapGetters({
+      businessId: 'business/businessId',
+      businessServiceCategories: 'business/businessServiceCategories'
+    }),
     duration () {
-      const reducer = (accumulator, currentService) => accumulator + currentService.j.duration
+      const reducer = (accumulator, currentService) =>
+        accumulator + currentService.j.duration
 
       return this.selectedServices.reduce(reducer, 0)
     },
     selectedDayFormatted () {
-      if (!this.selectedDate) return ''
+      if (!this.selectedDate) { return '' }
       const options = {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
-        weekday: 'short',
+        weekday: 'short'
       }
-      return hyphensStringToDate(this.selectedDate).toLocaleString("ru",options)
-    }, 
+      return hyphensStringToDate(this.selectedDate).toLocaleString(
+        'ru',
+        options
+      )
+    },
     hasPhone () {
       if (!this.phone) {
         return 0
       }
       return this.phone.length >= 10
-    }, 
+    },
     saveDisabled () {
-      return this.message
-        || (!this.expressRecord && !this.name)
-        || (!this.expressRecord && !this.hasPhone)
-        || !(this.visit.j.client && this.selectedServices && this.selectedServices.length && this.selectedDate && this.selectedTime)
-    }, 
+      return (
+        this.message ||
+        (!this.expressRecord && !this.name) ||
+        (!this.expressRecord && !this.hasPhone) ||
+        !(
+          this.visit.j.client &&
+          this.selectedServices &&
+          this.selectedServices.length &&
+          this.selectedDate &&
+          this.selectedTime
+        )
+      )
+    },
     todayString () {
       return formatDate(new Date())
     }
@@ -341,9 +442,9 @@ export default {
     visit: 'setSelectedValues',
     page: 'setPage',
     employee () {
-      if (this.employee.j.services && this.employee.j.services.length) { 
+      if (this.employee.j.services && this.employee.j.services.length) {
         this.selectedEmployee = this.employee
-        this.loadFreeTimes() 
+        this.loadFreeTimes()
       }
     },
     selectedDate: 'loadFreeTimes',
@@ -357,23 +458,27 @@ export default {
     this.setSelectedValues()
   },
   methods: {
-    ...mapActions({alert: 'alerts/alert'}),
+    ...mapActions({ alert: 'alerts/alert' }),
     allowedDates (dateStr) {
       return dateStr >= this.todayString
     },
     getClientsByPhone (newPhone) {
       Api()
-        .get(`/client_phone?company_id=eq.${this.companyId}&phone=ilike.*7${newPhone}*&limit=10`)
+        .get(
+          `/client_phone?company_id=eq.${this.companyId}&phone=ilike.*7${newPhone}*&limit=10`
+        )
         .then(({ data }) => {
           this.suggestedClientsByPhone = data
         })
         .catch(e => console.log(e))
     },
     loadFreeTimes () {
-      if (!(this.businessId && this.selectedDate)) return
+      if (!(this.businessId && this.selectedDate)) { return }
 
-      let params = {
-        dt: `${this.selectedDate}${this.selectedTime? 'T' + this.selectedTime + ':00': ''}`,
+      const params = {
+        dt: `${this.selectedDate}${
+          this.selectedTime ? 'T' + this.selectedTime + ':00' : ''
+        }`,
         business_id: this.businessId
       }
 
@@ -390,19 +495,19 @@ export default {
       this.message = ''
       this.loadingTimes = true
       Api()
-        .post("rpc/free_times", params)
+        .post('rpc/free_times', params)
         .then(({ data }) => {
           this.freeTimes = data
           if (!this.freeTimes.length) {
-            this.message = 'На эту дату или время записаться нельзя. Выберите другую дату или время'
+            this.message =
+              'На эту дату или время записаться нельзя. Выберите другую дату или время'
 
             if (this.selectedServices.length > 1) {
               this.message += ', или уменьшите количество услуг'
             }
           }
-          }
-        )
-        .catch(err => {
+        })
+        .catch((err) => {
           this.alert(makeAlert(err))
         })
         .finally(() => {
@@ -425,28 +530,31 @@ export default {
       const duration = this.duration
       const startTime = `${this.selectedDate}T${this.selectedTime}:00`
       const ts1 = dateFromISO(startTime)
-      let ts2 = new Date()
+      const ts2 = new Date()
 
-      ts2.setTime(ts1.getTime() + 60000 * duration) 
-      this.visit.business_id = this.selectedEmployee? this.selectedEmployee.id : this.businessId
+      ts2.setTime(ts1.getTime() + 60000 * duration)
+      this.visit.business_id = this.selectedEmployee
+        ? this.selectedEmployee.id
+        : this.businessId
       this.visit.j.duration = duration
-      this.visit.j.client.name = this.expressRecord? null : this.name.trim()
-      this.visit.j.client.phone = this.expressRecord? null : this.phone.trim()
+      this.visit.j.client.name = this.expressRecord ? null : this.name.trim()
+      this.visit.j.client.phone = this.expressRecord ? null : this.phone.trim()
       this.visit.ts_begin = startTime
       this.visit.ts_end = `${formatDate(ts2)}T${formatTime(ts2)}`
       this.visit.j.services = this.selectedServices
       if (!this.visit.j.color) {
-        this.visit.j.color = '#' + this.colors[Math.floor(Math.random() * this.colors.length)]
+        this.visit.j.color =
+          '#' + this.colors[Math.floor(Math.random() * this.colors.length)]
       }
 
       this.$emit('onSave', this.visit)
     },
     selectClient (field, value) {
-      if (value && (typeof value === 'object')) {
+      if (value && typeof value === 'object') {
         const { j } = value
 
         this.name = j.name.fullname
-        this.phone = j.phone? j.phone.substr(-10) : j.phones[0].substr(-10)
+        this.phone = j.phone ? j.phone.substr(-10) : j.phones[0].substr(-10)
       } else {
         this[field] = value
       }
@@ -454,7 +562,8 @@ export default {
     setPage () {
       if (this.page !== undefined) {
         this.active = this.page
-        this.message = 'На эту дату или время записаться нельзя. Выберите другую дату или время'
+        this.message =
+          'На эту дату или время записаться нельзя. Выберите другую дату или время'
         if (this.selectedServices.length > 1) {
           this.message += ', или уменьшите количество услуг'
         }
@@ -463,7 +572,7 @@ export default {
     setSelectedValues () {
       this.$refs.visitEditForm.resetValidation()
       if (this.visit.ts_begin) {
-        let ts1 = new Date(this.visit.ts_begin)
+        const ts1 = new Date(this.visit.ts_begin)
         this.selectedDate = formatDate(ts1)
         this.selectedTime = formatTime(ts1)
       } else {
@@ -474,16 +583,20 @@ export default {
       if (this.visit.services && this.visit.services.length) {
         const visitServices = this.visit.services.map(s => s.id)
 
-        this.selectedServices = this.businessServices.filter(s => visitServices.includes(s.id))
+        this.selectedServices = this.businessServices.filter(s =>
+          visitServices.includes(s.id)
+        )
       } else {
         this.selectedServices = []
       }
 
       if (this.visit.j && this.visit.j.master) {
-        this.selectedEmployee = this.employees.find(e => e.id === this.visit.j.master.id)
-      } else if (this.employee.j.services && this.employee.j.services.length) { 
-        this.selectedEmployee = this.employee 
-      } 
+        this.selectedEmployee = this.employees.find(
+          e => e.id === this.visit.j.master.id
+        )
+      } else if (this.employee.j.services && this.employee.j.services.length) {
+        this.selectedEmployee = this.employee
+      }
       if (this.visit.clientName) {
         this.name = this.visit.clientName
       } else {
@@ -504,17 +617,17 @@ export default {
 </script>
 
 <style lang="scss">
-  @import '~/assets/styles/right-attached-panel.scss';
-  @import '~/assets/styles/dropdown-select.scss';
+@import '~assets/styles/right-attached-panel.scss';
+@import '~assets/styles/dropdown-select.scss';
 
-  .visit-edit.right-attached-panel {
+.visit-edit.right-attached-panel {
   ._service,
   ._client-name,
   ._reminder {
     position: relative;
   }
 
-  input[type="radio"] {
+  input[type='radio'] {
     display: none;
     &:checked + label {
       background-color: rgba(137, 149, 175, 0.2);
@@ -535,7 +648,7 @@ export default {
     border-radius: 50%;
     padding: 4px;
     cursor: pointer;
-    &>div {
+    & > div {
       height: 24px;
       border-radius: 50%;
     }
@@ -552,7 +665,7 @@ export default {
     height: 16px;
     margin-left: 7px;
     cursor: pointer;
-    //background: url('~assets/images/svg/cross.svg') center no-repeat;
+    background: url('~assets/images/svg/cross.svg') center no-repeat;
   }
   .right-attached-panel__buttons {
     margin-top: 50px;
@@ -575,7 +688,7 @@ export default {
       padding: 5px 16px 5px 37px;
       text-align: left;
       text-transform: capitalize;
-      color: #8995AF;
+      color: #8995af;
       font-size: 14px;
       &:hover {
         background-color: rgba(137, 149, 175, 0.2);
@@ -604,7 +717,7 @@ export default {
       padding: 6px 0 5px 32px;
       text-align: left;
       background: rgba(137, 149, 175, 0.1);
-      color: #8995AF;
+      color: #8995af;
       font-family: $lato;
       font-style: normal;
       font-weight: normal;

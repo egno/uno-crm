@@ -1,5 +1,9 @@
 <template>
-  <div v-if="visit.j.type === 'break'" class="visit-wrapper" @click="selectCurrentBreak">
+  <div
+    v-if="visit.j.type === 'break'"
+    class="visit-wrapper"
+    @click="selectCurrentBreak"
+  >
     <div class="visit" :style="`height: ${actualContainerHight}px;`">
       <div :class="['break-time', { _long: visit.j.duration > 15 }]" />
     </div>
@@ -7,11 +11,14 @@
   <div v-else class="visit-wrapper">
     <div
       :style="`height: ${actualContainerHight}px; background: ${bgColor};`"
-      :class="['visit', {
-        'white-bg': whiteBg,
-        canceled: visitStatus.display === 'Отмена',
-        unvisited: visitStatus.display === 'Не пришел'
-      }]"
+      :class="[
+        'visit',
+        {
+          'white-bg': whiteBg,
+          canceled: visitStatus.display === 'Отмена',
+          unvisited: visitStatus.display === 'Не пришел'
+        }
+      ]"
       @click="selectVisit(visit)"
     >
       <div
@@ -29,10 +36,7 @@
           {{ visitStatus.display }}
         </div>
       </div>
-      <div
-        v-else
-        class="visit__container"
-      >
+      <div v-else class="visit__container">
         <div class="visit__top">
           <div class="visit__time">
             {{ timeStart }} – {{ timeEnd }}
@@ -43,11 +47,7 @@
           <div class="visit__phone">
             {{ visit.clientPhone | phoneFormat }}
           </div>
-          <div
-            v-for="(service,n) in services"
-            :key="n"
-            class="visit__service"
-          >
+          <div v-for="(service, n) in services" :key="n" class="visit__service">
             {{ serviceName(service) }}
           </div>
         </div>
@@ -70,7 +70,7 @@
               {{ visit.clientPhone | phoneFormat }}
             </div>
             <div
-              v-for="(service,n) in services"
+              v-for="(service, n) in services"
               :key="n"
               class="visit__service"
             >
@@ -80,20 +80,20 @@
           <div class="visit__status">
             {{ visitStatus.display }}
           </div>
-        </div>        
+        </div>
       </div>
     </transition>
   </div>
 </template>
 
 <script>
-import { hashColor } from '~/components/utils'
 import { mapActions, mapGetters } from 'vuex'
+import { hashColor } from '~/components/utils'
 
 export default {
   props: {
     id: { type: String, default: undefined },
-    now: { 
+    now: {
       type: Date,
       default () {
         return new Date()
@@ -115,8 +115,8 @@ export default {
   },
   data () {
     return {
-      slotDuration: 15, /* smallest slot duration in minutes  */
-      slotHeight: 55.5, /* smallest slot height in px */
+      slotDuration: 15 /* smallest slot duration in minutes  */,
+      slotHeight: 55.5 /* smallest slot height in px */,
       showTooltip: false
     }
   },
@@ -128,7 +128,11 @@ export default {
     whiteBg () {
       const status = this.visitStatus
 
-       return status.display === 'Завершен' || status.display === 'Отмена' || status.display === 'Не пришел'
+      return (
+        status.display === 'Завершен' ||
+        status.display === 'Отмена' ||
+        status.display === 'Не пришел'
+      )
     },
     bgColor () {
       if (this.whiteBg) {
@@ -138,24 +142,28 @@ export default {
       return (
         this.visit.color ||
         (this.visit.clientName || this.visit.clientPhone
-          ? hashColor(`${this.visit.clientName}${this.visit.j.client.phone}${this.email}`, 30, 40)
+          ? hashColor(
+            `${this.visit.clientName}${this.visit.j.client.phone}${this.email}`,
+            30,
+            40
+          )
           : 'grey')
       )
     },
     actualContainerHight () {
-      return this.visit.j.duration / this.slotDuration * this.slotHeight - 1
+      return (this.visit.j.duration / this.slotDuration) * this.slotHeight - 1
     },
     timeEnd () {
       return this.visit.timeEnd
     },
     timeStart () {
       return this.visit.time
-    },
+    }
   },
   methods: {
     ...mapActions({
       selectBreak: 'common/selectBreak',
-      selectVisit: 'common/selectVisit',
+      selectVisit: 'common/selectVisit'
     }),
     onSelect () {
       this.$emit('unselectOthers')
@@ -167,10 +175,14 @@ export default {
       if (this.services.length > 2) {
         return service.name.substring(0, 13) + '...'
       }
-      return (this.services.length > 1) && (service.name.length > 30) ? service.name.substring(0, 27) + '...' : service.name
+      return this.services.length > 1 && service.name.length > 30
+        ? service.name.substring(0, 27) + '...'
+        : service.name
     },
     clientName () {
-      const arr = this.visit.clientName? this.visit.clientName.split(' ') : ['Аноним','']
+      const arr = this.visit.clientName
+        ? this.visit.clientName.split(' ')
+        : ['Аноним', '']
 
       return `${arr[0]} ${arr[1] ? arr[1].substring(0, 1) + '.' : ''}`
     }
@@ -179,16 +191,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .slide-fade-enter-active {
-    transition: all .3s ease;
-  }
-  .slide-fade-leave-active {
-    transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
-  }
-  .slide-fade-enter, .slide-fade-leave-to {
-    transform: translateX(10px);
-    opacity: 0;
-  }
+.slide-fade-enter-active {
+  transition: all 0.3s ease;
+}
+.slide-fade-leave-active {
+  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+}
+.slide-fade-enter,
+.slide-fade-leave-to {
+  transform: translateX(10px);
+  opacity: 0;
+}
 .v-btn {
   float: right;
   margin: 0;
@@ -204,12 +217,12 @@ export default {
   transition: all 0.5s ease 0s;
   border-radius: 4px;
   text-align: left;
-  &__container { 
+  &__container {
     height: 100%;
     display: flex;
     flex-wrap: wrap;
     align-content: space-between;
-    padding: 9px 12px;  
+    padding: 9px 12px;
     color: #fff;
   }
   &__top {
@@ -242,26 +255,26 @@ export default {
   }
   &._tooltip {
     position: absolute;
-    z-index: 10; 
+    z-index: 10;
     top: 100%;
     padding: 5px;
-    background-color: #1C2F44 !important;
-    box-shadow: 1px 2px 7px rgba(0, 0, 0, 0.04); 
+    background-color: #1c2f44 !important;
+    box-shadow: 1px 2px 7px rgba(0, 0, 0, 0.04);
   }
   .active {
     z-index: 2;
   }
   &.white-bg {
     border-radius: 0;
-    border-top: 2px solid #5699FF;
-    
+    border-top: 2px solid #5699ff;
+
     .visit__container {
-      color: #07101C;
+      color: #07101c;
     }
     .visit__time,
     .visit__service,
     .visit__status {
-      color: #8995AF;
+      color: #8995af;
     }
   }
 
@@ -271,24 +284,26 @@ export default {
   }
 
   &.unvisited {
-    border-left: 2px solid #EF4D37;
+    border-left: 2px solid #ef4d37;
     .visit__status {
-      color: #EF4D37;
+      color: #ef4d37;
     }
   }
 
   &.canceled {
-    border-left: 2px solid #8995AF;
+    border-left: 2px solid #8995af;
     .visit__status {
       color: rgba(137, 149, 175, 0.35);
     }
   }
   .break-time {
     height: 100%;
-    background: url('~assets/images/svg/cup-big.svg') center/48px no-repeat #d6dae3;
+    background: url('~assets/images/svg/cup-big.svg') center/48px no-repeat
+      #d6dae3;
     border-radius: 4px;
     &._long {
-      background: url('~assets/images/svg/cup-title.svg') center/65px 81px no-repeat #d6dae3;
+      background: url('~assets/images/svg/cup-title.svg') center/65px 81px
+        no-repeat #d6dae3;
     }
   }
 }

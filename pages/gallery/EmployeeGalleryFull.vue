@@ -1,13 +1,6 @@
 <template>
-  <v-container
-    fluid
-    grid-list-sm
-  >
-    <v-card
-      v-if="data"
-      flat
-      class="grey lighten-5"
-    >
+  <v-container fluid grid-list-sm>
+    <v-card v-if="data" flat class="grey lighten-5">
       <v-card-title>
         <v-layout row>
           <v-flex>
@@ -29,15 +22,8 @@
       </v-card-title>
 
       <v-responsive>
-        <v-layout
-          row
-          fill-height
-          wrap
-        >
-          <v-flex
-            v-for="(service, n) in services"
-            :key="service+n"
-          >
+        <v-layout row fill-height wrap>
+          <v-flex v-for="(service, n) in services" :key="service + n">
             <!--<album
               :title="service"
               :employee="id"
@@ -68,14 +54,14 @@
 </template>
 
 <script>
-/*import Album from '~/components/gallery/Album.vue'*/
+/* import Album from '~/components/gallery/Album.vue' */
+import { mapActions } from 'vuex'
 import AlbumSlider from '~/components/gallery/AlbumSlider.vue'
 import Avatar from '~/components/avatar/Avatar.vue'
 import Api from '~/api/backend'
-import { mapActions } from 'vuex'
 
 export default {
-  components: { /*Album,*/ AlbumSlider, Avatar },
+  components: { AlbumSlider, Avatar },
   data () {
     return {
       data: undefined,
@@ -107,24 +93,24 @@ export default {
     this.load()
   },
   methods: {
-    ...mapActions({setBusiness: 'business/setBusiness'}),
+    ...mapActions({ setBusiness: 'business/setBusiness' }),
     load () {
-      if (!this.id) return
+      if (!this.id) { return }
       Api()
         .get(`employee?id=eq.${this.id}`)
         .then(res => res.data[0])
-        .then(res => {
+        .then((res) => {
           this.data = res
           this.loadBusiness(res.parent)
         })
     },
     loadBusiness () {
-      if (!this.business) return
+      if (!this.business) { return }
       this.setBusiness(this.businessId)
       Api()
         .get(`gallery?employees=cs.{${this.id}}`)
         .then(res => res.data)
-        .then(res => {
+        .then((res) => {
           this.images = res
         })
     },

@@ -3,9 +3,9 @@ import axios from 'axios'
 export const backendMixins = {
   methods: {
     locationId (headers) {
-      if (!(headers && headers.location)) return
+      if (!(headers && headers.location)) { return }
       const res = headers.location.match(/eq\.(.*)$/)
-      if (!res) return
+      if (!res) { return }
       return res[1]
     },
     saveImage (img, name) {
@@ -13,16 +13,16 @@ export const backendMixins = {
         return false
       }
       this.avatarEdit = false
-      var blobBin = atob(img.toDataURL().split(',')[1])
-      var array = []
-      for (var i = 0; i < blobBin.length; i++) {
+      const blobBin = atob(img.toDataURL().split(',')[1])
+      const array = []
+      for (let i = 0; i < blobBin.length; i++) {
         array.push(blobBin.charCodeAt(i))
       }
-      var file = new Blob([new Uint8Array(array)], { type: 'image/png' })
-      let formData = new FormData()
-      let newFileName = `${name || this.uuidv4()}.png`
+      const file = new Blob([new Uint8Array(array)], { type: 'image/png' })
+      const formData = new FormData()
+      const newFileName = `${name || this.uuidv4()}.png`
       formData.append('file', file, newFileName)
-      let vm = this
+      const vm = this
       return axios
         .post(process.env.VUE_APP_UPLOAD, formData, {
           headers: {

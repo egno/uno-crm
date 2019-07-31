@@ -3,37 +3,24 @@
     <VFlex>
       <VContainer pa-2>
         <VLayout column>
-          <VFlex
-            v-for="(week,i) in dates"
-            :key="i"
-            ma-0
-          >
-            <VLayout
-              justify-space-between
-              row
-            >
-              <VFlex
-                v-for="(day, di) in week"
-                :key="di"
-              >
+          <VFlex v-for="(week, i) in dates" :key="i" ma-0>
+            <VLayout justify-space-between row>
+              <VFlex v-for="(day, di) in week" :key="di">
                 <VBadge overlap>
-                  <span
-                    v-if="visitCount(day.dateKey)"
-                    slot="badge"
-                  >
+                  <span v-if="visitCount(day.dateKey)" slot="badge">
                     {{ visitCount(day.dateKey) }}
                   </span>
-                  <VBtn
+                  <v-btn
                     fab
                     small
                     block
                     depressed
                     flat
-                    :color="day.outOfRange ? 'grey': ''"
+                    :color="day.outOfRange ? 'grey' : ''"
                     :outline="day.today"
                   >
                     {{ day.display }}
-                  </VBtn>
+                  </v-btn>
                 </VBadge>
               </VFlex>
             </VLayout>
@@ -71,7 +58,7 @@ export default {
       Api()
         .get('visit')
         .then(res => res.data)
-        .then(res => {
+        .then((res) => {
           this.visits = res
         })
     },
@@ -81,5 +68,3 @@ export default {
   }
 }
 </script>
-
-

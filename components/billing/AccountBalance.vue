@@ -4,7 +4,11 @@
       Остаток на счете:
       <span v-if="businessId">{{ balance }}&nbsp;руб.</span>
     </v-flex>
-    <button class="balance__update settings__update" type="button" @click="getBalance()">
+    <button
+      class="balance__update settings__update"
+      type="button"
+      @click="getBalance()"
+    >
       <span>Обновить</span>
     </button>
   </v-layout>
@@ -23,7 +27,7 @@ export default {
     }
   },
   watch: {
-      businessId: 'getBalance'
+    businessId: 'getBalance'
   },
   mounted () {
     this.$nextTick(function () {
@@ -32,24 +36,24 @@ export default {
   },
   methods: {
     getBalance () {
-        this.request = true
-        this.balance = '-'
-        if (!this.businessId) {
-            return
-        }
+      this.request = true
+      this.balance = '-'
+      if (!this.businessId) {
+        return
+      }
       BillingApi()
         .get(`business_balance/${this.businessId}?account=eq.business`)
-        .then(res => {
+        .then((res) => {
           if (res.data && res.data[0] && res.data[0].balance) {
             this.balance = res.data[0].balance
             this.request = false
           } else {
-              this.balance = 0
+            this.balance = 0
           }
         })
-        .catch(err => {
-            console.log(err)
-            this.request = false
+        .catch((err) => {
+          console.log(err)
+          this.request = false
         })
     }
   }

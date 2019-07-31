@@ -17,11 +17,7 @@
           :name="employee.j.name"
         />
       </div>
-      <VDialog
-        v-model="avatarEdit"
-        max-width="375px"
-        height="600px"
-      >
+      <VDialog v-model="avatarEdit" max-width="375px" height="600px">
         <VueAvatarEditor
           :width="280"
           :height="280"
@@ -33,11 +29,11 @@
     </v-layout>
     <v-text-field
       v-model="employee.j.name"
-      browser-autocomplete="name"
+      autocomplete="name"
       label="Имя и Фамилия*"
       required
       :disabled="!employee.access"
-      :rules="[ rules.required, rules.maxLength(50) ]"
+      :rules="[rules.required, rules.maxLength(50)]"
       maxlength="50"
       class="businesscard-form__field"
     />
@@ -47,7 +43,7 @@
         placeholder="Должность*"
         :items="employeeCategories"
         :disabled="!employee.access"
-        :rules="[ rules.required ]"
+        :rules="[rules.required]"
         attach=".infocard._edit .dropdown-select"
         class="businesscard-form__field"
       />
@@ -69,7 +65,10 @@
       maxlength="500"
       placeholder="Дополнительные сведения"
       :disabled="!employee.access"
-      :rules="[value => value && (value.length <= 500 || 'Слишком длинный текст') || true]"
+      :rules="[
+        (value) =>
+          (value && (value.length <= 500 || 'Слишком длинный текст')) || true
+      ]"
     />
   </v-layout>
 </template>
@@ -103,7 +102,7 @@ export default {
   computed: {
     ...mapGetters({
       employeePositions: 'employee/employeePositions',
-      employeeCategories: 'employee/employeeCategories',
+      employeeCategories: 'employee/employeeCategories'
     })
   },
   methods: {
@@ -118,5 +117,4 @@ export default {
 <style lang="scss">
 @import '~/assets/styles/phone-input.scss';
 @import '~/assets/styles/dropdown-select.scss';
-
 </style>

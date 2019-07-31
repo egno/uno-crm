@@ -4,19 +4,9 @@
       Мой профиль
     </h2>
     <VForm ref="FormManagerProfile">
-      <VBtn
-        class="avatar"
-        fab
-        left
-        @click="avatarEdit = !avatarEdit"
-      >
-        <Avatar
-          :name="name"
-          size="100px"
-          :src="avatar"
-          :required="true"
-        />
-      </VBtn>
+      <v-btn class="avatar" fab left @click="avatarEdit = !avatarEdit">
+        <Avatar :name="name" size="100px" :src="avatar" :required="true" />
+      </v-btn>
       <VTextField
         v-model="fname"
         class="centered-input"
@@ -54,16 +44,13 @@
             type="email"
             disabled
             :rules="[email]"
-            browser-autocomplete="username"
+            autocomplete="username"
           />
         </VFlex>
         <VFlex>
-          <VBtn
-            icon
-            :to="{name:'AccountChangeEmail'}"
-          >
+          <v-btn icon :to="{ name: 'accountChangeEmail' }">
             <v-icon>edit</v-icon>
-          </VBtn>
+          </v-btn>
         </VFlex>
       </v-layout>
       <v-layout row>
@@ -76,34 +63,25 @@
             type="phone"
             disabled
             :rules="[required]"
-            browser-autocomplete="tel"
+            autocomplete="tel"
           />
         </VFlex>
         <VFlex>
-          <VBtn
-            icon
-            :to="{name:'AccountChangePhone'}"
-          >
+          <v-btn icon :to="{ name: 'accountChangePhone' }">
             <v-icon>edit</v-icon>
-          </VBtn>
+          </v-btn>
         </VFlex>
       </v-layout>
       <div>
-        <router-link :to="{ name: 'AccountSetPassword'}">
+        <router-link :to="{ name: 'accountSetPassword' }">
           Изменить пароль
         </router-link>
       </div>
-      <VBtn
-        color="success"
-        @click="saveProfile"
-      >
+      <v-btn color="success" @click="saveProfile">
         Сохранить
-      </VBtn>
+      </v-btn>
     </VForm>
-    <VDialog
-      v-model="avatarEdit"
-      max-width="350px"
-    >
+    <VDialog v-model="avatarEdit" max-width="350px">
       <VueAvatarEditor
         :width="250"
         :height="250"
@@ -115,9 +93,9 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
 import Avatar from '~/components/avatar/Avatar.vue'
 import VueAvatarEditor from '~/components/avatar/VueAvatarEditor.vue'
-import { mapGetters, mapActions } from 'vuex'
 import ImageApi from '~/api/images'
 import { canvasToFormData, imagePath } from '~/components/avatar/utils'
 
@@ -152,7 +130,7 @@ export default {
         this.isPersonalMaster || !!v || 'Обязательное поле',
       specRequired: v =>
         this.isPersonalMaster || this.isManager || !!v || 'Обязательное поле',
-      email: value => {
+      email: (value) => {
         const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         return !value || pattern.test(value) || 'Введите действительный e-mail.'
       }
@@ -197,7 +175,7 @@ export default {
       uploadUserInfo: 'user/uploadUserInfo'
     }),
     load () {
-      if (!this.userID) return
+      if (!this.userID) { return }
       this.fname =
         (this.userInfo &&
           this.userInfo.data &&
@@ -233,10 +211,10 @@ export default {
       }
     },
     saveImage (payload) {
-      if (!payload) return
-      let formData = canvasToFormData(payload)
-      let vm = this
-      let newFileName = formData.get('file').name
+      if (!payload) { return }
+      const formData = canvasToFormData(payload)
+      const vm = this
+      const newFileName = formData.get('file').name
 
       ImageApi()
         .post('/', formData)
@@ -244,7 +222,7 @@ export default {
           vm.setUserAvatar(newFileName)
           this.avatarEdit = false
         })
-        .catch(err => {
+        .catch((err) => {
           this.alert({ message: err })
         })
     }

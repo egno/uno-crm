@@ -1,10 +1,6 @@
 <template>
   <div>
-    <VAlert
-      v-model="alert"
-      dismissible
-      type="error"
-    >
+    <VAlert v-model="alert" dismissible type="error">
       {{ message }}
     </VAlert>
   </div>
@@ -13,7 +9,7 @@
 <script>
 export default {
   props: {
-    message: {type: String, default: () => ""}
+    message: { type: String, default: () => '' }
   },
   data () {
     return {

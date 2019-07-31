@@ -1,13 +1,8 @@
 <template>
-  <span
-    class="ymaps-geolink"
-    data-type="biz"
-  >
+  <span class="ymaps-geolink" data-type="biz">
     {{ address }}
   </span>
 </template>
-
-
 
 <script>
 import * as utils from '~/components/yandex/utils'

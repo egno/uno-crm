@@ -1,11 +1,13 @@
 <template>
-  <HomeHeader v-if="!$route.name || $route.name === 'home' || $route.name === 'features' || $route.name === 'news'" /><!--todo make a slot inside HomeHeader for authenticated user -->
-  <v-app-bar
-    v-else
-    class="topbar"
-    app
-    height="55px"
-  >
+  <HomeHeader
+    v-if="
+      !$route.name ||
+        $route.name === 'index' ||
+        $route.name === 'features' ||
+        $route.name === 'news'
+    "
+  /><!--todo make a slot inside HomeHeader for authenticated user -->
+  <v-app-bar v-else class="topbar" app height="55px">
     <!--<v-app-bar-side-icon
       v-if="!navigationVisible"
       class="menu-button"
@@ -33,7 +35,12 @@
     <VSpacer />
     <VToolbarItems>
       <!--<Notifications />-->
-      <VLayout v-if="businessInfo" align-center justify-center class="company-badge">
+      <VLayout
+        v-if="businessInfo"
+        align-center
+        justify-center
+        class="company-badge"
+      >
         <VFlex class="text-truncate company-badge__name">
           {{ businessInfo.name }}
         </VFlex>
@@ -51,21 +58,19 @@
             />
           </template>
           <VList class="menu-list">
-            <VListTile
-              @click="$router.push({ name: 'home' })"
-            >
-              <VListTileTitle>
+            <VListItem @click="$router.push({ name: 'index' })">
+              <VListItemTitle>
                 На главную UNO
-              </VListTileTitle>
-            </VListTile>
-            <VListTile
+              </VListItemTitle>
+            </VListItem>
+            <VListItem
               v-if="isEditorUser && businessIsFilial"
               @click="goToCompany"
             >
-              <VListTileTitle>
+              <VListItemTitle>
                 Перейти к выбору филиала
-              </VListTileTitle>
-            </VListTile>
+              </VListItemTitle>
+            </VListItem>
           </VList>
         </v-menu>
       </div>
@@ -75,8 +80,8 @@
 </template>
 
 <script>
-import ProfileMenu from '~/components/ProfileMenu.vue'
 import { mapActions, mapGetters } from 'vuex'
+import ProfileMenu from '~/components/ProfileMenu.vue'
 import { isBusinessRoute } from '~/utils'
 import HomeHeader from '~/components/home/HomeHeader.vue'
 import Users from '~/mixins/users'
@@ -84,7 +89,7 @@ import Users from '~/mixins/users'
 export default {
   components: {
     HomeHeader,
-    ProfileMenu,
+    ProfileMenu
   },
   mixins: [Users],
   data () {
@@ -106,7 +111,7 @@ export default {
       if (!(this.actions && Array.isArray(this.actions))) {
         return
       }
-      return this.actions.filter(x => x['default'])[0]
+      return this.actions.filter(x => x.default)[0]
     },
     href () {
       if (this.defaultAction) {
@@ -118,10 +123,7 @@ export default {
       return isBusinessRoute(this.$route.name)
     },
     showSearchInput () {
-      const routes = [
-        'businessList',
-        'myBusinessList'
-        ]
+      const routes = ['businessList', 'myBusinessList']
       return routes.includes(this.$route.name)
     },
     target () {
@@ -142,10 +144,10 @@ export default {
       setActions: 'common/setActions',
       setBusiness: 'common/setBusiness',
       setNavigationVisible: 'common/setNavigationVisible',
-      setSearchString: 'common/setSearchString',
+      setSearchString: 'common/setSearchString'
     }),
     goHome () {
-      this.$router.push({ name: 'home' })
+      this.$router.push({ name: 'index' })
     },
     goToCompany () {
       const parentId = this.businessInfo.parent
@@ -159,21 +161,21 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-  @import '~/assets/styles/company-badge.scss';
+@import '~/assets/styles/company-badge.scss';
 
-  .go-home-menu {
-    button {
-      width: 66px;
-      height: 100%;
-      outline: none;
-      background: url('~assets/images/svg/menu.svg') center/24px no-repeat;
-      border-left: 1px solid rgba(137, 149, 175, 0.1);
-      &.active {
-        background-color: rgba(137, 149, 175, 0.2);
-      }
+.go-home-menu {
+  button {
+    width: 66px;
+    height: 100%;
+    outline: none;
+    background: url('~assets/images/svg/menu.svg') center/24px no-repeat;
+    border-left: 1px solid rgba(137, 149, 175, 0.1);
+    &.active {
+      background-color: rgba(137, 149, 175, 0.2);
     }
   }
-  .topsearch {
-    display: block !important
-  }
+}
+.topsearch {
+  display: block !important;
+}
 </style>

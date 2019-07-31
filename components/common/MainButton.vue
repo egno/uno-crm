@@ -3,9 +3,7 @@
     <slot />
   </button>
 </template>
-<script>
-
-</script>
+<script></script>
 <style lang="scss" scoped>
-  @import '~/assets/styles/button.scss';
+@import '~/assets/styles/button.scss';
 </style>

@@ -23,18 +23,20 @@ export default {
     return {
       val: null,
       rules: {
-        time: value => {
+        time: (value) => {
           if (!value) {
             return true
           }
-          return !!value.match(/^(24:00|([01]?[0-9]|2[0-3]):[0-5][0-9])/) ||
+          return (
+            !!value.match(/^(24:00|([01]?[0-9]|2[0-3]):[0-5][0-9])/) ||
             'Время должно быть в промежутке от 00:00 до 24:00'
+          )
         }
       }
     }
   },
   watch: {
-    time: 'loadVal',
+    time: 'loadVal'
   },
   mounted () {
     this.loadVal()
@@ -72,5 +74,4 @@ export default {
     color: #ef4d37 !important;
   }
 }
-
 </style>

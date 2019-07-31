@@ -15,20 +15,20 @@
 </template>
 
 <script>
-  import Gallery from '~/components/gallery/gallery'
-  import ImageCard from '~/components/gallery/ImageCard.vue'
+import Gallery from '~/components/gallery/gallery'
+import ImageCard from '~/components/gallery/ImageCard.vue'
 
-  export default {
-    components: { ImageCard },
-    mixins: [ Gallery ],
-    computed: {
-      companyImages () {
-        return this.imagesData && this.imagesData.filter(x => x.j && x.j.business)
-      },
-    },
+export default {
+  components: { ImageCard },
+  mixins: [Gallery],
+  computed: {
+    companyImages () {
+      return (
+        this.imagesData && this.imagesData.filter(x => x.j && x.j.business)
+      )
+    }
   }
+}
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

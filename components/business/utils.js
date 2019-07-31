@@ -1,5 +1,7 @@
 export function fullName (obj) {
-  return obj && obj.j && [obj.j.name, obj.j.surname].filter(x => !!x).join(' ')
+  return (
+    obj && obj.j && [obj.j.name, obj.j.surname].filter(x => !!x).join(' ')
+  )
 }
 
 export function serviceInit (service) {

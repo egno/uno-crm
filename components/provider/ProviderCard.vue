@@ -1,11 +1,7 @@
 <template>
   <v-layout justify-center>
     <v-card-actions class="justify-center">
-      <v-btn
-        flat
-        ripple
-        @click="$emit('click')"
-      >
+      <v-btn text ripple @click="$emit('click')">
         <v-img
           :src="logo(provider)"
           :alt="provider.name"
@@ -18,7 +14,7 @@
 </template>
 
 <script>
-import {logo} from '~/components/provider/utils'
+import { logo } from '~/components/provider/utils'
 
 export default {
   props: {
@@ -36,4 +32,3 @@ export default {
   }
 }
 </script>
-

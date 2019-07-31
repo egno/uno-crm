@@ -1,6 +1,6 @@
+import { sortBy } from 'lodash'
 import Api from '~/api/backend'
 import { makeAlert } from '~/api/utils'
-import { sortBy } from 'lodash'
 
 const state = () => ({
   businessInfo: {},
@@ -47,12 +47,18 @@ const getters = {
   }),
   businessName: (state, getters) =>
     getters.businessInfo && getters.businessInfo.name,
-  businessInn: (state) =>
+  businessInn: state =>
     state.businessInfo && state.businessInfo.j && state.businessInfo.j.inn,
   businessServiceCount: (state, getters) =>
     getters.businessServices && getters.businessServices.length,
   businessServiceCategories: (state) => {
-    return [...new Set(state.businessServices.map(service => service.j && service.j.group).filter(name => !!name))]
+    return [
+      ...new Set(
+        state.businessServices
+          .map(service => service.j && service.j.group)
+          .filter(name => !!name)
+      )
+    ]
   },
   businessDayVisits: state => state.dayVisits,
   businessFilialCount: state =>
@@ -61,16 +67,16 @@ const getters = {
     state.businessIndividualCategories.includes(getters.businessCategory),
   businessIsSalon: (state, getters) =>
     state.businessCategories.includes(getters.businessCategory),
-  businessIsFilial: state => state.businessInfo && !!state.businessInfo.parent,
-  businessSchedule: state => state.businessInfo  && state.businessInfo.j && state.businessInfo.j.schedule
+  businessIsFilial: state =>
+    state.businessInfo && !!state.businessInfo.parent,
+  businessSchedule: state =>
+    state.businessInfo && state.businessInfo.j && state.businessInfo.j.schedule
 }
 
 const mutations = {
   ADD_CLIENTS_COUNTER (state, payload) {
     let counter =
-      state.businessInfo &&
-      state.businessInfo.j &&
-      state.businessInfo.j.clients
+      state.businessInfo && state.businessInfo.j && state.businessInfo.j.clients
     counter = counter + +payload
     state.businessInfo.j.clients = counter
   },
@@ -93,39 +99,21 @@ const mutations = {
 
 const actions = {
   loadDayVisits ({ commit }, payload) {
-    if (!(payload && payload.month && payload.business)) return
-    const path = `salon_day_visits?and=(salon_id.eq.${
-      payload.business
-    },dt1.eq.${payload.month})`
+    if (!(payload && payload.month && payload.business)) { return }
+    const path = `salon_day_visits?and=(salon_id.eq.${payload.business},dt1.eq.${payload.month})`
     Api()
       .get(path)
       .then(res => res.data)
-      .then(res => {
+      .then((res) => {
         commit('SET_DAY_VISITS', res)
       })
-      .catch(err => commit('ADD_ALERT', makeAlert(err)))
+      .catch(err => commit('alerts/ADD_ALERT', makeAlert(err), { root: true }))
   },
   addClientsCounter ({ commit }, payload) {
     commit('ADD_CLIENTS_COUNTER', payload)
   },
-  setBusinessToParent (  { commit, dispatch }, businessId) {
-      if (!(businessId && businessId.length == 36)) {
-        commit('SET_BUSINESS_INFO', {})
-        return
-      }
-      const path = `business?id=eq.${businessId}`
-      Api()
-        .get(path)
-        .then(res => res.data[0])
-        .then(res => {
-          if (res.parent) {
-            dispatch('setBusiness', res.parent)
-          }
-        })
-        .catch(err => commit('ADD_ALERT', makeAlert(err)))
-  },
-  setBusiness ({ commit, dispatch }, businessId) {
-    if (!(businessId && businessId.length == 36)) {
+  setBusinessToParent ({ commit, dispatch }, businessId) {
+    if (!(businessId && businessId.length === 36)) {
       commit('SET_BUSINESS_INFO', {})
       return
     }
@@ -133,13 +121,29 @@ const actions = {
     Api()
       .get(path)
       .then(res => res.data[0])
-      .then(res => {
+      .then((res) => {
+        if (res.parent) {
+          dispatch('setBusiness', res.parent)
+        }
+      })
+      .catch(err => commit('alerts/ADD_ALERT', makeAlert(err), { root: true }))
+  },
+  setBusiness ({ commit, dispatch }, businessId) {
+    if (!(businessId && businessId.length === 36)) {
+      commit('SET_BUSINESS_INFO', {})
+      return
+    }
+    const path = `business?id=eq.${businessId}`
+    Api()
+      .get(path)
+      .then(res => res.data[0])
+      .then((res) => {
         commit('SET_BUSINESS_INFO', res)
         dispatch('loadEmployee', businessId)
         dispatch('business/loadBusinessServices', businessId)
         dispatch('business/loadBusinessEmployees', businessId)
       })
-      .catch(err => commit('ADD_ALERT', makeAlert(err)))
+      .catch(err => commit('alerts/ADD_ALERT', makeAlert(err), { root: true }))
   },
   loadBusinessServices ({ commit }, branchId) {
     if (!branchId) {
@@ -151,10 +155,10 @@ const actions = {
     Api()
       .get(path)
       .then(res => res.data)
-      .then(res => {
+      .then((res) => {
         commit('SET_BUSINESS_SERVICES', res)
       })
-      .catch(err => commit('ADD_ALERT', makeAlert(err)))
+      .catch(err => commit('alerts/ADD_ALERT', makeAlert(err), { root: true }))
   },
   loadBusinessEmployees ({ commit }, branchId) {
     if (!branchId) {
@@ -167,10 +171,10 @@ const actions = {
     Api()
       .get(path)
       .then(res => res.data)
-      .then(res => {
-        commit('SET_BUSINESS_EMPLOYEES', sortBy(res, e => e.j.name ))
+      .then((res) => {
+        commit('SET_BUSINESS_EMPLOYEES', sortBy(res, e => e.j.name))
       })
-      .catch(err => commit('ADD_ALERT', makeAlert(err)))
+      .catch(err => commit('alerts/ADD_ALERT', makeAlert(err), { root: true }))
       .finally(() => {
         commit('SET_LOADING_EMPLOYEES', false)
       })

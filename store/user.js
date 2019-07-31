@@ -20,7 +20,7 @@ export const getters = {
   loggedIn: (state, getters) => {
     return !!getters.userID
   },
-  userAvatar: state => {
+  userAvatar: (state) => {
     return (
       state.userInfo &&
       state.userInfo.data &&
@@ -31,22 +31,22 @@ export const getters = {
   userID: (state, getters) => {
     const info = getters.userInfo
     if (info) {
-      return info['login']
+      return info.login
     }
   },
-  userInfo: state => {
+  userInfo: (state) => {
     return state.userInfo
   },
   userLogin: (state, getters) => {
     const info = getters.userInfo
     if (info) {
-      return info['login']
+      return info.login
     }
   },
   userRole: (state, getters) => {
     const info = getters.userInfo
     if (info) {
-      return info['role']
+      return info.role
     }
   },
   userEmail: (state, getters) => {
@@ -99,12 +99,12 @@ export const actions = {
     Api()
       .post(infoPath)
       .then(res => res.data)
-      .then(res => {
+      .then((res) => {
         commit('SET_USERINFO', res)
         commit('SET_LOADING', 'finished')
       })
-      .catch(err => { 
-        commit('ADD_ALERT', makeAlert(err))
+      .catch((err) => {
+        commit('alerts/ADD_ALERT', makeAlert(err), { root: true })
         commit('SET_LOADING', 'not started')
       })
   },
@@ -123,31 +123,31 @@ export const actions = {
   login ({ commit, dispatch }, payload) {
     const loginPath = 'rpc/login'
 
-    commit('SET_TOKEN', '')
+    commit('common/SET_TOKEN', '', { root: true })
     return Api()
       .post(loginPath, payload)
       .then(res => res.data)
       .then(res => res[0])
       .then(res => res.token)
-      .then(token => {
-        commit('SET_TOKEN', token)
-        dispatch('user/loadUserInfo')
+      .then((token) => {
+        commit('common/SET_TOKEN', token, { root: true })
+        dispatch('loadUserInfo')
         dispatch('loadMyBusinessList')
       })
-      .catch(err => {
-        commit('ADD_ALERT', makeAlert(err))
+      .catch((err) => {
+        commit('alerts/ADD_ALERT', makeAlert(err), { root: true })
       })
   },
   logout ({ commit }) {
-    commit('SET_TOKEN', '')
+    commit('common/SET_TOKEN', '', { root: true })
     commit('SET_USERINFO', {})
-    commit('SET_BUSINESS_INFO', {})
+    commit('business/SET_BUSINESS_INFO', {}, { root: true })
     commit('SET_LOADING', 'not started')
   },
   setUserAvatar ({ dispatch, state }, payload) {
-    if (!payload) return
-    if (!state.userInfo) return
-    let j = state.userInfo.data.j
+    if (!payload) { return }
+    if (!state.userInfo) { return }
+    const j = state.userInfo.data.j
     j.avatar = payload
     dispatch('uploadUserInfo', j)
   },
@@ -155,10 +155,9 @@ export const actions = {
     const path = 'rpc/set_user_info'
     Api()
       .post(path, { j: payload })
-      .then(res => {
+      .then((res) => {
         commit('SET_USERINFO', res.data)
         commit('SET_LOADING', 'finished')
       })
   }
 }
-
