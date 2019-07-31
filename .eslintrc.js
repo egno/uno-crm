@@ -16,13 +16,7 @@ module.exports = {
   },
   extends: [
     '@nuxtjs',
-    'prettier',
-    'prettier/vue',
-    'plugin:prettier/recommended',
     'plugin:nuxt/recommended'
-  ],
-  plugins: [
-    'prettier'
   ],
   // add your custom rules here
   rules: {
@@ -30,6 +24,7 @@ module.exports = {
     'import/no-unassigned-import': 0,
     'semi': ['error', 'never'],
     'no-console': 'off',
+    'object-curly-spacing': ["error", "always"],
     "space-before-function-paren": [
       "error",
       {

@@ -1,6 +1,13 @@
-import colors from 'vuetify/es5/util/colors'
+import ru from 'vuetify/es5/locale/ru'
+import prodEnv from './env'
+import devEnv from './dev-env'
+
+process.env.NODE_ENV = process.env.NODE_ENV || 'production'
+
+const env = process.env.NODE_ENV === 'production' ? prodEnv : devEnv
 
 export default {
+  env,
   mode: 'universal',
   /*
   ** Headers of the page
@@ -27,9 +34,10 @@ export default {
   css: [
   ],
   /*
-  ** Plugins to load before mounting the App
+  ** Plugins and directives and filters to load before mounting the App
   */
   plugins: [
+    '~/plugins/directives_filters.js'
   ],
   /*
   ** Nuxt.js dev-modules
@@ -37,7 +45,7 @@ export default {
   devModules: [
     // Doc: https://github.com/nuxt-community/eslint-module
     '@nuxtjs/eslint-module',
-    '@nuxtjs/vuetify',
+    '@nuxtjs/vuetify'
   ],
   /*
   ** Nuxt.js modules
@@ -45,7 +53,7 @@ export default {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
-    '@nuxtjs/pwa',
+    '@nuxtjs/pwa'
   ],
   /*
   ** Axios module configuration
@@ -59,19 +67,16 @@ export default {
   */
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
+    iconfont: 'mdi',
+    lang: {
+      locales: { ru },
+      current: 'ru'
+    },
     theme: {
-      dark: true,
-      themes: {
-        dark: {
-          primary: colors.blue.darken2,
-          accent: colors.grey.darken3,
-          secondary: colors.amber.darken3,
-          info: colors.teal.lighten1,
-          warning: colors.amber.base,
-          error: colors.deepOrange.accent4,
-          success: colors.green.accent3
-        }
-      }
+      primary: '#5699FF',
+      secondary: '#343e55',
+      gold: '#b69768',
+      accent: '#ef4d37'
     }
   },
   /*
@@ -81,7 +86,7 @@ export default {
     /*
     ** You can extend webpack config here
     */
-    extend(config, ctx) {
+    extend (config, ctx) {
     }
   }
 }
