@@ -8,6 +8,8 @@ stages:
 lint:
   image: node:10.15-alpine
   stage: lint
+  tags: 
+    - node
   cache:
     paths:
       - node_modules
