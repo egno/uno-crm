@@ -18,7 +18,10 @@ lint:
 build_development:
   stage: build
   image: docker:stable
-    
+  tags: 
+    - deploy
+    - docker
+
   before_script:
     - docker info
 
