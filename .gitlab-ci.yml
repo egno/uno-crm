@@ -1,0 +1,27 @@
+image: docker
+
+stages:
+  - lint
+  - build
+  - deploy
+  
+lint:
+  image: node:10.15-alpine
+  stage: lint
+  cache:
+    paths:
+      - node_modules
+  script:
+    - npm install --registry=https://npm.gisauto.ru
+    - npm run lint
+
+build_development:
+  image: node:10.15-alpine
+  stage: build
+  cache:
+    paths:
+      - node_modules
+  script:
+    - npm run build
+
+
