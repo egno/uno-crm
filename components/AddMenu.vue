@@ -13,13 +13,13 @@
         <v-list dark>
           <template v-for="(item, i) in adds">
             <VListItem :key="i" ripple active-class="accent" @click="onAction">
-              <v-list-tile-content>
+              <v-list-item-content>
                 <VListItemTitle>
                   <span class="body-1">
                     {{ item }}
                   </span>
                 </VListItemTitle>
-              </v-list-tile-content>
+              </v-list-item-content>
             </VListItem>
           </template>
         </v-list>
@@ -29,23 +29,23 @@
     <v-list v-else>
       <VListGroup v-model="expand" no-action :class="{ accent: !expand }">
         <VListItem slot="activator" class="add-menu-button">
-          <v-list-tile-content>
+          <v-list-item-content>
             <VListItemTitle>
               <span class="title">
                 Добавить
               </span>
             </VListItemTitle>
-          </v-list-tile-content>
+          </v-list-item-content>
         </VListItem>
         <template v-for="(item, i) in adds">
           <VListItem :key="i" ripple active-class="accent" @click="onAction">
-            <v-list-tile-content class="list-group-item-unshift">
+            <v-list-item-content class="list-group-item-unshift">
               <VListItemTitle>
                 <span class="body-1">
                   {{ item }}
                 </span>
               </VListItemTitle>
-            </v-list-tile-content>
+            </v-list-item-content>
           </VListItem>
         </template>
       </VListGroup>

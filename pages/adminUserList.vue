@@ -12,8 +12,8 @@
       :items="managers"
       :loading="progressQuery"
       :options.sync="pagination"
-      :rows-per-page-items="[5, 10, 25]"
-      rows-per-page-text="Записей на страницу:"
+      footer-props.items-per-page-options="[5, 10, 25]"
+      footer-props.items-per-page-text="Записей на страницу:"
       :server-items-length="totalItems"
       class="elevation-1"
     >

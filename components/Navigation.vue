@@ -12,22 +12,18 @@
     @input="onInput($event)"
   >
     <VToolbar flat :dark="!mini" height="55" class="pa-0">
-      <VList class="logo-wrap">
-        <!--<v-list-tile-content>
-          <v-list-tile-title overflow-hidden>
-            <router-link :to="{ name: 'index' }">
-              <div class="logo" />
-            </router-link>
-          </v-list-tile-title>
-        </v-list-tile-content>-->
-      </VList>
-      <v-list-tile-action v-if="isManagerMenu" class="title-action">
+      <div class="logo-wrap">
+        <router-link :to="{ name: 'index' }">
+          <div class="logo" />
+        </router-link>
+      </div>
+      <div v-if="isManagerMenu" class="title-action">
         <v-btn icon :class="{ 'menu-button': mini }" @click.stop="mini = !mini">
           <v-icon v-if="!mini" class="blind">
             close
           </v-icon>
         </v-btn>
-      </v-list-tile-action>
+      </div>
     </VToolbar>
 
     <VCalendar v-if="isCalendarVisible" />

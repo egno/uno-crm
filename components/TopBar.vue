@@ -142,7 +142,7 @@ export default {
   methods: {
     ...mapActions({
       setActions: 'common/setActions',
-      setBusiness: 'common/setBusiness',
+      setBusiness: 'business/setBusiness',
       setNavigationVisible: 'common/setNavigationVisible',
       setSearchString: 'common/setSearchString'
     }),

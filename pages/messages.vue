@@ -5,8 +5,8 @@
     item-key="id"
     :loading="progressQuery"
     :options.sync="pagination"
-    :rows-per-page-items="[5, 10, 25]"
-    rows-per-page-text="Записей на страницу:"
+    footer-props.items-per-page-options="[5, 10, 25]"
+    footer-props.items-per-page-text="Записей на страницу:"
     class="elevation-1"
   >
     <VProgressLinear slot="progress" color="blue" indeterminate />

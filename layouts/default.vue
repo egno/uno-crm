@@ -75,13 +75,16 @@ export default {
       }
     }
   },
-  mounted () {
+  created () {
+    this.loadBusiness()
     this.loadApiTime()
     this.setActions()
-    this.loadFromStorage()
     this.loadServiceList()
     this.loadServiceGroups()
-    this.checkDate()
+    this.setActualDate()
+  },
+  mounted () {
+    this.loadFromStorage()
     this.loadEmployeeCategories()
     this.tokenTimer()
   },
@@ -100,9 +103,6 @@ export default {
       setBusiness: 'business/setBusiness',
       navBar: 'layout/navBar'
     }),
-    checkDate () {
-      this.setActualDate()
-    },
     goHome () {
       this.$router.push({ name: 'index' })
     },
@@ -136,7 +136,7 @@ export default {
 </script>
 
 <style lang="scss">
-  @import '~/node_modules/lato-font/scss/_public-api.scss';
+  @import 'lato-font/scss/_public-api.scss';
   $lato-font-path: '~lato-font/fonts';
   @include lato-include-font('light');
   @include lato-include-font('normal');
@@ -159,6 +159,7 @@ export default {
     line-height: normal;
   }
   #app {
+    font-family: 'Lato', sans-serif;
     .main-cont {
       padding: 40px 56px;
     }

@@ -209,6 +209,7 @@ export default {
 
 <style lang="scss">
 @import '~/assets/styles/common.scss';
+@import 'lato-font/scss/_public-api.scss';
 
 $header-height: 80px;
 $header-desktop-height: 146px;
