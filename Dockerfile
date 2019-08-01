@@ -1,4 +1,4 @@
-ROM node:10.15-alpine AS deps
+FROM node:10.15-alpine AS deps
 
 WORKDIR /app
 COPY package.json ./package.json
