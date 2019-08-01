@@ -13,6 +13,9 @@
   "lint-staged": {
     "*.{js,vue}": "npm run lint"
   },
+  "gitHooks": {
+    "pre-commit": "lint-staged"
+  },
   "husky": {
     "hooks": {}
   },
