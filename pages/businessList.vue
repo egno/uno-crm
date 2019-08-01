@@ -4,10 +4,10 @@
       :headers="headers"
       :items="data"
       :loading="progressQuery"
-      :pagination.sync="pagination"
+      :options.sync="pagination"
       :rows-per-page-items="[5, 10, 25]"
       rows-per-page-text="Записей на страницу:"
-      :total-items="totalItems"
+      :server-items-length="totalItems"
       class="elevation-1"
     >
       <VProgressLinear slot="progress" color="blue" indeterminate />
@@ -19,9 +19,9 @@
               flat
               right
               small
-              :outline="props.item.access"
+              :outlined="props.item.access"
               color="green"
-              :to="{ name: 'businessCard', params: { id: props.item.id } }"
+              :to="{ name: 'id-businessCard', params: { id: props.item.id } }"
               target="_blank"
             >
               <Avatar
@@ -40,7 +40,7 @@
             </VFlex>
           </VLayout>
           <a
-            :to="{ name: 'businessCard', params: { id: props.item.id } }"
+            :to="{ name: 'id-businessCard', params: { id: props.item.id } }"
             target="_blank"
           />
         </td>
@@ -55,7 +55,7 @@
             class="caption text-no-wrap grey--text text--darken-1"
           >
             <RouterLink
-              :to="{ name: 'filialList', params: { id: props.item.id } }"
+              :to="{ name: 'id-filials', params: { id: props.item.id } }"
             >
               Филиалов: {{ props.item.j.filials }}
             </RouterLink>
@@ -130,7 +130,7 @@ export default {
       formActions: [
         {
           label: 'Добавить',
-          href: '/businessCard/new',
+          href: '/new/businessCard',
           target: '_blank',
           default: true
         }
@@ -203,7 +203,7 @@ export default {
       this.fetchData()
     },
     editItem (item) {
-      this.$router.push({ name: 'businessCard', params: { id: item.id } })
+      this.$router.push({ name: 'id-businessCard', params: { id: item.id } })
     },
     fetchData () {
       this.progressQuery = true

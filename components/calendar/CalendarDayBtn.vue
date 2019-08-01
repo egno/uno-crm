@@ -24,7 +24,7 @@
       depressed
       text
       :color="color"
-      :outline="day.today"
+      :outlined="day.today"
       @click="onClickDate(day.dateKey)"
       @mouseup="move"
       @mouseleave="tooltip = false"

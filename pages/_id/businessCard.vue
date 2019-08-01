@@ -11,7 +11,7 @@
           v-if="!editMode && businessInfo && businessInfo.access"
           class="businesscard__edit"
         >
-          <v-btn icon fab textripple @click="editMode = true">
+          <v-btn icon fab text ripple @click="editMode = true">
             <svg
               width="13"
               height="20"

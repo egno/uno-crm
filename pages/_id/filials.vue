@@ -192,7 +192,7 @@
 
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
-import { filials } from '../components/business/mixins'
+import { filials } from '../../components/business/mixins'
 import Api from '~/api/backend'
 import FilialCard from '~/components/branches/FilialCard.vue'
 import Business from '~/classes/business'
@@ -314,7 +314,7 @@ export default {
     },
     checkoutTo (id) {
       this.$router.push({
-        name: 'visitCalendar',
+        name: 'id-visits',
         params: {
           id,
           date: formatDate(new Date())
@@ -423,7 +423,7 @@ export default {
       if (this.businessParent) {
         console.log('replace', this.businessParent)
         this.$router.replace({
-          name: 'filialList',
+          name: 'id-filials',
           params: { id: this.businessParent }
         })
       }

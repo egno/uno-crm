@@ -345,8 +345,8 @@ export default {
     }),
     ...mapGetters({
       userInfo: 'user/userInfo',
-      businessCategories: 'businessCategories',
-      businessIsIndividual: 'businessIsIndividual'
+      businessCategories: 'business/businessCategories',
+      businessIsIndividual: 'business/businessIsIndividual'
     }),
     avatar () {
       if (this.data.j) {

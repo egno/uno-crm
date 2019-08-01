@@ -11,7 +11,8 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { setTimeout, clearTimeout } from 'timers'
+import { mapActions, mapGetters } from 'vuex'
 import UserProfileModal from '@/components/user/UserProfileModal.vue'
 import Navigation from '@/components/Navigation.vue'
 import TopBar from '@/components/TopBar.vue'
@@ -26,6 +27,17 @@ export default {
   },
   computed: {
     ...mapGetters({
+      actions: 'common/actions',
+      actualDate: 'common/actualDate',
+      appTitle: 'common/appTitle',
+      businessName: 'business/businessName',
+      businessInfo: 'business/businessInfo',
+      loggedIn: 'user/loggedIn',
+      userID: 'user/userID',
+      userRole: 'user/userRole',
+      myBusinessList: 'user/myBusinessList',
+      navBarVisible: 'common/navBarVisible',
+      messageWindow: 'common/messageWindow',
       profileDrawer: 'common/profileDrawer'
     }),
     isMenuVisible () {
@@ -40,11 +52,84 @@ export default {
         this.$route.name !== 'features' &&
         this.$route.name !== 'news'
       )
+    },
+    businessId () {
+      return this.$route && this.$route.params && this.$route.params.id
+    },
+    defaultAction () {
+      if (!this.actions) {
+        return
+      }
+      return this.actions.filter(x => x.default)[0]
     }
   },
+  watch: {
+    '$route.params': {
+      handler: 'loadBusiness',
+      deep: true
+    },
+    actualDate: 'loadVisits',
+    loggedIn (newVal) {
+      if (newVal) {
+        this.loadMyBusinessList()
+      }
+    }
+  },
+  mounted () {
+    this.loadApiTime()
+    this.setActions()
+    this.loadFromStorage()
+    this.loadServiceList()
+    this.loadServiceGroups()
+    this.checkDate()
+    this.loadEmployeeCategories()
+    this.tokenTimer()
+  },
   methods: {
+    ...mapActions({
+      loadApiTime: 'common/loadApiTime',
+      loadDayVisits: 'business/loadDayVisits',
+      loadEmployeeCategories: 'employee/loadEmployeeCategories',
+      loadFromStorage: 'common/loadFromStorage',
+      loadMyBusinessList: 'user/loadMyBusinessList',
+      loadServiceList: 'service/loadServiceList',
+      loadServiceGroups: 'service/loadServiceGroups',
+      refreshToken: 'common/refreshToken',
+      setActions: 'common/setActions',
+      setActualDate: 'common/setActualDate',
+      setBusiness: 'business/setBusiness',
+      navBar: 'layout/navBar'
+    }),
+    checkDate () {
+      this.setActualDate()
+    },
+    goHome () {
+      this.$router.push({ name: 'index' })
+    },
+    loadBusiness () {
+      if (!this.businessId || this.businessId === 'new') {
+        return
+      }
+      this.setBusiness(this.businessId)
+    },
+    loadVisits () {
+      if (!this.actualDate) { return }
+      const month = this.actualDate.replace(/\d{2}$/, '01')
+      this.loadDayVisits({
+        business: this.businessId,
+        month
+      })
+    },
     onAction (payload) {
       this.$root.$emit('onAction', payload)
+    },
+    tokenTimer () {
+      const vm = this
+      clearTimeout(this.tokenTimerId)
+      this.tokenTimerId = setTimeout(function () {
+        vm.refreshToken()
+        vm.tokenTimer()
+      }, 1000 * 60 * 45)
     }
   }
 }

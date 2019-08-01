@@ -18,11 +18,11 @@
           :headers="headers"
           :items="items"
           :loading="progressQuery"
-          :pagination.sync="pagination"
-          :total-items="totalItems"
+          :options.sync="pagination"
+          :server-items-length="totalItems"
           class="elevation-0"
-          sort-icon="mdi-menu-down"
-          hide-actions
+          header-props.sort-icon="mdi-menu-down"
+          hide-default-footer
         >
           <template slot="items" slot-scope="props">
             <td>
@@ -188,7 +188,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import { debounce } from 'lodash'
-import { filials } from '../../../../components/business/mixins'
+import { filials } from '../../../components/business/mixins'
 import Api from '~/api/backend'
 import Avatar from '~/components/avatar/Avatar.vue'
 import ClientCardEdit from '~/components/client/ClientCardEdit.vue'
@@ -326,7 +326,7 @@ export default {
     closeClientEditor () {
       if (!this.edit) {
         this.$router.push({
-          name: 'businessClientsTable',
+          name: 'id-businessClientsTable',
           params: { id: this.businessId }
         })
       }
@@ -344,9 +344,9 @@ export default {
       const filterString = `and=(${filter})`
       const params = [filterString]
 
-      if (sortBy) {
+      if (sortBy && sortBy.length) {
         params.push(
-          `order=${sortBy}${descending ? '.desc.nullslast' : '.asc.nullsfirst'}`
+          `order=${sortBy[0]}${descending ? '.desc.nullslast' : '.asc.nullsfirst'}`
         )
       }
       if (rowsPerPage > -1) {

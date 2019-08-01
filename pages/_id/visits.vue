@@ -42,9 +42,7 @@
                 text
                 small
                 @click.stop="addMonth(1)"
-              >
-                <v-icon>navigate_next</v-icon>
-              </v-btn>
+              />
             </VLayout>
             <div class="header__button">
               <MainButton
@@ -74,18 +72,14 @@
                   text
                   small
                   @click.stop="addMonth(-1)"
-                >
-                  <v-icon>navigate_before</v-icon>
-                </v-btn>
+                />
                 <v-btn
                   class="desktop calendar-controls__button"
                   depressed
                   text
                   small
                   @click.stop="addMonth(1)"
-                >
-                  <v-icon>navigate_next</v-icon>
-                </v-btn>
+                />
                 <div class="calendar-controls__heading">
                   {{ dateMonthHeader }}
                 </div>
@@ -121,9 +115,7 @@
                   text
                   small
                   @click.stop="addMonth(1)"
-                >
-                  <v-icon>navigate_next</v-icon>
-                </v-btn>
+                />
               </VLayout>
             </VLayout>
 
@@ -137,18 +129,14 @@
                   text
                   small
                   @click.stop="changeWeek(-1)"
-                >
-                  <v-icon>navigate_before</v-icon>
-                </v-btn>
+                />
                 <v-btn
                   class="visit-log__controls-button"
                   depressed
                   text
                   small
                   @click.stop="changeWeek(1)"
-                >
-                  <v-icon>navigate_next</v-icon>
-                </v-btn>
+                />
               </div>
               <VLayout
                 row
@@ -394,7 +382,7 @@
                     <v-expansion-panel-content
                       v-for="category in employeesCategories"
                       :key="category"
-                      :hide-actions="true"
+                      :hide-default-footer="true"
                     >
                       <template v-slot:header>
                         <VLayout align-center justify-space-between>
@@ -531,18 +519,14 @@
                     text
                     small
                     @click="selectPrevEmployee"
-                  >
-                    <v-icon>navigate_before</v-icon>
-                  </v-btn>
+                  />
                   <v-btn
                     class="visit-log__controls-button"
                     depressed
                     text
                     small
                     @click="selectNextEmployee"
-                  >
-                    <v-icon>navigate_next</v-icon>
-                  </v-btn>
+                  />
                 </div>
               </div>
             </VLayout>
@@ -558,9 +542,7 @@
             text
             small
             @click.stop="showMobileMenu = false"
-          >
-            <v-icon>navigate_before</v-icon>
-          </v-btn>
+          />
           <h2 class="modal-content__heading">
             Выберите мастера
           </h2>

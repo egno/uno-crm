@@ -152,7 +152,7 @@ export default {
     goToCompany () {
       const parentId = this.businessInfo.parent
       this.setBusiness(parentId)
-      this.$router.push({ name: 'filialList', params: { id: parentId } })
+      this.$router.push({ name: 'id-filials', params: { id: parentId } })
     },
     setStoreSearchString (newVal) {
       this.setSearchString(newVal && newVal.toLowerCase())

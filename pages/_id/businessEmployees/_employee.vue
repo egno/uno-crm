@@ -230,12 +230,12 @@ export default {
         {
           text: 'Сотрудники',
           disabled: false,
-          href: `/businessCard/e/${businessId}`
+          href: `/${businessId}/employeeList`
         },
         {
           text: `${employee.id ? employee.name : 'Новый сотрудник'}`,
           disabled: true,
-          href: `/businessCard/${businessId}//e/${employeeId}`
+          href: `/${businessId}/employeeList/${employeeId}`
         }
       ]
     },

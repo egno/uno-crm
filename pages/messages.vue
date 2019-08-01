@@ -4,7 +4,7 @@
     :items="data"
     item-key="id"
     :loading="progressQuery"
-    :pagination.sync="pagination"
+    :options.sync="pagination"
     :rows-per-page-items="[5, 10, 25]"
     rows-per-page-text="Записей на страницу:"
     class="elevation-1"

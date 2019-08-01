@@ -11,18 +11,16 @@
       :headers="headers"
       :items="managers"
       :loading="progressQuery"
-      :pagination.sync="pagination"
+      :options.sync="pagination"
       :rows-per-page-items="[5, 10, 25]"
       rows-per-page-text="Записей на страницу:"
-      :total-items="totalItems"
+      :server-items-length="totalItems"
       class="elevation-1"
     >
       <VProgressLinear slot="progress" color="blue" indeterminate />
       <template slot="items" slot-scope="props">
         <td>
-          <v-btn small fab @click="edit(props.item)">
-            <v-icon>edit</v-icon>
-          </v-btn>
+          <v-btn small fab @click="edit(props.item)" />
           <span>{{ props.item.j && props.item.j.name }}</span>
         </td>
         <td>

@@ -163,7 +163,7 @@ export default {
     goToBusiness () {
       if (this.badge.id) {
         this.$router.push({
-          name: 'businessCard',
+          name: 'id-businessCard',
           params: { id: this.badge.id }
         })
       }

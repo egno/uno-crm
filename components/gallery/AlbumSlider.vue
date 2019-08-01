@@ -23,10 +23,7 @@
           <v-flex shrink>
             <v-layout align-center justify-space-between>
               <div>{{ selected + 1 }} / {{ images.length }}</div>
-              <v-btn text icon @click="deleteImage">
-                <!--todo-->
-                <v-icon>delete</v-icon>
-              </v-btn>
+              <v-btn text icon @click="deleteImage" /><!--todo-->
             </v-layout>
           </v-flex>
         </v-layout>
@@ -46,15 +43,13 @@
             @click="$emit('fullscreenOn')"
           >
             &lt;!&ndash;todo&ndash;&gt;
-            <v-icon>expand</v-icon>
+
           </v-btn>
         </v-layout>-->
       </v-flex>
       <div class="gallery-slider__thumbs">
         <v-flex v-if="sliderCanScroll">
-          <v-btn small textblock class="white--text" @click="onPrevClick">
-            <v-icon>keyboard_arrow_up</v-icon>
-          </v-btn>
+          <v-btn small textblock class="white--text" @click="onPrevClick" />
         </v-flex>
         <div v-show="!fullScreen" class="gallery-slider__previews">
           <div
@@ -70,9 +65,7 @@
           </div>
         </div>
         <v-flex v-if="sliderCanScroll">
-          <v-btn small textblock class="white--text" @click="onNextClick">
-            <v-icon>keyboard_arrow_down</v-icon>
-          </v-btn>
+          <v-btn small textblock class="white--text" @click="onNextClick" />
         </v-flex>
       </div>
     </v-layout>

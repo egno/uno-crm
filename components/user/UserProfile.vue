@@ -48,9 +48,7 @@
           />
         </VFlex>
         <VFlex>
-          <v-btn icon :to="{ name: 'accountChangeEmail' }">
-            <v-icon>edit</v-icon>
-          </v-btn>
+          <v-btn icon :to="{ name: 'accountChangeEmail' }" />
         </VFlex>
       </v-layout>
       <v-layout row>
@@ -67,9 +65,7 @@
           />
         </VFlex>
         <VFlex>
-          <v-btn icon :to="{ name: 'accountChangePhone' }">
-            <v-icon>edit</v-icon>
-          </v-btn>
+          <v-btn icon :to="{ name: 'accountChangePhone' }" />
         </VFlex>
       </v-layout>
       <div>

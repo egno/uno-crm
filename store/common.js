@@ -123,13 +123,11 @@ export const mutations = {
     } else {
       localStorage.removeItem('accessToken')
     }
-  },
-  SHOW_NAVBAR (state) {
-    state.navBarVisible = true
   }
 }
 
 export const actions = {
+  // todo check where does it need
   closeMessageWindow ({ commit, dispatch }, payload) {
     if (payload) {
       dispatch('sendMessage', payload)
@@ -156,9 +154,9 @@ export const actions = {
           commit('alerts/ADD_ALERT', {
             message:
               'Мы уже решаем эту проблему! При необходимости мы свяжемся с вами'
-          })
+          }, { root: true })
         } else {
-          commit('alerts/ADD_ALERT', res)
+          commit('alerts/ADD_ALERT', res, { root: true })
         }
       })
       .catch(err => commit('alerts/ADD_ALERT', makeAlert(err), { root: true }))

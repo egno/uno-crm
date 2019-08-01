@@ -62,6 +62,9 @@ export function conjugateVisits (n) {
 }
 
 export function widgetHost () {
+  if (!process.client) {
+    return
+  }
   let host = window.location.host
   // set host address for debug
   if (host.substr(-5) === ':8080') {

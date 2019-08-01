@@ -226,8 +226,8 @@ export default {
   computed: {
     ...mapGetters({
       loggedIn: 'user/loggedIn',
-      roles: 'businessCategories',
-      avatar: 'userAvatar',
+      roles: 'business/businessCategories',
+      avatar: 'user/userAvatar',
       userID: 'user/userID',
       userInfo: 'user/userInfo'
     }),

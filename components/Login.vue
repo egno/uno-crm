@@ -132,7 +132,7 @@ export default {
           // if user has access to a company with no branches
           if (this.businessCount === 1 && res[0].id && !company && !filial) {
             this.$router.push({
-              name: 'businessCard',
+              name: 'id-businessCard',
               params: { id: res[0].id }
             })
             return
@@ -141,7 +141,7 @@ export default {
           if (!company) {
             if (this.user.business.length === 1) {
               this.$router.push({
-                name: 'visitCalendar',
+                name: 'id-visits',
                 params: {
                   id: filial.id,
                   date: formatDate(new Date())
@@ -149,7 +149,7 @@ export default {
               })
             } else if (filial) {
               this.$router.push({
-                name: 'filialList',
+                name: 'id-filials',
                 params: { id: filial.parent }
               })
             }
@@ -158,7 +158,7 @@ export default {
           // if user has access to a company
           if (company) {
             this.$router.push({
-              name: 'businessCard',
+              name: 'id-businessCard',
               params: { id: company.id }
             })
           }

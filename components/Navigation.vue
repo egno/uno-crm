@@ -142,7 +142,7 @@ export default {
           title: 'Информация',
           count: undefined,
           route: {
-            name: 'businessCard',
+            name: 'id-businessCard',
             params: { id: this.businessId }
           },
           show:
@@ -175,7 +175,7 @@ export default {
           title: 'Филиалы',
           count: this.businessFilialCount,
           route: {
-            name: 'filialList',
+            name: 'id-filials',
             params: { id: this.businessId }
           },
           show:
@@ -191,7 +191,7 @@ export default {
         {
           title: 'Пользователи',
           route: {
-            name: 'businessUsers',
+            name: 'id-businessUsers-user',
             params: { id: this.businessId }
           },
           show:
@@ -208,7 +208,7 @@ export default {
           title: 'Услуги',
           count: this.businessServiceCount,
           route: {
-            name: 'services',
+            name: 'id-services',
             params: { id: this.businessId }
           },
           show:
@@ -226,7 +226,7 @@ export default {
           title: 'Сотрудники',
           count: this.employeesCount,
           route: {
-            name: 'employeeList',
+            name: 'id-businessEmployees',
             params: { id: this.businessId }
           },
           show:
@@ -257,7 +257,7 @@ export default {
           title: 'Клиенты',
           count: this.clientsCount,
           route: {
-            name: 'businessClientsTable',
+            name: 'id-businessClientsTable',
             params: { id: this.businessId }
           },
           show:
@@ -278,7 +278,7 @@ export default {
         {
           title: 'Журнал записи',
           route: {
-            name: 'visitCalendar',
+            name: 'id-visits',
             params: { id: this.businessId, date: this.date }
           },
           show: this.hasSalonLevelAccess && this.hasName && !this.isManagerMenu,
@@ -292,7 +292,7 @@ export default {
           title: 'Онлайн запись',
           count: undefined,
           route: {
-            name: 'widgetSettings',
+            name: 'id-widgetSettings',
             params: { id: this.businessId }
           },
           show:
@@ -308,7 +308,7 @@ export default {
           title: 'Настройки',
           count: undefined,
           route: {
-            name: 'businessSettings',
+            name: 'id-businessSettings',
             params: { id: this.businessId }
           },
           show:

@@ -139,9 +139,9 @@ const actions = {
       .then(res => res.data[0])
       .then((res) => {
         commit('SET_BUSINESS_INFO', res)
-        dispatch('loadEmployee', businessId)
-        dispatch('business/loadBusinessServices', businessId)
-        dispatch('business/loadBusinessEmployees', businessId)
+        dispatch('employee/loadEmployee', businessId, { root: true })
+        dispatch('loadBusinessServices', businessId)
+        dispatch('loadBusinessEmployees', businessId)
       })
       .catch(err => commit('alerts/ADD_ALERT', makeAlert(err), { root: true }))
   },

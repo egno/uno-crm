@@ -21,9 +21,7 @@
             small
             color="#ffffff"
             @click.stop="addMonth(-1)"
-          >
-            <v-icon>navigate_before</v-icon>
-          </v-btn>
+          />
           <v-btn
             class="cal-next-prev"
             color="#ffffff"
@@ -31,9 +29,7 @@
             text
             small
             @click.stop="addMonth(1)"
-          >
-            <v-icon>navigate_next</v-icon>
-          </v-btn>
+          />
         </div>
         <v-tooltip
           v-if="!expanded"
@@ -138,7 +134,7 @@ export default {
       businessInfo: 'business/businessInfo',
       calendar: 'common/calendar',
       businessDayVisits: 'business/businessDayVisits',
-      schedule: 'schedule'
+      schedule: 'common/schedule'
     }),
     currentEmployee () {
       return this.employee[0] || this.businessId

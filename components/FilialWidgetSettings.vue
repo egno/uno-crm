@@ -34,9 +34,9 @@
                     <v-btn
                       small
                       ripple
-                      round
+                      rounded
                       color="primary"
-                      outline
+                      outlined
                       @click="copyLink(filial.id)"
                     >
                       Скопировать
