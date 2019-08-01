@@ -8,7 +8,8 @@ cache:
 
 test_async:
   script:
-    - npm run install
+    - npm install
+    - npm run eslint
     - node ./specs/start.js ./specs/async.spec.js
 
 build:
