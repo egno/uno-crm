@@ -1,17 +1,27 @@
-image: node:10.15-alpine
+image: docker
 
-# This folder is cached between builds
-# http://docs.gitlab.com/ce/ci/yaml/README.html#cache
-cache:
-  paths:
-    - node_modules/
-
-test_async:
+stages:
+  - lint
+  - build
+  - deploy
+  
+lint:
+  image: node:10.15-alpine
+  stage: lint
+  cache:
+    paths:
+      - node_modules
   script:
-    - npm install
-    - npm run eslint
-    - node ./specs/start.js ./specs/async.spec.js
+    - npm install --registry=https://npm.gisauto.ru
+    - npm run lint
 
-build:
+build_development:
+  image: node:10.15-alpine
+  stage: build
+  cache:
+    paths:
+      - node_modules
   script:
     - npm run build
+
+
