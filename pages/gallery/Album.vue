@@ -15,7 +15,7 @@
             </h1>
           </v-flex>
           <div v-if="!editMode && businessInfo && businessInfo.access">
-            <v-btn icon fab text ripple @click="editMode = true" />
+            <v-btn icon fab flat ripple @click="editMode = true" />
           </div>
         </div>
         <gallery-images

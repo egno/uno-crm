@@ -1,7 +1,7 @@
 <template>
   <v-layout justify-center>
     <v-card-actions class="justify-center">
-      <v-btn text ripple @click="$emit('click')">
+      <v-btn flat ripple @click="$emit('click')">
         <v-img
           :src="logo(provider)"
           :alt="provider.name"

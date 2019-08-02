@@ -2,7 +2,7 @@
   <v-card hover class="image-card" @click="$emit('click')">
     <v-card-actions v-if="editMode">
       <v-spacer />
-      <v-btn text icon @click="deleteImage" />
+      <v-btn flat icon @click="deleteImage" />
     </v-card-actions>
     <v-img :src="src" aspect-ratio="1" />
   </v-card>

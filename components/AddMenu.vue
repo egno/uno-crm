@@ -12,15 +12,15 @@
 
         <v-list dark>
           <template v-for="(item, i) in adds">
-            <VListItem :key="i" ripple active-class="accent" @click="onAction">
-              <v-list-item-content>
-                <VListItemTitle>
+            <VListTile :key="i" ripple active-class="accent" @click="onAction">
+              <v-list-tile-content>
+                <VListTileTitle>
                   <span class="body-1">
                     {{ item }}
                   </span>
-                </VListItemTitle>
-              </v-list-item-content>
-            </VListItem>
+                </VListTileTitle>
+              </v-list-tile-content>
+            </VListTile>
           </template>
         </v-list>
       </v-menu>
@@ -28,25 +28,25 @@
 
     <v-list v-else>
       <VListGroup v-model="expand" no-action :class="{ accent: !expand }">
-        <VListItem slot="activator" class="add-menu-button">
-          <v-list-item-content>
-            <VListItemTitle>
+        <VListTile slot="activator" class="add-menu-button">
+          <v-list-tile-content>
+            <VListTileTitle>
               <span class="title">
                 Добавить
               </span>
-            </VListItemTitle>
-          </v-list-item-content>
-        </VListItem>
+            </VListTileTitle>
+          </v-list-tile-content>
+        </VListTile>
         <template v-for="(item, i) in adds">
-          <VListItem :key="i" ripple active-class="accent" @click="onAction">
-            <v-list-item-content class="list-group-item-unshift">
-              <VListItemTitle>
+          <VListTile :key="i" ripple active-class="accent" @click="onAction">
+            <v-list-tile-content class="list-group-item-unshift">
+              <VListTileTitle>
                 <span class="body-1">
                   {{ item }}
                 </span>
-              </VListItemTitle>
-            </v-list-item-content>
-          </VListItem>
+              </VListTileTitle>
+            </v-list-tile-content>
+          </VListTile>
         </template>
       </VListGroup>
     </v-list>

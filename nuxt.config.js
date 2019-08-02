@@ -68,8 +68,7 @@ export default {
   */
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
-    '@nuxtjs/axios',
-    '@nuxtjs/pwa'
+    '@nuxtjs/axios'
   ],
   /*
   ** Axios module configuration
@@ -90,9 +89,13 @@ export default {
     },
     theme: {
       primary: '#5699FF',
+      accent: '#ef4d37',
       secondary: '#343e55',
-      gold: '#b69768',
-      accent: '#ef4d37'
+      info: '#5699FF',
+      warning: '#b69768',
+      error: '#EF4D37',
+      success: '#85CA86',
+      gold: '#b69768'
     }
   },
   /*

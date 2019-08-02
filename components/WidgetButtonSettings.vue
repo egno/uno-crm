@@ -70,9 +70,9 @@
                 <v-btn
                   small
                   ripple
-                  rounded
+                  round
                   color="primary"
-                  outlined
+                  outline
                   @click="copyScript"
                 >
                   Скопировать код

@@ -8,18 +8,18 @@
   >
     <div class="menu-item-container">
       <div class="menu-item-left" :class="{ _active: isActiveItem }">
-        <VListItem :to="item.route">
-          <VListItemContent>
-            <VListItemTitle>
+        <VListTile :to="item.route">
+          <VListTileContent>
+            <VListTileTitle>
               {{ item.title }}
-            </VListItemTitle>
-          </VListItemContent>
-          <VListItemAction>
+            </VListTileTitle>
+          </VListTileContent>
+          <VListTileAction>
             <span v-if="item.count && !isActiveItem" class="list-item--count">
               {{ item.count }}
             </span>
-          </VListItemAction>
-        </VListItem>
+          </VListTileAction>
+        </VListTile>
       </div>
       <div
         v-show="item.action && isActiveItem"

@@ -91,7 +91,7 @@
               <v-spacer />
               <v-btn
                 :disabled="!successCode"
-                text
+                flat
                 color="primary"
                 @click="save"
               >

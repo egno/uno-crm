@@ -22,7 +22,7 @@
       small
       block
       depressed
-      text
+      flat
       :color="color"
       :outlined="day.today"
       @click="onClickDate(day.dateKey)"

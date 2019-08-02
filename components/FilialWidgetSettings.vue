@@ -24,6 +24,7 @@
                   fill-height
                   justify-space-between
                 >
+                  <!--eslint-disable vue/no-parsing-error -->
                   <v-flex xs12 md4>
                     {{ (filial.j && filial.j.name) || `<${filial.id}>` }}
                   </v-flex>
@@ -34,9 +35,9 @@
                     <v-btn
                       small
                       ripple
-                      rounded
+                      round
                       color="primary"
-                      outlined
+                      outline
                       @click="copyLink(filial.id)"
                     >
                       Скопировать

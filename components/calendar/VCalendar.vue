@@ -9,7 +9,7 @@
       @mouseleave="tooltip = false"
     >
       <VLayout align-center justify-space-between row class="cal-month">
-        <div class="cal-head display-3">
+        <div class="cal-head">
           {{ dateMonthHeader }}
         </div>
 
@@ -17,7 +17,7 @@
           <v-btn
             class="cal-next-prev"
             depressed
-            text
+            flat
             small
             color="#ffffff"
             @click.stop="addMonth(-1)"
@@ -26,7 +26,7 @@
             class="cal-next-prev"
             color="#ffffff"
             depressed
-            text
+            flat
             small
             @click.stop="addMonth(1)"
           />
@@ -232,7 +232,7 @@ export default {
   margin: 0 auto;
 }
 .cal-head {
-  font-size: 18px;
+  font: 18px 'Roboto Slab', serif;
   text-transform: capitalize;
   color: #fff;
   white-space: nowrap;

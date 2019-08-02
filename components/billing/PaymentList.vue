@@ -4,11 +4,11 @@
       :headers="paymentHeaders"
       :items="paymentItems"
       :loading="paymentIsLoading"
-      :options.sync="paymentPagination"
-      :server-items-length="paymentTotalItems"
+      :pagination.sync="paymentPagination"
+      :total-items="paymentTotalItems"
       class="elevation-0"
-      header-props.sort-icon="mdi-menu-down"
-      hide-default-footer
+      sort-icon="mdi-menu-down"
+      hide-actions
       must-sort
     >
       <template slot="items" slot-scope="props">

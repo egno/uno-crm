@@ -1,7 +1,7 @@
 <template>
   <!--for animation of header on mobiles
     :class="{ 'mobile-transparent' : $route.name === 'features' || $route.name === 'news' }"-->
-  <v-app-bar app class="home-header" flat fixed :height="isDesktop ? 146 : 80">
+  <v-toolbar app class="home-header" flat fixed :height="isDesktop ? 146 : 80">
     <router-link :to="{ name: 'index' }" class="home-header__logo" />
     <VToolbarItems>
       <div class="home-header__desktop-menu">
@@ -49,7 +49,7 @@
         </VLayout>
         <v-btn
           v-if="loggedIn && userRole !== 'manager' && userRole !== 'admin'"
-          text
+          flat
           class="main-header__button"
           @click="goToBusiness"
         >
@@ -57,7 +57,7 @@
         </v-btn>
         <v-btn
           v-else-if="!loggedIn"
-          text
+          flat
           :class="[
             'home-header__button _register',
             {
@@ -77,7 +77,7 @@
         <ProfileMenu v-if="loggedIn" />
         <v-btn
           v-else
-          text
+          flat
           class="home-header__button _login"
           @click="$router.push({ name: 'login' })"
         >
@@ -88,7 +88,7 @@
         </v-btn>
       </div>
     </VToolbarItems>
-  </v-app-bar>
+  </v-toolbar>
 </template>
 
 <script>

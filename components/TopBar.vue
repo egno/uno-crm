@@ -7,8 +7,8 @@
         $route.name === 'news'
     "
   /><!--todo make a slot inside HomeHeader for authenticated user -->
-  <v-app-bar v-else class="topbar" app height="55px">
-    <!--<v-app-bar-side-icon
+  <v-toolbar v-else class="topbar" app height="55px">
+    <!--<v-toolbar-side-icon
       v-if="!navigationVisible"
       class="menu-button"
       @click="setNavigationVisible(true)"
@@ -58,25 +58,25 @@
             />
           </template>
           <VList class="menu-list">
-            <VListItem @click="$router.push({ name: 'index' })">
-              <VListItemTitle>
+            <VListTile @click="$router.push({ name: 'index' })">
+              <VListTileTitle>
                 На главную UNO
-              </VListItemTitle>
-            </VListItem>
-            <VListItem
+              </VListTileTitle>
+            </VListTile>
+            <VListTile
               v-if="isEditorUser && businessIsFilial"
               @click="goToCompany"
             >
-              <VListItemTitle>
+              <VListTileTitle>
                 Перейти к выбору филиала
-              </VListItemTitle>
-            </VListItem>
+              </VListTileTitle>
+            </VListTile>
           </VList>
         </v-menu>
       </div>
       <ProfileMenu />
     </VToolbarItems>
-  </v-app-bar>
+  </v-toolbar>
 </template>
 
 <script>

@@ -14,11 +14,11 @@
       :headers="smsHeaders"
       :items="smsItems"
       :loading="smsIsLoading"
-      :options.sync="smsPagination"
-      :server-items-length="smsTotalItems"
+      :pagination.sync="smsPagination"
+      :total-items="smsTotalItems"
       class="elevation-0 sms"
-      header-props.sort-icon="mdi-menu-down"
-      hide-default-footer
+      sort-icon="mdi-menu-down"
+      hide-actions
       must-sort
     >
       <template slot="items" slot-scope="props">

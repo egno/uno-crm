@@ -14,7 +14,7 @@
     :close-on-content-click="false"
   >
     <template v-slot:activator="{ on }">
-      <v-btn text v-on="on">
+      <v-btn flat v-on="on">
         <VLayout align-center justify-space-between>
           <Avatar
             :new-message="newMessage"
@@ -28,17 +28,17 @@
     </template>
     <VList class="menu-list">
       <template v-for="(item, index) in menuList">
-        <VListItem
+        <VListTile
           v-if="!item.hide"
           :key="index"
           :to="item.route"
           @click="menuHandler(item.action)"
         >
-          <VListItemTitle
+          <VListTileTitle
             :class="{ _bold: item.count && item.title === 'Сообщения' }"
           >
             {{ item.title }}
-          </VListItemTitle>
+          </VListTileTitle>
           <span
             v-if="item.count"
             class="caption count"
@@ -46,7 +46,7 @@
           >
             {{ item.count }}
           </span>
-        </VListItem>
+        </VListTile>
       </template>
     </VList>
   </VMenu>

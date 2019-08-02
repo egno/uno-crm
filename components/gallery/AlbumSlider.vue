@@ -23,7 +23,7 @@
           <v-flex shrink>
             <v-layout align-center justify-space-between>
               <div>{{ selected + 1 }} / {{ images.length }}</div>
-              <v-btn text icon @click="deleteImage" /><!--todo-->
+              <v-btn flat icon @click="deleteImage" /><!--todo-->
             </v-layout>
           </v-flex>
         </v-layout>
@@ -38,7 +38,7 @@
         </v-container>
         <!--<v-layout>
           <v-btn
-            text
+            flat
             icon
             @click="$emit('fullscreenOn')"
           >

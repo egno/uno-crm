@@ -17,7 +17,7 @@
                     depressed
                     flat
                     :color="day.outOfRange ? 'grey' : ''"
-                    :outlined="day.today"
+                    :outline="day.today"
                   >
                     {{ day.display }}
                   </v-btn>

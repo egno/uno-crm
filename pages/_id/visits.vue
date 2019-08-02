@@ -39,7 +39,7 @@
               <v-btn
                 class="mobile calendar-controls__button"
                 depressed
-                text
+                flat
                 small
                 @click.stop="addMonth(1)"
               />
@@ -69,14 +69,14 @@
                 <v-btn
                   class="calendar-controls__button"
                   depressed
-                  text
+                  flat
                   small
                   @click.stop="addMonth(-1)"
                 />
                 <v-btn
                   class="desktop calendar-controls__button"
                   depressed
-                  text
+                  flat
                   small
                   @click.stop="addMonth(1)"
                 />
@@ -112,7 +112,7 @@
                 <v-btn
                   class="mobile calendar-controls__button"
                   depressed
-                  text
+                  flat
                   small
                   @click.stop="addMonth(1)"
                 />
@@ -126,14 +126,14 @@
                 <v-btn
                   class="visit-log__controls-button"
                   depressed
-                  text
+                  flat
                   small
                   @click.stop="changeWeek(-1)"
                 />
                 <v-btn
                   class="visit-log__controls-button"
                   depressed
-                  text
+                  flat
                   small
                   @click.stop="changeWeek(1)"
                 />
@@ -382,7 +382,7 @@
                     <v-expansion-panel-content
                       v-for="category in employeesCategories"
                       :key="category"
-                      :hide-default-footer="true"
+                      :hide-actions="true"
                     >
                       <template v-slot:header>
                         <VLayout align-center justify-space-between>
@@ -516,14 +516,14 @@
                   <v-btn
                     class="visit-log__controls-button"
                     depressed
-                    text
+                    flat
                     small
                     @click="selectPrevEmployee"
                   />
                   <v-btn
                     class="visit-log__controls-button"
                     depressed
-                    text
+                    flat
                     small
                     @click="selectNextEmployee"
                   />
@@ -539,7 +539,7 @@
           <v-btn
             class="controls__button"
             depressed
-            text
+            flat
             small
             @click.stop="showMobileMenu = false"
           />
