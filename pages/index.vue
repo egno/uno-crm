@@ -208,7 +208,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '~/assets/styles/common.scss';
+@import '~assets/styles/common.scss';
 @import 'lato-font/scss/_public-api.scss';
 
 $header-height: 80px;

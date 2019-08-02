@@ -324,7 +324,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '~/assets/styles/common.scss';
+@import '~assets/styles/common.scss';
 @mixin active-header {
   background-color: rgba(137, 149, 175, 0.35);
   border-radius: 4px;

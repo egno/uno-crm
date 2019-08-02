@@ -117,7 +117,6 @@ import Avatar from '~/components/avatar/Avatar.vue'
 import PhoneView from '~/components/common/PhoneView.vue'
 import { makeAlert } from '~/api/utils'
 import { displayRESTDate } from '~/components/calendar/utils'
-
 export default {
   components: { Avatar, PhoneView },
   filters: {

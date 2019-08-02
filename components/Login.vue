@@ -179,7 +179,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '~/assets/styles/businesscard-form.scss';
+@import '~assets/styles/businesscard-form.scss';
 ._login {
   .businesscard-form__field {
     margin-top: 0;

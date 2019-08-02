@@ -115,7 +115,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '~/assets/styles/dropdown-select.scss';
+@import '~assets/styles/dropdown-select.scss';
 
 .custom-select {
   position: relative;

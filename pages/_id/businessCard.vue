@@ -120,10 +120,10 @@ export default {
 </script>
 
 <style lang="scss">
-@import '~/assets/styles/common.scss';
-@import '~/assets/styles/icon.scss';
-@import '~/assets/styles/businesscard-tabs.scss';
-@import '~/assets/styles/businesscard-form.scss';
+@import '~assets/styles/common.scss';
+@import '~assets/styles/icon.scss';
+@import '~assets/styles/businesscard-tabs.scss';
+@import '~assets/styles/businesscard-form.scss';
 
 .businesscard {
   height: 100%;

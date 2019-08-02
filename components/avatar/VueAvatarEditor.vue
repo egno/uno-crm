@@ -116,7 +116,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~/assets/styles/button.scss';
+@import '~assets/styles/button.scss';
 
 .avatar-editor {
   padding: 56px 47px 56px 48px;

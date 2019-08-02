@@ -269,7 +269,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '~/assets/styles/common.scss';
+@import '~assets/styles/common.scss';
 
 .employees-list {
   padding: 28px 28px 0;

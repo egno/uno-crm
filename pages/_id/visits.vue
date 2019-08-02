@@ -1184,8 +1184,8 @@ export default {
 </script>
 
 <style lang="scss">
-@import '~/assets/styles/common.scss';
-@import '~/assets/styles/day-schedule.scss';
+@import '~assets/styles/common.scss';
+@import '~assets/styles/day-schedule.scss';
 
 %round-arrow-button {
   float: left;

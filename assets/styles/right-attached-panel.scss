@@ -195,11 +195,11 @@
     font-weight: normal; 
     font-size: 14px;
     color: #8995AF;
-    background: url('/assets/del.svg') 65px 8px/11px no-repeat;
+    background: url('~assets/images/svg/del.svg') 65px 8px/11px no-repeat;
     outline: none;
     &:hover {
       color: #07101C;
-      background: url("'..") 65px 8px/11px no-repeat;
+      background: url('~assets/images/svg/delh.svg') 65px 8px/11px no-repeat;
       border-color: #07101C;
       transition: border-color 0.4s 0s, color 0.4s 0s;
     }

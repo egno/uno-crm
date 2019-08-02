@@ -98,8 +98,8 @@ export default {
 </script>
 
 <style lang="scss">
-@import '~/assets/styles/employee-card.scss';
-@import '~/assets/styles/icon.scss';
+@import '~assets/styles/employee-card.scss';
+@import '~assets/styles/icon.scss';
 .employee-registry {
   @include uno-icon();
   justify-content: center;

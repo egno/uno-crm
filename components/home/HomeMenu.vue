@@ -38,7 +38,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '~/assets/styles/common.scss';
+@import '~assets/styles/common.scss';
 
 .home-menu {
   .hamburger-menu {

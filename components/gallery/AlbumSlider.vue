@@ -158,7 +158,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '~/assets/styles/common.scss';
+@import '~assets/styles/common.scss';
 .gallery-slider {
   box-shadow: none;
 

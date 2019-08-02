@@ -110,7 +110,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '~/assets/styles/right-attached-panel.scss';
+@import '~assets/styles/right-attached-panel.scss';
 
 .right-attached-panel._client-visits {
   .right-attached-panel__header {

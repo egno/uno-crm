@@ -39,7 +39,7 @@ export default {
 }
 </script>
 <style lang="scss">
-@import '~/assets/styles/common.scss';
+@import '~assets/styles/common.scss';
 
 .steps {
   @extend %vertical-align;

@@ -5,5 +5,5 @@
 </template>
 <script></script>
 <style lang="scss" scoped>
-@import '~/assets/styles/button.scss';
+@import '~assets/styles/button.scss';
 </style>

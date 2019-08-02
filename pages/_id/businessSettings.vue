@@ -256,9 +256,9 @@ export default {
 </script>
 
 <style lang="scss">
-@import '~/assets/styles/common.scss';
-@import '~/assets/styles/infocard.scss';
-@import '~/assets/styles/businesscard-form.scss';
+@import '~assets/styles/common.scss';
+@import '~assets/styles/infocard.scss';
+@import '~assets/styles/businesscard-form.scss';
 
 .settings {
   color: #07101c;

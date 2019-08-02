@@ -284,13 +284,13 @@ export default {
         min-width: 20px;
         max-width: 20px;
         height: 20px;
-        background: url('~assets/del.svg') no-repeat center center;
+        background: url('~assets/images/svg/del.svg') no-repeat center center;
         background-size: 12px 20px;
         &:before {
           display: none;
         }
         &:hover {
-          background: url('~assets/delh.svg') no-repeat center center;
+          background: url('~assets/images/svg/delh.svg') no-repeat center center;
         }
       }
       &.transparent {

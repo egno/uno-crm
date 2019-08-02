@@ -401,8 +401,8 @@ export default {
 </script>
 
 <style lang="scss">
-@import '~/assets/styles/businesscard-form.scss';
-@import '~/assets/styles/dropdown-select.scss';
+@import '~assets/styles/businesscard-form.scss';
+@import '~assets/styles/dropdown-select.scss';
 
 .register-form {
   width: 280px;

@@ -468,10 +468,10 @@ export default {
 </script>
 
 <style lang="scss">
-@import '~/assets/styles/businesscard-form.scss';
-@import '~/assets/styles/phone-input.scss';
-@import '~/assets/styles/right-attached-panel.scss';
-@import '~/assets/styles/dropdown-select.scss';
+@import '~assets/styles/businesscard-form.scss';
+@import '~assets/styles/phone-input.scss';
+@import '~assets/styles/right-attached-panel.scss';
+@import '~assets/styles/dropdown-select.scss';
 
 .right-attached-panel._clients {
   .businesscard-form__field {

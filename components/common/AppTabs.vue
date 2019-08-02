@@ -20,7 +20,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '~/assets/styles/common.scss';
+@import '~assets/styles/common.scss';
 .app-tabs {
   border-bottom: 1px solid rgba(137, 149, 175, 0.1);
   .v-tabs__wrapper {

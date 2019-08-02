@@ -38,7 +38,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '~/assets/styles/public-sections.scss';
+@import '~assets/styles/public-sections.scss';
 
 .main-page-sections {
   background: #f3f4f7;

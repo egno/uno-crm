@@ -55,7 +55,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '~/assets/styles/common.scss';
+@import '~assets/styles/common.scss';
 .uno-modal {
   position: relative;
   padding: 30px 30px 25px;

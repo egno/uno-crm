@@ -34,7 +34,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~/assets/styles/common.scss';
+@import '~assets/styles/common.scss';
 
 .main-page__links {
   display: flex;

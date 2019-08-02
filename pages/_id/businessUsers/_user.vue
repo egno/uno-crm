@@ -389,7 +389,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '~/assets/styles/common.scss';
+@import '~assets/styles/common.scss';
 
 $first-column: 270px;
 $first-column-desktop: 330px;

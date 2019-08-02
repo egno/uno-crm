@@ -54,7 +54,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~/assets/styles/common.scss';
+@import '~assets/styles/common.scss';
 
 .add-photo {
   background: url('~assets/images/svg/plus.svg') no-repeat center;

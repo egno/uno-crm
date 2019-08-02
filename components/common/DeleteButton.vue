@@ -51,8 +51,8 @@ export default {
 }
 </script>
 <style lang="scss">
-@import '~/assets/styles/common.scss';
-@import '~/assets/styles/icon.scss';
+@import '~assets/styles/common.scss';
+@import '~assets/styles/icon.scss';
 .delete-button {
   @include uno-icon();
   @extend %vertical-align;

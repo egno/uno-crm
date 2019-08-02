@@ -192,7 +192,7 @@
 
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
-import { filials } from '../../components/business/mixins'
+import { filials } from '~/components/business/mixins'
 import Api from '~/api/backend'
 import FilialCard from '~/components/branches/FilialCard.vue'
 import Business from '~/classes/business'
@@ -456,9 +456,9 @@ export default {
 </script>
 
 <style lang="scss">
-@import '~/assets/styles/common.scss';
-@import '~/assets/styles/infocard.scss';
-@import '~/assets/styles/businesscard-tabs.scss';
+@import '~assets/styles/common.scss';
+@import '~assets/styles/infocard.scss';
+@import '~assets/styles/businesscard-tabs.scss';
 
 .card-wrapper {
   margin: 0 10px 20px 0;

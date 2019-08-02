@@ -67,5 +67,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import '~/assets/styles/day-schedule.scss';
+@import '~assets/styles/day-schedule.scss';
 </style>

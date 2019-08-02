@@ -184,8 +184,8 @@ export default {
 </script>
 
 <style lang="scss">
-@import '~/assets/styles/common.scss';
-@import '~/assets/styles/company-badge.scss';
+@import '~assets/styles/common.scss';
+@import '~assets/styles/company-badge.scss';
 
 .home-header {
   background-color: #fff !important;

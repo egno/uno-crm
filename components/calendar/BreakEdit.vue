@@ -277,8 +277,8 @@ export default {
 </script>
 
 <style lang="scss">
-@import '~/assets/styles/common.scss';
-@import '~/assets/styles/day-schedule.scss';
+@import '~assets/styles/common.scss';
+@import '~assets/styles/day-schedule.scss';
 
 .create-break {
   color: #07101c;

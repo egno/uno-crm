@@ -90,5 +90,5 @@ export default {
 }
 </script>
 <style lang="scss">
-@import '~/assets/styles/phone-input.scss';
+@import '~assets/styles/phone-input.scss';
 </style>

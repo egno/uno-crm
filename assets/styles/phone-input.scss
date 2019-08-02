@@ -24,10 +24,10 @@
     min-width: 24px;
     max-width: 24px;
     height: 24px;
-    background: #fff url('/assets/del.svg') no-repeat center center;
+    background: #fff url('~assets/images/svg/del.svg') no-repeat center center;
     background-size: 12px 20px;
     &:hover {
-      background: #fff url('/assets/delh.svg') no-repeat center center;
+      background: #fff url('~assets/images/svg/delh.svg') no-repeat center center;
     }
   }
 }

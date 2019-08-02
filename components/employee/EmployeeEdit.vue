@@ -115,6 +115,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import '~/assets/styles/phone-input.scss';
-@import '~/assets/styles/dropdown-select.scss';
+@import '~assets/styles/phone-input.scss';
+@import '~assets/styles/dropdown-select.scss';
 </style>

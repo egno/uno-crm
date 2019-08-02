@@ -25,7 +25,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~/assets/styles/common.scss';
+@import '~assets/styles/common.scss';
 
 .pic-title {
   font-size: 0.7em;

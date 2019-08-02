@@ -188,7 +188,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import { debounce } from 'lodash'
-import { filials } from '../../../components/business/mixins'
+import { filials } from '~/components/business/mixins'
 import Api from '~/api/backend'
 import Avatar from '~/components/avatar/Avatar.vue'
 import ClientCardEdit from '~/components/client/ClientCardEdit.vue'
@@ -445,7 +445,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '~/assets/styles/common.scss';
+@import '~assets/styles/common.scss';
 
 $first-column: 270px;
 $first-column-desktop: 330px;

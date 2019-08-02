@@ -476,8 +476,8 @@ export default {
 </script>
 
 <style lang="scss">
-@import '~/assets/styles/common.scss';
-@import '~/assets/styles/right-attached-panel.scss';
+@import '~assets/styles/common.scss';
+@import '~assets/styles/right-attached-panel.scss';
 
 .slide-enter,
 .slide-leave-to {

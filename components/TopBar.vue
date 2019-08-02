@@ -161,7 +161,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-@import '~/assets/styles/company-badge.scss';
+@import '~assets/styles/company-badge.scss';
 
 .go-home-menu {
   button {
