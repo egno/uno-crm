@@ -193,7 +193,7 @@ export default {
       )
     },
     roles () {
-      return roles.filter(x => x === roles[0] || this.businessFilialCount)
+      return roles && roles.filter(x => x === roles[0] || this.businessFilialCount)
     }
   },
   watch: {

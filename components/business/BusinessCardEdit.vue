@@ -277,7 +277,7 @@
 
 <script>
 import { mapState, mapActions, mapGetters, mapMutations } from 'vuex'
-import { debounce } from 'lodash'
+import { debounce, cloneDeep } from 'lodash'
 import Avatar from '~/components/avatar/Avatar.vue'
 import VueAvatarEditor from '~/components/avatar/VueAvatarEditor.vue'
 import BusinessPhonesEdit from '~/components/business/BusinessPhonesEdit.vue'
@@ -314,10 +314,12 @@ export default {
     }
   },
   data () {
+    const newBusiness = cloneDeep(this.businessInfo)
+
     return {
       avatarEdit: false,
       captionClass: '',
-      data: new Business(this.businessInfo),
+      data: new Business(newBusiness),
       rules: {
         INN_counter: value =>
           (value &&
@@ -408,7 +410,7 @@ export default {
   methods: {
     ...mapActions({ alert: 'alerts/alert' }),
     ...mapMutations({
-      setBusinessInfo: 'SET_BUSINESS_INFO'
+      setBusinessInfo: 'business/SET_BUSINESS_INFO'
     }),
     addLink () {
       if (!this.data.j.links) {

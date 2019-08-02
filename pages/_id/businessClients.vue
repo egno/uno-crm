@@ -18,11 +18,11 @@
           :headers="headers"
           :items="items"
           :loading="progressQuery"
-          :options.sync="pagination"
-          :server-items-length="totalItems"
+          :pagination.sync="pagination"
+          :total-items="totalItems"
           class="elevation-0"
-          header-props.sort-icon="mdi-menu-down"
-          hide-default-footer
+          sort-icon="mdi-menu-down"
+          hide-actions
         >
           <template slot="items" slot-scope="props">
             <td>
@@ -52,10 +52,7 @@
                     <div class="clients__name">
                       {{ props.item.name.fullName }}
                     </div>
-                    <div
-                      v-if="props.item.phone"
-                      class="clients__add-info _phone"
-                    >
+                    <div v-if="props.item.phone" class="clients__add-info _phone">
                       {{ props.item.phone | phoneFormat }}
                     </div>
                     <div v-else class="clients__add-info _phone">
@@ -64,18 +61,13 @@
                   </div>
                 </v-layout>
                 <div>
-                  <a
-                    :href="`tel:+${props.item.phone}`"
-                    class="clients__phone-button"
-                  />
+                  <a :href="`tel:+${props.item.phone}`" class="clients__phone-button" />
                 </div>
               </v-layout>
             </td>
             <td>
               <div v-if="props.item.visit.visits.total">
-                <span class="clients__visit-total">{{
-                  props.item.visit.visits.total
-                }}</span>
+                <span class="clients__visit-total">{{ props.item.visit.visits.total }}</span>
                 <span
                   v-if="props.item.visit.visits.unvisited"
                   class="clients__visit-unvisited"
@@ -85,28 +77,19 @@
               </div>
             </td>
             <td>
-              <v-layout
-                v-if="props.item.lastVisit.ts_begin"
-                column
-                class="hidden-button"
-                @click="clientVisits(props.item)"
-              >
+              <v-layout v-if="props.item.lastVisit.ts_begin" column class="hidden-button" @click="clientVisits(props.item)">
                 <v-flex>
                   <span>{{ props.item.lastVisit.date }}</span>
                   <span> — </span>
                   <span>{{ props.item.lastVisit.displayStatus }}</span>
                 </v-flex>
                 <v-flex>
-                  <span class="second-row">{{
-                    props.item.lastVisit.timeInterval
-                  }}</span>
+                  <span class="second-row">{{ props.item.lastVisit.timeInterval }}</span>
                 </v-flex>
               </v-layout>
             </td>
             <td>
-              <span
-                v-if="props.item.visit.visits.check"
-              >{{ props.item.visit.visits.check | numberFormat }} рублей</span>
+              <span v-if="props.item.visit.visits.check">{{ props.item.visit.visits.check | numberFormat }} рублей</span>
             </td>
             <td>
               <v-layout row align-center fill-height justify-start>
@@ -173,12 +156,7 @@
           </template>
         </Modal>
       </div>
-      <v-tooltip
-        bottom
-        :value="tooltip"
-        attach=".clients__question"
-        content-class="clients__tooltip"
-      >
+      <v-tooltip bottom :value="tooltip" attach=".clients__question" content-class="clients__tooltip">
         Для просмотра всей истории посещений кликните по статусу клиента
       </v-tooltip>
     </template>
@@ -344,9 +322,9 @@ export default {
       const filterString = `and=(${filter})`
       const params = [filterString]
 
-      if (sortBy && sortBy.length) {
+      if (sortBy) {
         params.push(
-          `order=${sortBy[0]}${descending ? '.desc.nullslast' : '.asc.nullsfirst'}`
+          `order=${sortBy}${descending ? '.desc.nullslast' : '.asc.nullsfirst'}`
         )
       }
       if (rowsPerPage > -1) {

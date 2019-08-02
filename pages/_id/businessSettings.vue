@@ -215,7 +215,9 @@ export default {
   },
 
   methods: {
-    ...mapActions(['openMessageWindow']),
+    ...mapActions({
+      openMessageWindow: 'common/openMessageWindow'
+    }),
     add () {
       if (!this.businessId || !this.amount) {
         return

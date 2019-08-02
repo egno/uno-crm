@@ -355,7 +355,7 @@ export default {
     },
     deletePhone (i, phone) {
       this.client.phones.splice(i, 1)
-      if (this.client.phone.substr(-10) === phone.substr(-10)) {
+      if (this.client.phone && (this.client.phone.substr(-10) === phone.substr(-10))) {
         this.client.phone = ''
       }
     },

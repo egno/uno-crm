@@ -11,10 +11,10 @@
       :headers="headers"
       :items="managers"
       :loading="progressQuery"
-      :options.sync="pagination"
-      footer-props.items-per-page-options="[5, 10, 25]"
-      footer-props.items-per-page-text="Записей на страницу:"
-      :server-items-length="totalItems"
+      :pagination.sync="pagination"
+      :rows-per-page-items="[5, 10, 25]"
+      rows-per-page-text="Записей на страницу:"
+      :total-items="totalItems"
       class="elevation-1"
     >
       <VProgressLinear slot="progress" color="blue" indeterminate />
@@ -113,7 +113,7 @@ export default {
       const params = [this.querySearchString]
       if (sortBy && sortBy.length) {
         params.push(
-          `order=${sortBy[0]}${descending ? '.desc.nullslast' : '.asc.nullsfirst'}`
+          `order=${sortBy}${descending ? '.desc.nullslast' : '.asc.nullsfirst'}`
         )
       }
       if (rowsPerPage > -1) {

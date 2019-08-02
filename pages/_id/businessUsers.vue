@@ -18,11 +18,11 @@
           :headers="headers"
           :items="items"
           :loading="progressQuery"
-          :options.sync="pagination"
-          :server-items-length="totalItems"
+          :pagination.sync="pagination"
+          :total-items="totalItems"
           class="elevation-0"
-          header-props.sort-icon="mdi-menu-down"
-          hide-default-footer
+          sort-icon="mdi-menu-down"
+          hide-actions
         >
           <template slot="items" slot-scope="props">
             <td>
@@ -294,7 +294,7 @@ export default {
 
       if (sortBy && sortBy.length) {
         params.push(
-          `order=${sortBy[0]}${descending ? '.desc.nullslast' : '.asc.nullsfirst'}`
+          `order=${sortBy}${descending ? '.desc.nullslast' : '.asc.nullsfirst'}`
         )
       }
       if (rowsPerPage > -1) {

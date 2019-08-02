@@ -4,9 +4,9 @@
     :items="data"
     item-key="id"
     :loading="progressQuery"
-    :options.sync="pagination"
-    footer-props.items-per-page-options="[5, 10, 25]"
-    footer-props.items-per-page-text="Записей на страницу:"
+    :pagination.sync="pagination"
+    :rows-per-page-items="[5, 10, 25]"
+    rows-per-page-text="Записей на страницу:"
     class="elevation-1"
   >
     <VProgressLinear slot="progress" color="blue" indeterminate />
@@ -92,7 +92,7 @@ export default {
       const params = [this.querySearchString]
       if (sortBy && sortBy.length) {
         params.push(
-          `order=${sortBy[0]}${descending ? '.desc.nullsfirst' : '.asc.nullslast'}`
+          `order=${sortBy}${descending ? '.desc.nullsfirst' : '.asc.nullslast'}`
         )
       }
       if (rowsPerPage > -1) {
