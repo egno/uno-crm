@@ -3,9 +3,9 @@ FROM node:10.15-alpine
 WORKDIR /app
 COPY . .
 
-RUN npm ci
+RUN npm i
 RUN npm run build
-RUN npm ci --only=production
+# RUN npm ci --only=production
 
 ENV NUXT_HOST=0.0.0.0 \
     NUXT_PORT=3000
