@@ -307,7 +307,7 @@
             class="button_attractive"
             @click="
               $router.push({
-                name: 'employeeProfile',
+                name: 'id-businessEmployees-employee',
                 params: { id: $route.params.id, employee: 'new' }
               })
             "

@@ -319,7 +319,7 @@ export default {
     height: 10px;
     margin-left: 7px;
     cursor: pointer;
-    //background: url('~assets/images/svg/cross.svg') center no-repeat;
+    background: url('~assets/images/svg/cross.svg') center no-repeat;
   }
   &__error {
     min-height: 17px;

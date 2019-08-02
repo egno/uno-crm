@@ -70,7 +70,7 @@ export default {
     right: 17px;
     width: 24px;
     height: 24px;
-    //background: url('~assets/images/svg/cross.svg') center/14px no-repeat;
+    background: url('~assets/images/svg/cross.svg') center/14px no-repeat;
     outline: none;
   }
 

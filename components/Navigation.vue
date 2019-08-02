@@ -234,7 +234,7 @@ export default {
             label: 'Добавить сотрудника',
             action: 'newEmployee',
             to: {
-              name: 'employeeProfile',
+              name: 'id-businessEmployees-employee',
               params: { id: this.businessId, employee: 'new' }
             },
             default: true

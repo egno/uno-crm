@@ -6,7 +6,7 @@
     :class="{ 'businesscard-form': isEditMode || isCreating }"
     @add="
       $router.push({
-        name: 'employeeProfile',
+        name: 'id-businessEmployees-employee',
         params: { id: id, employee: 'new' }
       })
     "
@@ -163,8 +163,9 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
 import axios from 'axios'
+import { cloneDeep } from 'lodash'
 import Accordion from '~/components/common/Accordion.vue'
 import AppTabs from '~/components/common/AppTabs.vue'
 import PageLayout from '~/components/common/PageLayout.vue'
@@ -302,7 +303,11 @@ export default {
   methods: {
     ...mapActions({
       alert: 'alerts/alert',
-      deleteEmployee: 'employee/deleteEmployee'
+      deleteEmployee: 'employee/deleteEmployee',
+      setEmployeeItem: 'employee/setEmployeeItem'
+    }),
+    ...mapMutations({
+      LOAD_EMPLOYEES: 'employee/LOAD_EMPLOYEES'
     }),
     addEmpToServices (employeeId) {
       const p = []
@@ -316,10 +321,10 @@ export default {
         }
 
         // eslint-disable-next-line prefer-const
-        employees = (service.j && service.j.employees) || []
+        employees = cloneDeep(service.j && service.j.employees) || []
         employees.push(employeeId)
         !service.j && (service.j = {})
-        service.j.employees = employees
+        this.LOAD_EMPLOYEES(employees)
 
         p.push(
           Api()
@@ -354,7 +359,7 @@ export default {
       this.employee = new Employee(
         this.employeeId === 'new' ? { parent: this.id } : {}
       )
-      this.employee.load(this.employeeId)
+      this.employee.load(this.employeeId).then(res => this.setEmployeeItem(res))
     },
     onAvatarChange (img) {
       if (!img) {
@@ -411,21 +416,25 @@ export default {
           this.employee.j.schedule.data = this.businessInfo.j.schedule.data
         }
 
-        this.employee.save().then((id) => {
+        this.employee.save().then((res) => {
           if (this.employeeId === 'new') {
-            this.addEmpToServices(id).then(() => {
+            this.addEmpToServices(res).then(() => {
               this.$router.replace({
-                name: 'employeeProfile',
-                params: { id: this.id, employee: id }
+                name: 'id-businessEmployees-employee',
+                params: { id: this.id, employee: res }
               })
             })
           } else {
+            this.setEmployeeItem(res)
             this.addEmpToServices(this.employeeId).then(() => {
               this.isEditMode = false
               this.loadEmployee()
             })
           }
         })
+          .catch((err) => {
+            this.alert(makeAlert(err))
+          })
       })
     }
   }

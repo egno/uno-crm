@@ -4,7 +4,7 @@
     :template="{ headerText: 'Сотрудники', buttonText: 'Новый сотрудник' }"
     @add="
       $router.push({
-        name: 'employeeProfile',
+        name: 'id-businessEmployees-employee',
         params: { id: id, employee: 'new' }
       })
     "
@@ -69,7 +69,7 @@
                     @calendarClick="openRegistry"
                     @click="
                       $router.push({
-                        name: 'employeeProfile',
+                        name: 'id-businessEmployees-employee',
                         params: { id: id, employee: employee.id }
                       })
                     "

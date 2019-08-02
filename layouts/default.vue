@@ -1,5 +1,5 @@
 <template>
-  <VApp app>
+  <VApp app :dark="false">
     <top-bar />
     <Navigation v-if="isMenuVisible" @onAction="onAction" />
     <VContent app>

@@ -1,55 +1,56 @@
 <template>
-  <VMenu
-    v-if="loggedIn"
-    v-model="menu"
-    class="profile-menu"
-    left
-    full-width
-    offset-y
-    disable-resize-watcher
-    min-width="174"
-    max-width="174"
-    content-class="profile-dropdown"
-    open-on-hover
-    :close-on-content-click="false"
-  >
-    <template v-slot:activator="{ on }">
-      <v-btn flat v-on="on">
-        <VLayout align-center justify-space-between>
-          <Avatar
-            :new-message="newMessage"
-            :size="avatarSize"
-            :name="displayName"
-            :src="avatar"
-          />
-          <div class="profile-expand-more" />
-        </VLayout>
-      </v-btn>
-    </template>
-    <VList class="menu-list">
-      <template v-for="(item, index) in menuList">
-        <VListTile
-          v-if="!item.hide"
-          :key="index"
-          :to="item.route"
-          @click="menuHandler(item.action)"
-        >
-          <VListTileTitle
-            :class="{ _bold: item.count && item.title === 'Сообщения' }"
-          >
-            {{ item.title }}
-          </VListTileTitle>
-          <span
-            v-if="item.count"
-            class="caption count"
-            :class="{ attention: item.count === '!' }"
-          >
-            {{ item.count }}
-          </span>
-        </VListTile>
+  <div class="profile-menu">
+    <VMenu
+      v-if="loggedIn"
+      v-model="menu"
+      left
+      full-width
+      offset-y
+      disable-resize-watcher
+      min-width="174"
+      max-width="174"
+      content-class="profile-dropdown"
+      open-on-hover
+      :close-on-content-click="false"
+    >
+      <template v-slot:activator="{ on }">
+        <v-btn flat v-on="on">
+          <VLayout align-center justify-space-between>
+            <Avatar
+              :new-message="newMessage"
+              :size="avatarSize"
+              :name="displayName"
+              :src="avatar"
+            />
+            <div class="profile-expand-more" />
+          </VLayout>
+        </v-btn>
       </template>
-    </VList>
-  </VMenu>
+      <VList class="menu-list">
+        <template v-for="(item, index) in menuList">
+          <VListTile
+            v-if="!item.hide"
+            :key="index"
+            :to="item.route"
+            @click="menuHandler(item.action)"
+          >
+            <VListTileTitle
+              :class="{ _bold: item.count && item.title === 'Сообщения' }"
+            >
+              {{ item.title }}
+            </VListTileTitle>
+            <span
+              v-if="item.count"
+              class="caption count"
+              :class="{ attention: item.count === '!' }"
+            >
+              {{ item.count }}
+            </span>
+          </VListTile>
+        </template>
+      </VList>
+    </VMenu>
+  </div>
   <!--<VMenu
     v-else-if="$route.name !== 'login'"
     v-model="menu"
@@ -195,7 +196,9 @@ export default {
 }
 </script>
 <style lang="scss">
-.v-menu.profile-menu {
+.profile-menu {
+  display: flex;
+  align-items: center;
   border-left: 1px solid rgba(137, 149, 175, 0.1);
   box-sizing: border-box;
   @media only screen and (min-width: 1360px) {

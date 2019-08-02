@@ -48,7 +48,7 @@ export default {
     background: url('~assets/images/svg/menu.svg') center/contain no-repeat;
     outline: none;
     &.active {
-      //background: url('~assets/images/svg/cross.svg') center/14px no-repeat;
+      background: url('~assets/images/svg/cross.svg') center/14px no-repeat;
     }
   }
 

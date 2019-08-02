@@ -1,15 +1,8 @@
 import ApiObject from '~/classes/api_object'
 import Api from '~/api/backend'
-import { makeAlert, responseGetId } from '~/api/utils'
+import { responseGetId } from '~/api/utils'
 import { imagePath } from '~/components/gallery/utils'
 
-let store
-
-if (process.browser) {
-  window.onNuxtReady(({ $store }) => {
-    store = $store
-  })
-}
 /* import DaySchedule from '~/classes/day_schedule'
 
 class ScheduleTemplate extends ApiObject {
@@ -251,7 +244,7 @@ class Employee extends ApiObject {
       .then(res => res.data[0])
       .then((res) => {
         this.jsonObject = res
-        store.dispatch('employee/setEmployeeItem', res)
+        return res
       })
   }
 
@@ -261,17 +254,11 @@ class Employee extends ApiObject {
       return Api()
         .post(`employee?`, this.jsonObject)
         .then(res => responseGetId(res))
-        .catch((err) => {
-          store.dispatch('alerts/alert', makeAlert(err))
-        })
     } else {
       return Api()
         .patch(`employee?id=eq.${this.id}`, this.jsonObject)
         .then(() => {
-          store.dispatch('setEmployeeItem', this.jsonObject)
-        })
-        .catch((err) => {
-          store.dispatch('alerts/alert', makeAlert(err))
+          return this.jsonObject
         })
     }
   }
