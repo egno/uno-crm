@@ -8,6 +8,8 @@ stages:
 lint:
   image: node:10.15-alpine
   stage: lint
+  tags: 
+    - node
   cache:
     paths:
       - node_modules
@@ -16,12 +18,18 @@ lint:
     - npm run lint
 
 build_development:
-  image: node:10.15-alpine
   stage: build
-  cache:
-    paths:
-      - node_modules
+  image: docker:stable
+  tags: 
+    - deploy
+    - docker
+
+  before_script:
+    - docker info
+
   script:
-    - npm run build
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build -t $CI_REGISTRY_IMAGE:develop .
+    - docker push $CI_REGISTRY_IMAGE:develop
 
 
