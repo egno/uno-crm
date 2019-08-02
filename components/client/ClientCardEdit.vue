@@ -172,7 +172,7 @@
           <template slot="footer">
             <router-link
               :to="{
-                name: 'businessCardClient',
+                name: 'id-businessClient',
                 params: {
                   id: clientWithSamePhone.business_id,
                   client: clientWithSamePhone.id

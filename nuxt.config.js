@@ -10,6 +10,22 @@ export default {
   env,
   mode: 'universal',
   /*
+  ** Router
+  */
+  router: {
+    extendRoutes (routes, resolve) {
+      routes.push({
+        name: 'id-businessClient',
+        path: '/:id/businessClients/:client',
+        component: resolve(__dirname, 'pages/_id/businessClients.vue')
+      }, {
+        name: 'id-businessUser',
+        path: '/:id/businessUsers/:user',
+        component: resolve(__dirname, 'pages/_id/businessUsers.vue')
+      })
+    }
+  },
+  /*
   ** Headers of the page
   */
   head: {

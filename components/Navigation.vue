@@ -187,7 +187,7 @@ export default {
         {
           title: 'Пользователи',
           route: {
-            name: 'id-businessUsers-user',
+            name: 'id-businessUsers',
             params: { id: this.businessId }
           },
           show:
@@ -253,7 +253,7 @@ export default {
           title: 'Клиенты',
           count: this.clientsCount,
           route: {
-            name: 'id-businessClientsTable',
+            name: 'id-businessClients',
             params: { id: this.businessId }
           },
           show:
@@ -265,7 +265,7 @@ export default {
             label: 'Добавить клиента',
             action: 'newClient',
             to: {
-              name: 'businessCardClient',
+              name: 'id-businessClient',
               params: { id: this.businessId, client: 'new' }
             },
             default: true

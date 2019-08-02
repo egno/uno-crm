@@ -5,8 +5,8 @@
       :items="data"
       :loading="progressQuery"
       :options.sync="pagination"
-      :rows-per-page-items="[5, 10, 25]"
-      rows-per-page-text="Записей на страницу:"
+      footer-props.items-per-page-options="[5, 10, 25]"
+      footer-props.items-per-page-text="Записей на страницу:"
       :server-items-length="totalItems"
       class="elevation-1"
     >
@@ -210,9 +210,9 @@ export default {
       const { sortBy, descending, page, rowsPerPage } = this.pagination
       const params = [this.querySearchString]
       params.push('parent=is.null')
-      if (sortBy) {
+      if (sortBy && sortBy.length) {
         params.push(
-          `order=${sortBy}${descending ? '.desc.nullslast' : '.asc.nullsfirst'}`
+          `order=${sortBy[0]}${descending ? '.desc.nullslast' : '.asc.nullsfirst'}`
         )
       }
       if (rowsPerPage > -1) {

@@ -111,9 +111,9 @@ export default {
       this.managers = []
       const { sortBy, descending, page, rowsPerPage } = this.pagination
       const params = [this.querySearchString]
-      if (sortBy) {
+      if (sortBy && sortBy.length) {
         params.push(
-          `order=${sortBy}${descending ? '.desc.nullslast' : '.asc.nullsfirst'}`
+          `order=${sortBy[0]}${descending ? '.desc.nullslast' : '.asc.nullsfirst'}`
         )
       }
       if (rowsPerPage > -1) {

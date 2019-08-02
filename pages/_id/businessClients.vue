@@ -2,13 +2,13 @@
   <PageLayout
     :is-button-visible="isEditorUser"
     :template="{
-      headerText: 'Пользователи',
-      buttonText: 'Добавить'
+      headerText: 'Клиенты',
+      buttonText: 'Добавить клиента'
     }"
     @add="
       $router.push({
-        name: 'id-businessUsers-user',
-        params: { id: businessId, user: 'new' }
+        name: 'id-businessClient',
+        params: { id: businessId, client: 'new' }
       })
     "
   >
@@ -38,25 +38,28 @@
                   row
                   fill-height
                   class="clients__badge"
-                  @click="userEdit(props.item)"
+                  @click="clientEdit(props.item)"
                 >
                   <div class="clients__avatar">
                     <Avatar
                       class="ma-1"
-                      :name="props.item.fullName || props.item.email"
+                      :name="props.item.name.fullName || props.item.email"
                       size="24px"
                       :src="props.item.j.avatar"
                     />
                   </div>
                   <div class="clients__name-phone">
                     <div class="clients__name">
-                      {{ props.item.fullName }}
+                      {{ props.item.name.fullName }}
                     </div>
                     <div
                       v-if="props.item.phone"
                       class="clients__add-info _phone"
                     >
-                      {{ props.item.phone }}
+                      {{ props.item.phone | phoneFormat }}
+                    </div>
+                    <div v-else class="clients__add-info _phone">
+                      {{ props.item.phones[0] | phoneFormat }}
                     </div>
                   </div>
                 </v-layout>
@@ -69,26 +72,41 @@
               </v-layout>
             </td>
             <td>
-              <div>
-                <span class="clients__visit-total">{{ props.item.role }}</span>
+              <div v-if="props.item.visit.visits.total">
+                <span class="clients__visit-total">{{
+                  props.item.visit.visits.total
+                }}</span>
+                <span
+                  v-if="props.item.visit.visits.unvisited"
+                  class="clients__visit-unvisited"
+                >
+                  {{ props.item.visit.visits.unvisited }}
+                </span>
               </div>
             </td>
             <td>
-              <v-layout v-if="props.item.business" column>
+              <v-layout
+                v-if="props.item.lastVisit.ts_begin"
+                column
+                class="hidden-button"
+                @click="clientVisits(props.item)"
+              >
                 <v-flex>
-                  <span>{{ props.item.business[0].name }}</span>
+                  <span>{{ props.item.lastVisit.date }}</span>
+                  <span> — </span>
+                  <span>{{ props.item.lastVisit.displayStatus }}</span>
                 </v-flex>
-                <v-flex
-                  v-if="props.item.filialCount && props.item.filialCount - 1"
-                >
-                  <span
-                    class="second-row"
-                  >+ еще {{ props.item.filialCount - 1 }}</span>
+                <v-flex>
+                  <span class="second-row">{{
+                    props.item.lastVisit.timeInterval
+                  }}</span>
                 </v-flex>
               </v-layout>
             </td>
             <td>
-              <span v-if="props.item.j.notes">{{ props.item.j.notes }}</span>
+              <span
+                v-if="props.item.visit.visits.check"
+              >{{ props.item.visit.visits.check | numberFormat }} рублей</span>
             </td>
             <td>
               <v-layout row align-center fill-height justify-start>
@@ -109,7 +127,7 @@
             color="rgba(137, 149, 175, 0.35)"
           />
         </div>
-        <UserCardEdit
+        <ClientCardEdit
           v-if="edit"
           :visible="edit"
           :client="item"
@@ -122,6 +140,11 @@
             edit = false
             item = {}
           "
+        />
+        <ClientVisits
+          :value="visitsPanel"
+          :client="item"
+          @close="visitsPanel = false"
         />
         <Modal
           :visible="deleteConfirm"
@@ -141,15 +164,23 @@
         >
           <template slot="text">
             <div v-if="item.fullName" class="uno-modal__text">
-              Удалить пользователя
-              <span class="font-weight-bold">{{ item.fullName }}</span>?
+              Удалить клиента
+              <span class="font-weight-bold">{{ item.fullName }}</span>? Все данные клиента будут удалены.
             </div>
             <div v-else class="uno-modal__text">
-              Удалить пользователя?
+              Удалить клиента? Все данные клиента будут удалены.
             </div>
           </template>
         </Modal>
       </div>
+      <v-tooltip
+        bottom
+        :value="tooltip"
+        attach=".clients__question"
+        content-class="clients__tooltip"
+      >
+        Для просмотра всей истории посещений кликните по статусу клиента
+      </v-tooltip>
     </template>
   </PageLayout>
 </template>
@@ -160,8 +191,9 @@ import { debounce } from 'lodash'
 import { filials } from '~/components/business/mixins'
 import Api from '~/api/backend'
 import Avatar from '~/components/avatar/Avatar.vue'
-import UserCardEdit from '~/components/user/UserCardEdit.vue'
-import User from '~/classes/user'
+import ClientCardEdit from '~/components/client/ClientCardEdit.vue'
+import ClientVisits from '~/components/client/ClientVisits.vue'
+import Client from '~/classes/client'
 import DeleteButton from '~/components/common/DeleteButton'
 import Users from '~/mixins/users'
 import PageLayout from '~/components/common/PageLayout.vue'
@@ -169,7 +201,8 @@ import Modal from '~/components/common/Modal'
 
 export default {
   components: {
-    UserCardEdit,
+    ClientCardEdit,
+    ClientVisits,
     Avatar,
     DeleteButton,
     PageLayout,
@@ -190,10 +223,16 @@ export default {
       branchesList: [],
       edit: false,
       headers: [
-        { text: 'Имя и фамилия', value: 'j->>name' },
-        { text: 'Роль пользователя', value: '', sortable: false },
-        { text: 'Филиал', value: '', sortable: false },
-        { text: 'Комментарий', value: '', sortable: false },
+        { text: 'Имя и фамилия', value: 'j->name->>fullname' },
+        { text: 'Визиты', value: 'visit->visits->>total', width: '100px' },
+        {
+          text: 'Статус последнего визита',
+          value: 'visit->last->>ts_begin',
+          width: '200px',
+          class: 'clients__question'
+        },
+        { text: 'Средний чек', value: 'visit->visits->>check', width: '170px' },
+        /* { text: 'Филиал', value: '', width: '200px' }, */
         { text: '', value: '', sortable: false, width: '1' }
       ],
       item: {},
@@ -213,8 +252,8 @@ export default {
       businessIsFilial: 'business/businessIsFilial',
       searchString: 'common/searchString'
     }),
-    userId () {
-      return this.$route && this.$route.params && this.$route.params.user
+    clientId () {
+      return this.$route && this.$route.params && this.$route.params.client
     },
     querySearchString () {
       if (!this.searchString || this.searchString.trim().length < 3) {
@@ -245,7 +284,7 @@ export default {
       handler: 'onClientChange',
       deep: true
     },
-    edit: 'closeUserEditor',
+    edit: 'closeClientEditor',
     businessIsFilial: 'getFilials'
   },
   created () {
@@ -254,27 +293,40 @@ export default {
     this.debouncedFetch = debounce(this.fetchData, 350)
   },
   mounted () {
-    if (this.userId) {
+    if (this.clientId) {
       this.onClientChange()
     }
+    this.$el
+      .querySelector('.clients__question')
+      .addEventListener('mouseenter', this.onHover)
+    this.$el
+      .querySelector('.clients__question')
+      .addEventListener('mouseleave', this.onLeave)
   },
-  beforeDestroy () {},
+  beforeDestroy () {
+    this.$el
+      .querySelector('.clients__question')
+      .removeEventListener('mouseenter', this.onHover)
+    this.$el
+      .querySelector('.clients__question')
+      .removeEventListener('mouseleave', this.onLeave)
+  },
   methods: {
     ...mapActions({ addClientsCounter: 'business/addClientsCounter' }),
-    userEdit (item) {
+    clientEdit (item) {
       this.$router.push({
-        name: 'id-businessUsers-user',
-        params: { id: this.businessId, user: item.user_id }
+        name: 'id-businessClient',
+        params: { id: this.businessId, client: item.id }
       })
     },
     clientVisits (item) {
-      this.item = new User(item)
+      this.item = new Client(item)
       this.visitsPanel = true
     },
-    closeUserEditor () {
+    closeClientEditor () {
       if (!this.edit) {
         this.$router.push({
-          name: 'id-businessUsers-user',
+          name: 'id-businessClients',
           params: { id: this.businessId }
         })
       }
@@ -284,7 +336,7 @@ export default {
 
       const { sortBy, descending, page, rowsPerPage } = this.pagination
       const filter = [
-        `company_id.eq.${this.businessId}`,
+        `business_id.eq.${this.businessId}`,
         this.querySearchString
       ]
         .filter(x => !!x)
@@ -293,7 +345,6 @@ export default {
       const params = [filterString]
 
       if (sortBy && sortBy.length) {
-        debugger
         params.push(
           `order=${sortBy[0]}${descending ? '.desc.nullslast' : '.asc.nullsfirst'}`
         )
@@ -311,7 +362,7 @@ export default {
         this.items = []
 
         Api()
-          .get(`user?${this.lastQuery}`)
+          .get(`client?${this.lastQuery}`)
           .then((res) => {
             if (res.headers && res.headers['content-range']) {
               const r = res.headers['content-range'].match(/^\d*-\d*\/(\d*)$/)
@@ -322,7 +373,7 @@ export default {
             return res.data
           })
           .then((res) => {
-            this.items = res.filter(x => !!x.j).map(x => new User(x))
+            this.items = res.filter(x => !!x.j).map(x => new Client(x))
           })
           .catch((e) => {
             console.error(e)
@@ -332,7 +383,6 @@ export default {
           })
       }
     },
-
     getFilials () {
       const id = this.businessIsFilial
         ? this.businessInfo && this.businessInfo.parent
@@ -344,9 +394,9 @@ export default {
       })
     },
     onClientChange () {
-      if (!this.userId) { return }
-      this.item = new User({ id: this.userId })
-      this.item.load(this.userId).then(() => {
+      if (!this.clientId) { return }
+      this.item = new Client({ id: this.clientId })
+      this.item.load(this.clientId).then(() => {
         this.edit = true
       })
     },
@@ -369,19 +419,25 @@ export default {
         return
       }
       Api()
-        .delete(`user?user_id=eq.${this.item.id}`)
+        .delete(`client?id=eq.${this.item.id}`)
         .then(() => {
           this.addClientsCounter(-1)
-          this.fetchData(true)
+          this.fetchData({ force: true })
           this.edit = false
           this.item = {}
         })
     },
     onSave (item) {
-      const newItem = item instanceof User ? item : new User(item)
-      newItem.save().then(() => {
-        this.fetchData(true)
+      const newItem = item instanceof Client ? item : new Client(item)
+      newItem.save().then((res) => {
+        if (!res) { return }
         this.edit = false
+        const idx = this.items.findIndex(x => x.id === item.id)
+        if (idx > -1) {
+          this.items.splice(idx, 1, item)
+        }
+        this.item = {}
+        this.fetchData({ force: true })
       })
     }
   }
@@ -562,7 +618,7 @@ $left-panel: 240px;
     border: 1px solid rgba(137, 149, 175, 0.1);
     border-radius: 50%;
   }
-  &__unvisited {
+  &__visit-unvisited {
     display: inline-block;
     vertical-align: baseline;
     margin-left: 11px;

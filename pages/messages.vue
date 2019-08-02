@@ -90,9 +90,9 @@ export default {
       this.data = []
       const { sortBy, descending, page, rowsPerPage } = this.pagination
       const params = [this.querySearchString]
-      if (sortBy) {
+      if (sortBy && sortBy.length) {
         params.push(
-          `order=${sortBy}${descending ? '.desc.nullsfirst' : '.asc.nullslast'}`
+          `order=${sortBy[0]}${descending ? '.desc.nullsfirst' : '.asc.nullslast'}`
         )
       }
       if (rowsPerPage > -1) {
