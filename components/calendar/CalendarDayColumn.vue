@@ -388,7 +388,7 @@ export default {
     }
   }
   &__add-visit {
-    background: url('/assets/plus.svg') center/14px no-repeat;
+    background: url('~assets/plus.svg') center/14px no-repeat;
     cursor: pointer;
   }
   &__add-break {

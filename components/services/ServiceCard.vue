@@ -109,6 +109,7 @@ export default {
   background-position: right top;
   background-repeat: no-repeat;
   background-color: #fff;
+  background-origin: border-box;
   @media only screen and (min-width: 1360px) {
     padding-left: 24px;
   }

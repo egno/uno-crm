@@ -241,7 +241,7 @@ export default {
       bottom: 8px;
       left: 16px;
       content: '';
-      background: url('/assets/sllink.svg') no-repeat center center;
+      background: url('~assets/sllink.svg') no-repeat center center;
       background-size: 18px;
       z-index: 1;
     }
@@ -270,7 +270,7 @@ export default {
       top: 19px;
       left: 0;
       content: '';
-      background: url('/assets/sllink.svg') no-repeat center;
+      background: url('~assets/sllink.svg') no-repeat center;
       background-size: 18px;
     }
     &._ig {

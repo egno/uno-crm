@@ -202,7 +202,7 @@ export default {
     margin-bottom: 20px;
     width: 312px !important;
     height: 184px !important;
-    background: url('/assets/phot.svg') no-repeat top 57px center;
+    background: url('~assets/phot.svg') no-repeat top 57px center;
     background-size: 40px;
     background-color: rgba(137, 149, 175, 0.1) !important;
     border-radius: 0;
