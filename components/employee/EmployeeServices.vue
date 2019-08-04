@@ -90,6 +90,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
+import { cloneDeep } from 'lodash'
 import ServiceCard from '~/components/services/ServiceCard.vue'
 import AppCheckbox from '~/components/common/AppCheckbox.vue'
 import MainButton from '~/components/common/MainButton.vue'
@@ -98,12 +99,6 @@ import Steps from '~/components/common/Steps.vue'
 export default {
   components: { AppCheckbox, MainButton, ServiceCard, Steps },
   props: {
-    item: {
-      type: Object,
-      default () {
-        return {}
-      }
-    },
     employeeServices: {
       type: Array,
       default () {
@@ -149,7 +144,7 @@ export default {
   methods: {
     init () {
       this.selectedServiceGroups = this.employeeServiceGroups.slice()
-      this.selectedServices = this.employeeServices.slice()
+      this.selectedServices = cloneDeep(this.employeeServices)
     },
     onGroupsChange (category, selected) {
       if (selected) {

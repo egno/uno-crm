@@ -133,7 +133,6 @@
           </div>
           <div v-show="activeTab === 1" class="employee-profile-edit">
             <EmployeeServices
-              :item="employee"
               :employee-services="empServices"
               :employee-service-groups="empServiceGroups"
               @selected="onServicesSelected"
@@ -165,6 +164,7 @@
 <script>
 import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
 import axios from 'axios'
+import { cloneDeep } from 'lodash'
 import Accordion from '~/components/common/Accordion.vue'
 import AppTabs from '~/components/common/AppTabs.vue'
 import PageLayout from '~/components/common/PageLayout.vue'
@@ -322,7 +322,7 @@ export default {
         this.employeeId === 'new' ? { parent: this.id } : {}
       )
       this.employee.load(this.employeeId).then((res) => {
-        this.setEmployeeItem(res)
+        this.setEmployeeItem(cloneDeep(res))
       })
     },
     onAvatarChange (img) {
