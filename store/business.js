@@ -151,7 +151,8 @@ const actions = {
     }
 
     const path = `business_service?business_id=eq.${branchId}`
-
+    console.log('loadBusinessServices ')
+    // todo add loading flag and reduce requests
     Api()
       .get(path)
       .then(res => res.data)

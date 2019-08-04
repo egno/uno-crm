@@ -126,7 +126,7 @@ import EmployeeCard from '~/components/employee/EmployeeCard.vue'
 import Modal from '~/components/common/Modal'
 import PageLayout from '~/components/common/PageLayout.vue'
 import Api from '~/api/backend'
-import { employeeMixin, employeesCategorized } from '~/mixins/employee'
+import { employeesCategorized } from '~/mixins/employee'
 import { formatDate } from '~/components/calendar/utils'
 import { conjugateVisits } from '~/components/utils'
 
@@ -141,7 +141,7 @@ export default {
       return conjugateVisits(n)
     }
   },
-  mixins: [employeesCategorized, employeeMixin],
+  mixins: [employeesCategorized],
   data () {
     return {
       edit: false,
@@ -196,21 +196,15 @@ export default {
       loadBusinessEmployees: 'business/loadBusinessEmployees'
     }),
     deleteEmployee () {
-      const empServices = this.businessServices.filter(
-        s => s.j.employees && s.j.employees.includes(this.empToDelete.id)
-      )
-
-      this.removeEmpServices(empServices, this.empToDelete.id).then(() => {
-        Api()
-          .delete(`employee?id=eq.${this.empToDelete.id}`)
-          .then(() => {
-            this.deleteModalVisible = false
-            this.loadBusinessEmployees(this.id)
-          })
-          .catch((e) => {
-            console.log('FAILURE!! ', e)
-          })
-      })
+      Api()
+        .delete(`employee?id=eq.${this.empToDelete.id}`)
+        .then(() => {
+          this.deleteModalVisible = false
+          this.loadBusinessEmployees(this.id)
+        })
+        .catch((e) => {
+          console.log('FAILURE!! ', e)
+        })
     },
     empServices (empId) {
       if (!this.businessServices || !this.businessServices.length) {

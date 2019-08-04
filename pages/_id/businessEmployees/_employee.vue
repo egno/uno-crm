@@ -165,7 +165,6 @@
 <script>
 import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
 import axios from 'axios'
-import { cloneDeep } from 'lodash'
 import Accordion from '~/components/common/Accordion.vue'
 import AppTabs from '~/components/common/AppTabs.vue'
 import PageLayout from '~/components/common/PageLayout.vue'
@@ -177,10 +176,8 @@ import BusinessScheduleEdit from '~/components/business/BusinessScheduleEdit.vue
 import Avatar from '~/components/avatar/Avatar.vue'
 import MainButton from '~/components/common/MainButton.vue'
 import ServiceCard from '~/components/services/ServiceCard.vue'
-import Api from '~/api/backend'
 
 import { businessMixins } from '~/components/business/mixins'
-import { employeeMixin } from '~/mixins/employee'
 import { fullName } from '~/components/business/utils'
 import Employee from '~/classes/employee'
 import { makeAlert } from '~/api/utils'
@@ -199,7 +196,7 @@ export default {
     PageLayout,
     ServiceCard
   },
-  mixins: [businessMixins, employeeMixin],
+  mixins: [businessMixins],
   data () {
     return {
       activeTab: 0,
@@ -304,47 +301,12 @@ export default {
     ...mapActions({
       alert: 'alerts/alert',
       deleteEmployee: 'employee/deleteEmployee',
-      setEmployeeItem: 'employee/setEmployeeItem'
+      setEmployeeItem: 'employee/setEmployeeItem',
+      loadBusinessServices: 'business/loadBusinessServices'
     }),
     ...mapMutations({
       LOAD_EMPLOYEES: 'employee/LOAD_EMPLOYEES'
     }),
-    addEmpToServices (employeeId) {
-      const p = []
-
-      this.employee.services.forEach((servId) => {
-        const service = this.businessServices.find(s => s.id === servId)
-        let employees
-
-        if (!service) {
-          return
-        }
-
-        // eslint-disable-next-line prefer-const
-        employees = cloneDeep(service.j && service.j.employees) || []
-        employees.push(employeeId)
-        !service.j && (service.j = {})
-        this.LOAD_EMPLOYEES(employees)
-
-        p.push(
-          Api()
-            .patch(`business_service?id=eq.${service.id}`, {
-              id: service.id,
-              business_id: this.id,
-              name: service.name,
-              access: true,
-              j: {
-                ...service.j
-              }
-            })
-            .catch((err) => {
-              this.alert(makeAlert(err))
-            })
-        )
-      })
-
-      return Promise.all(p)
-    },
     deleteItem () {
       if (this.employeeId && this.employeeId !== 'new') {
         this.deleteEmployee(this.employeeId)
@@ -359,7 +321,9 @@ export default {
       this.employee = new Employee(
         this.employeeId === 'new' ? { parent: this.id } : {}
       )
-      this.employee.load(this.employeeId).then(res => this.setEmployeeItem(res))
+      this.employee.load(this.employeeId).then((res) => {
+        this.setEmployeeItem(res)
+      })
     },
     onAvatarChange (img) {
       if (!img) {
@@ -400,42 +364,38 @@ export default {
     save () {
       if (!this.employeeId) { return }
 
-      this.removeEmpServices(this.empServices, this.employeeId).then(() => {
-        this.employee.services =
-          this.employee.services && this.employee.services.length
-            ? this.employee.services
-              .map(s => (s && typeof s === 'object' ? s.id : s))
-              .filter(s => !!s)
-            : []
+      this.employee.services =
+        this.employee.services && this.employee.services.length
+          ? this.employee.services
+            .map(s => (s && typeof s === 'object' ? s.id : s))
+            .filter(s => !!s)
+          : []
 
-        if (!this.workDaysCount) {
-          this.employee.j.schedule = this.employee.j.schedule || {
-            data: [],
-            type: 'week'
-          }
-          this.employee.j.schedule.data = this.businessInfo.j.schedule.data
+      if (!this.workDaysCount) {
+        this.employee.j.schedule = this.employee.j.schedule || {
+          data: [],
+          type: 'week'
         }
+        this.employee.j.schedule.data = this.businessInfo.j.schedule.data
+      }
 
-        this.employee.save().then((res) => {
-          if (this.employeeId === 'new') {
-            this.addEmpToServices(res).then(() => {
-              this.$router.replace({
-                name: 'id-businessEmployees-employee',
-                params: { id: this.id, employee: res }
-              })
-            })
-          } else {
-            this.setEmployeeItem(res)
-            this.addEmpToServices(this.employeeId).then(() => {
-              this.isEditMode = false
-              this.loadEmployee()
-            })
-          }
-        })
-          .catch((err) => {
-            this.alert(makeAlert(err))
+      this.employee.save().then((res) => {
+        // Because Employee services'info like titles is rendered from businessServices,
+        // we need to update it to get visual change of employee services
+        this.loadBusinessServices(this.businessId)
+        if (this.employeeId === 'new') {
+          this.$router.replace({
+            name: 'id-businessEmployees-employee',
+            params: { id: this.id, employee: res }
           })
+        } else {
+          this.isEditMode = false
+          this.loadEmployee()
+        }
       })
+        .catch((err) => {
+          this.alert(makeAlert(err))
+        })
     }
   }
 }
