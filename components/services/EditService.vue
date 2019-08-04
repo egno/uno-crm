@@ -203,7 +203,7 @@
 <script>
 /* eslint-disable prefer-const */
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
-import { isEqual, debounce } from 'lodash'
+import { isEqual, cloneDeep, debounce } from 'lodash'
 import Counter from '~/components/common/Counter'
 import SearchSelect from '~/components/common/SearchSelect.vue'
 import Api from '~/api/backend'
@@ -326,14 +326,15 @@ export default {
 
       const {
         group,
-        sex,
+        sex = [],
         price,
         duration,
-        description,
-        employees
+        description
       } = this.service.j
+      let employees = this.service.j.employees
 
-      if (!isEqual(this.sex.sort(), sex.slice().sort())) { return true }
+      if (!employees) { employees = [] }
+      if (!isEqual(cloneDeep(this.sex).sort(), sex.slice().sort())) { return true }
       if (
         !isEqual(
           this.selectedEmployees.map(e => e && e.id).sort(),
