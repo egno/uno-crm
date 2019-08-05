@@ -65,10 +65,6 @@ export function widgetHost () {
   if (!process.client) {
     return
   }
-  let host = window.location.host
-  // set host address for debug
-  if (host.substr(-5) === ':8080') {
-    host = 'kudri.ml'
-  }
-  return `https://widget.${host}`
+
+  return process.env.VUE_APP_WIDGET_ADDRESS
 }
