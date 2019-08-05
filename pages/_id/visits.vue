@@ -679,7 +679,6 @@
 
 <script>
 import { setInterval, clearInterval } from 'timers'
-import { Carousel, Slide } from 'vue-carousel'
 import { mapState, mapActions, mapGetters } from 'vuex'
 import Api from '~/api/backend'
 import MainButton from '~/components/common/MainButton.vue'
@@ -703,6 +702,14 @@ import {
   hyphensStringToDate,
   visitInit
 } from '~/components/calendar/utils'
+
+let Carousel
+let Slide
+
+if (process.client) {
+  Carousel = require('vue-carousel').Carousel
+  Slide = require('vue-carousel').Slide
+}
 
 export default {
   components: {
