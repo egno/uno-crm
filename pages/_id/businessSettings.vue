@@ -224,18 +224,34 @@ export default {
       }
       const paymentNo = uuidv4()
       const amount = this.amount
-      const paymasterId =
-        window.location.hostname === process.env.VUE_APP_PROD_HOST_NAME
-          ? process.env.VUE_APP_PAYMASTER_ID
-          : process.env.VUE_APP_DEV_PAYMASTER_ID
+      const paymasterId = process.env.VUE_APP_PAYMASTER_ID
       const returnUrl = window.location.href
-      const url = `https://paymaster.ru/payment/init?LMI_MERCHANT_ID=${paymasterId}&LMI_PAYMENT_AMOUNT=${amount}&LMI_CURRENCY=643&LMI_PAYMENT_NO=${paymentNo}&LMI_PAYMENT_DESC=UNO_SALON&BUSINESS_ID=${
-        this.businessId
-      }&LMI_SUCCESS_URL=${encodeURIComponent(
-        returnUrl
-      )}&LMI_FAIL_URL=${encodeURIComponent(returnUrl)}&LMI_FAIL_METHOD=GET`
-      // console.log(url)
-      window.location = url
+      const paramsList = {
+        LMI_MERCHANT_ID: paymasterId,
+        LMI_PAYMENT_AMOUNT: amount,
+        LMI_CURRENCY: 643,
+        LMI_PAYMENT_NO: paymentNo,
+        LMI_PAYMENT_DESC: 'UNO.SALON',
+        BUSINESS_ID: this.businessId,
+        LMI_SUCCESS_URL: returnUrl,
+        LMI_FAIL_URL: returnUrl,
+        LMI_FAIL_METHOD: 'GET',
+        'LMI_SHOPPINGCART.ITEMS[0].NAME': 'Услуга sms-рассылка',
+        'LMI_SHOPPINGCART.ITEMS[0].QTY': 1,
+        'LMI_SHOPPINGCART.ITEMS[0].PRICE': amount,
+        'LMI_SHOPPINGCART.ITEMS[0].TAX': 'vat20',
+        'LMI_SHOPPINGCART.ITEMS[0].AGENT.TYPE': 4,
+        'LMI_SHOPPINGCART.ITEMS[0].SUPPLIER.NAME': 'ООО "Электронная отчетность"',
+        'LMI_SHOPPINGCART.ITEMS[0].SUBJECT': 10
+      }
+      const urlBase = `https://paymaster.ru/payment/init`
+      const params = Object.keys(paramsList)
+        .map(x => `${x}=${encodeURIComponent(paramsList[x])}`)
+        .join('&')
+      const url = `${urlBase}?${params}`
+
+      console.log(url)
+      // window.location = url
     },
     load () {
       if (!this.businessId) { return }
