@@ -114,6 +114,7 @@
         v-if="!expressRecord"
         class="right-attached-panel__field-block _client-name dropdown-select"
       >
+        <!-- todo use SearchSelect as in ClientCardEdit -->
         <v-combobox
           v-if="visit.j"
           ref="clientFullName"
@@ -124,6 +125,7 @@
           return-object
           required
           attach=".visit-edit ._client-name"
+          light
           @update:searchInput="nameInput = onInputName(companyId, $event)"
           @blur="selectClient(nameInput)"
           @input="selectClient('name', $event)"

@@ -36,7 +36,11 @@ export default {
       const match = val.match(/[а-яА-ЯёЁ ]+/g)
 
       val = match ? match[0] : ''
-      this.$refs.clientFullName.lazySearch = val
+      if (this.$refs.clientFullName) {
+        this.$refs.clientFullName.lazySearch = val
+      } else {
+        this.client.fullName = val
+      }
       if (!val || val.length < 3) {
         this.suggestedClients = []
         return val

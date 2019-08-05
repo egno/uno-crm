@@ -3,6 +3,7 @@
     :value="visible"
     content-class="right-attached-panel businesscard-form _clients"
     transition="slide"
+    light
     @input="$emit('close')"
   >
     <v-layout
@@ -21,31 +22,27 @@
         {{ create ? 'Добавить клиента' : 'Информация о клиенте' }}
       </div>
       <div class="businesscard-form__field _select dropdown-select">
-        <v-combobox
-          ref="clientFullName"
-          :value="client.fullName"
-          :items="suggestedClients"
-          :item-text="clientDisplay"
+        <SearchSelect
+          :searching-value="client.fullName"
+          searching-prop="j.name.fullname"
+          :options="suggestedClients"
+          :required="true"
+          :max-length="50"
           label="ИМЯ И ФАМИЛИЯ"
-          maxlength="50"
-          return-object
-          required
           attach="._clients .businesscard-form__field._select"
-          @update:searchInput="onInputName(companyId, $event)"
-          @input="selectClient"
+          @input="onInputName(companyId, $event)"
+          @blur="selectClient(client.fullName)"
+          @select="selectClient"
         >
-          <template v-slot:selection="{ item, parent, selected }">
-            {{ item }}
-          </template>
-          <template v-slot:item="{ index, item }">
+          <template v-slot:default="slotProps">
             <div>
-              {{ item.j.name.fullname }}
+              {{ slotProps.option.j.name.fullname }}
             </div>
             <div class="phone-number">
-              {{ item.j.phone ? item.j.phone : item.j.phones[0] | phoneFormat }}
+              {{ slotProps.option.j.phone ? slotProps.option.j.phone : slotProps.option.j.phones[0] | phoneFormat }}
             </div>
           </template>
-        </v-combobox>
+        </SearchSelect>
       </div>
       <div>
         <div v-for="(phone, i) in client.phones" :key="i" class="phone-input">
@@ -250,9 +247,10 @@ import PhoneEdit from '~/components/common/PhoneEdit.vue'
 import Api from '~/api/backend'
 import Client from '~/classes/client'
 import clientMixin from '~/mixins/client'
+import SearchSelect from '~/components/common/SearchSelect.vue'
 
 export default {
-  components: { Accordion, MainButton, PhoneEdit },
+  components: { Accordion, MainButton, PhoneEdit, SearchSelect },
   mixins: [clientMixin],
   model: {
     prop: 'visible',

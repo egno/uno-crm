@@ -13,6 +13,7 @@
       class="dropdown-select"
       :attach="attach"
       :error="error"
+      light
       @input.native="onInput"
       @blur="onBlur"
     />
@@ -26,13 +27,29 @@
         :class="['custom-select__item']"
         @mousedown="select(option)"
       >
-        {{ option }}
+        <slot :option="option">
+          {{ option }}
+        </slot>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+function deepFind (obj, path) {
+  const paths = path.split('.')
+  let current = obj
+
+  for (let i = 0; i < paths.length; ++i) {
+    if (!current[paths[i]]) {
+      return current[paths[i]]
+    } else {
+      current = current[paths[i]]
+    }
+  }
+  return current
+}
+
 export default {
   model: {
     prop: 'searchingValue',
@@ -40,6 +57,10 @@ export default {
   },
   props: {
     searchingValue: {
+      type: String,
+      default: ''
+    },
+    searchingProp: {
       type: String,
       default: ''
     },
@@ -86,9 +107,15 @@ export default {
       if (!this.searchingValue || !this.options) {
         return
       }
+      const searchString = this.searchingValue.trim().toLowerCase()
+      if (this.searchingProp) {
+        return this.options.filter((option) => {
+          return deepFind(option, this.searchingProp).toLowerCase().includes(searchString)
+        })
+      }
 
       return this.options.filter(option =>
-        option.toLowerCase().includes(this.searchingValue.trim().toLowerCase())
+        option.toLowerCase().includes(searchString)
       )
     }
   },
@@ -108,6 +135,7 @@ export default {
       }
     },
     select (option) {
+      this.visible = false
       this.$emit('select', option)
     }
   }
