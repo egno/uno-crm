@@ -192,7 +192,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({ businessId: 'business/businessId' }),
+    ...mapGetters({ businessId: 'business/businessId', userInfo: 'user/userInfo' }),
     saveDisabled () {
       return (
         (this.settings.cancel_visit.enabled &&
@@ -205,6 +205,12 @@ export default {
     },
     settings () {
       return this.businessSettings.settings.notifications.events
+    },
+    email () {
+      return this.userInfo && this.userInfo.data && this.userInfo.data.email
+    },
+    phone () {
+      return this.userInfo && this.userInfo.data && this.userInfo.data.j && this.userInfo.data.j.phone
     }
   },
   watch: {
@@ -231,7 +237,7 @@ export default {
         LMI_PAYMENT_AMOUNT: amount,
         LMI_CURRENCY: 643,
         LMI_PAYMENT_NO: paymentNo,
-        LMI_PAYMENT_DESC: 'UNO.SALON',
+        LMI_PAYMENT_DESC: 'Услуга sms-рассылка UNO.SALON',
         BUSINESS_ID: this.businessId,
         LMI_SUCCESS_URL: returnUrl,
         LMI_FAIL_URL: returnUrl,
@@ -244,14 +250,20 @@ export default {
         'LMI_SHOPPINGCART.ITEMS[0].SUPPLIER.NAME': 'ООО "Электронная отчетность"',
         'LMI_SHOPPINGCART.ITEMS[0].SUBJECT': 10
       }
+      if (this.phone) {
+        paramsList.LMI_PAYER_PHONE_NUMBER = this.phone
+      }
+      if (this.email) {
+        paramsList.LMI_PAYER_EMAIL = this.email
+      }
       const urlBase = `https://paymaster.ru/payment/init`
       const params = Object.keys(paramsList)
         .map(x => `${x}=${encodeURIComponent(paramsList[x])}`)
         .join('&')
       const url = `${urlBase}?${params}`
 
-      // console.log(url)
-      window.location = url
+      console.log(url)
+      // window.location = url
     },
     load () {
       if (!this.businessId) { return }
