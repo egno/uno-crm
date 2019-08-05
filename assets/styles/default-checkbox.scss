@@ -1,0 +1,18 @@
+.default-checkbox {
+  .v-input--selection-controls__input {
+    margin: auto;
+    width: 16px;
+    height: 16px;
+    border: 1px solid rgba(137, 149, 175, 0.2);
+    border-radius: 2px;
+    .v-input--selection-controls__ripple {
+      left: -16px;
+    }
+  }
+  &.v-input--is-label-active {
+    .v-input--selection-controls__input {
+      border-color: #5699FF;
+      background: url('~assets/images/svg/selection.svg') center/10px auto no-repeat #5699FF;
+    }
+  }
+}
