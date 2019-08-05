@@ -3,6 +3,7 @@
     :value="visible"
     content-class="right-attached-panel businesscard-form visit-edit"
     transition="slide"
+    light
     @input="$emit('close')"
   >
     <VForm ref="visitEditForm" class="right-attached-panel__container">
@@ -61,6 +62,7 @@
           deletable-chips
           label="ВЫБЕРИТЕ УСЛУГУ"
           attach=".right-attached-panel__field-block._service"
+          light
         />
       </div>
       <div class="right-attached-panel__field-block">

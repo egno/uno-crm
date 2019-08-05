@@ -50,10 +50,10 @@
           required
         />
       </div>
-      <div v-if="roles.length > 1" class="businesscard-form__field">
+      <div v-if="businessRoles && businessRoles.length > 1" class="businesscard-form__field">
         <v-select
           v-model="role"
-          :items="roles"
+          :items="businessRoles"
           :item-disabled="
             function itemDisabledLogger (x) {
               console.log(x)
@@ -64,7 +64,7 @@
         />
       </div>
       <div
-        v-if="roles.length > 1 && (role === roles[1] || role === roles[2])"
+        v-if="businessRoles && businessRoles.length > 1 && (role === businessRoles[1] || role === businessRoles[2])"
         class="businesscard-form__field"
       >
         <v-select
@@ -107,6 +107,7 @@
 </template>
 
 <script>
+import { setTimeout } from 'timers'
 import { mapGetters } from 'vuex'
 import MainButton from '~/components/common/MainButton.vue'
 import PhoneEdit from '~/components/common/PhoneEdit.vue'
@@ -185,14 +186,14 @@ export default {
     }),
     checkRole () {
       return (
-        (this.roles.length > 1 &&
-          (this.role === this.roles[1] || this.role === this.roles[2]) &&
-          this.filials.length > 0) ||
-        (this.roles.length <= 1 && !this.role) ||
-        this.role === this.roles[0]
+        (this.businessRoles && (this.businessRoles.length > 1 &&
+          (this.role === this.businessRoles[1] || this.role === this.businessRoles[2]) &&
+          this.filials.length > 0)) ||
+        (!this.businessRoles || (this.businessRoles.length <= 1 && !this.role)) ||
+        this.role === this.businessRoles[0]
       )
     },
-    roles () {
+    businessRoles () {
       return roles && roles.filter(x => x === roles[0] || this.businessFilialCount)
     }
   },
@@ -315,14 +316,14 @@ export default {
           user_id: this.foundedUser && this.foundedUser.id,
           company_id: this.businessId,
           business:
-            this.role === roles[0]
+            this.role === 'Администратор компании'
               ? []
               : this.filials.filter(b => b.id !== this.companyId),
           j: {
             name,
             surname,
             notes: this.notes,
-            role: this.role === roles[2] ? 'busman' : ''
+            role: this.role === 'Сотрудник Салона' ? 'busman' : ''
           },
           phone: this.phone
         }
