@@ -71,6 +71,7 @@ export default {
       actualDate: 'common/actualDate',
       businessFilialCount: 'business/businessFilialCount',
       businessInfo: 'business/businessInfo',
+      businessId: 'business/businessId',
       businessIsSalon: 'business/businessIsSalon',
       businessClientCount: 'business/businessClientCount',
       businessServiceCount: 'business/businessServiceCount',
@@ -83,9 +84,6 @@ export default {
     date () {
       const dt = new Date()
       return formatDate(dt)
-    },
-    businessId () {
-      return this.$route && this.$route.params && this.$route.params.id
     },
     clientsCount () {
       return this.businessClientCount

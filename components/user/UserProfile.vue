@@ -48,7 +48,7 @@
           />
         </VFlex>
         <VFlex>
-          <v-btn icon :to="{ name: 'accountChangeEmail' }" />
+          <v-btn icon :to="{ name: 'account-accountChangeEmail' }" />
         </VFlex>
       </v-layout>
       <v-layout row>
@@ -65,11 +65,11 @@
           />
         </VFlex>
         <VFlex>
-          <v-btn icon :to="{ name: 'accountChangePhone' }" />
+          <v-btn icon :to="{ name: 'account-accountChangePhone' }" />
         </VFlex>
       </v-layout>
       <div>
-        <router-link :to="{ name: 'accountSetPassword' }">
+        <router-link :to="{ name: 'account-accountSetPassword' }">
           Изменить пароль
         </router-link>
       </div>
