@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { uuidv4 } from '~/components/utils'
 
-export default () => {
+export default (noToken = false) => {
   const requestId = uuidv4()
   const options = {
     baseURL: process.env.VUE_APP_API,
@@ -13,7 +13,7 @@ export default () => {
       'X-Request-ID': requestId
     }
   }
-  if (process.client && localStorage.getItem('accessToken')) {
+  if (process.client && localStorage.getItem('accessToken') && !noToken) {
     options.headers.Authorization = `Bearer ${localStorage.getItem(
       'accessToken'
     )}`

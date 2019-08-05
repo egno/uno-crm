@@ -22,7 +22,7 @@ const mutations = {
 const actions = {
   loadServiceGroups ({ commit }) {
     const path = 'service_groups?name=not.is.null'
-    Api()
+    Api({ noToken: true })
       .get(path)
       .then(res => res.data)
       .then((res) => {

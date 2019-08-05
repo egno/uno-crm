@@ -141,7 +141,7 @@ export default {
     ...mapGetters({ businessId: 'business/businessId' }),
     link () {
       const host = widgetHost()
-      return `${host}/?b=${this.businessId}`
+      return `${host}?b=${this.businessId}`
     }
   },
   methods: {
