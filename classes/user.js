@@ -119,5 +119,7 @@ class User extends ApiObject {
   }
 }
 
-export default User
-export { roles }
+export {
+  User,
+  roles
+}

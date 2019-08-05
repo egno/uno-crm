@@ -112,8 +112,7 @@ import { mapGetters } from 'vuex'
 import MainButton from '~/components/common/MainButton.vue'
 import PhoneEdit from '~/components/common/PhoneEdit.vue'
 import Api from '~/api/backend'
-import User from '~/classes/user'
-const { roles } = User
+import { User, roles } from '~/classes/user'
 
 export default {
   components: { MainButton, PhoneEdit },

@@ -1,5 +1,5 @@
 import { mapGetters } from 'vuex'
-import User from '@/classes/user'
+import { User } from '@/classes/user'
 
 export default {
   data () {

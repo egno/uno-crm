@@ -22,6 +22,10 @@ export default {
         name: 'id-businessUser',
         path: '/:id/businessUsers/:user',
         component: resolve(__dirname, 'pages/_id/businessUsers.vue')
+      }, {
+        name: 'restorePassword',
+        path: '/restore',
+        component: resolve(__dirname, 'pages/register.vue')
       })
     }
   },
