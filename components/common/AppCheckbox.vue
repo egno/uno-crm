@@ -25,7 +25,7 @@ export default {
     id: { type: String, required: true },
     label: { type: String, default: '' },
     name: { type: String, default: '' },
-    value: { type: Boolean, default: false }
+    value: { type: String, default: '' }
   }
 }
 </script>
