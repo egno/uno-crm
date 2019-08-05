@@ -26,6 +26,10 @@ export default {
         name: 'restorePassword',
         path: '/restore',
         component: resolve(__dirname, 'pages/register.vue')
+      }, {
+        name: 'myBusinessList',
+        path: '/myBusinessList',
+        component: resolve(__dirname, 'pages/businessList.vue')
       })
     }
   },
