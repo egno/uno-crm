@@ -13,7 +13,7 @@ export default (noToken = false) => {
       'X-Request-ID': requestId
     }
   }
-  if (localStorage.getItem('accessToken') && !noToken) {
+  if (process.client && localStorage.getItem('accessToken') && !noToken) {
     options.headers.Authorization = `Bearer ${localStorage.getItem(
       'accessToken'
     )}`
