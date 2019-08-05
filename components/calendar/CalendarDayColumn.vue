@@ -238,7 +238,7 @@ export default {
         return
       }
 
-      if (window.innerWidth < 1360) {
+      if (window.innerWidth < 1300) {
         window.scrollTo({ top, behavior: 'smooth' })
       } else {
         elem &&

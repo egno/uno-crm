@@ -215,7 +215,7 @@ $header-height: 80px;
 $header-desktop-height: 146px;
 $padding-top: 53px;
 $min-height: 667px;
-
+$desktop-height: 950px;
 $saloons: beauty spa cosmetic hairdressers barbershop massage tattoo lash
   manicure epilation individual solarium;
 
@@ -239,20 +239,15 @@ $saloons: beauty spa cosmetic hairdressers barbershop massage tattoo lash
           url('~assets/images/bg_home_first_tablet.png') 60% bottom/160% auto
             no-repeat #fff;
       }
-      @media only screen and (min-aspect-ratio: 1366/666) and (min-width: $desktop) {
-        background: $white-fill,
-          url('~assets/images/bg_home_first_desktop.png') 60% bottom/100% auto
+      @media only screen and (min-width: $desktop) {
+        position: relative;
+        background: url('~assets/images/bg_home_first_desktop.png') 60% bottom/100% auto
             no-repeat #fff;
       }
-      @media only screen and (min-height: $min-height) {
+      @media only screen and (min-height: $desktop-height) {
         height: calc(100vh - #{$header-desktop-height});
       }
-      @media only screen and (min-width: $desktop) and (min-height: $min-height) {
-        position: relative;
-        background: url('~assets/images/bg_home_first_desktop.png') 70%
-          bottom/auto 100% no-repeat #fff;
-      }
-      @media only screen and (min-width: $wide) and (min-height: $min-height) {
+      @media only screen and (min-width: $wide) and (min-height: $desktop-height) {
         background: url('~assets/images/bg_home_first_wide.png') center
           bottom/auto 100% no-repeat #fff;
       }
@@ -370,10 +365,14 @@ $saloons: beauty spa cosmetic hairdressers barbershop massage tattoo lash
       }
       .main-page__links {
         display: none;
-        margin: 4vh 0 !important;
-        padding: 4vh 0;
+        margin: 2vh 0 !important;
+        padding: 2vh 0;
         @media screen and (min-height: $min-height) {
           display: flex;
+        }
+        @media screen and (min-height: $desktop-height) {
+          margin: 4vh 0 !important;
+          padding: 4vh 0;
         }
       }
     }

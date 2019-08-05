@@ -110,7 +110,7 @@ export default {
   background-repeat: no-repeat;
   background-color: #fff;
   background-origin: border-box;
-  @media only screen and (min-width: 1360px) {
+  @media only screen and (min-width: 1300px) {
     padding-left: 24px;
   }
   &:hover {

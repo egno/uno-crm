@@ -20,5 +20,5 @@ export function deleteImage (id) {
 }
 
 export function isMobile () {
-  return window.innerWidth < 1360
+  return window.innerWidth < 1300
 }
