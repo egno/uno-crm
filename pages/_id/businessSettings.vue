@@ -262,8 +262,8 @@ export default {
         .join('&')
       const url = `${urlBase}?${params}`
 
-      console.log(url)
-      // window.location = url
+      // console.log(url)
+      window.location = url
     },
     load () {
       if (!this.businessId) { return }
