@@ -108,7 +108,7 @@ export const actions = {
         commit('SET_LOADING', 'not started')
       })
   },
-  loadMyBusinessList ({ commit, getters }) {
+  loadMyBusinessList ({ commit, getters, dispatch }) {
     if (!getters.loggedIn) {
       return []
     }
@@ -119,7 +119,7 @@ export const actions = {
         commit('SET_MY_BUSINESS_LIST', data)
         return data
       })
-      .catch(err => {
+      .catch((err) => {
         if (err.response.status === 401) {
           dispatch('logout')
         }
