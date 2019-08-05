@@ -120,7 +120,7 @@
                 </v-flex>
               </v-layout>
               <v-layout align-center>
-                <v-checkbox v-model="oferta_agree" color="blue">
+                <v-checkbox v-model="oferta_agree" class="default-checkbox">
                   <template v-slot:label>
                     <span>Я ознакомился со
                       <a
@@ -289,6 +289,7 @@ export default {
 @import '~assets/styles/common.scss';
 @import '~assets/styles/infocard.scss';
 @import '~assets/styles/businesscard-form.scss';
+@import '~assets/styles/default-checkbox.scss';
 
 .settings {
   color: #07101c;
@@ -564,6 +565,9 @@ export default {
     }
     &__add {
       margin-left: 0;
+    }
+    .v-input--selection-controls__input {
+      margin-right: 11px;
     }
   }
   .payment {

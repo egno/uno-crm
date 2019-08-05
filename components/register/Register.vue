@@ -51,7 +51,7 @@
           justify-center
           class="offer-checkbox"
         >
-          <v-checkbox v-model="offerAgree" class="app-checkbox" />
+          <v-checkbox v-model="offerAgree" class="default-checkbox" />
           <p class="register-form__disclaimer text-sm-left">
             Нажимая кнопку «Создать», вы соглашаетесь с
             <a
@@ -404,6 +404,7 @@ export default {
 <style lang="scss">
 @import '~assets/styles/businesscard-form.scss';
 @import '~assets/styles/dropdown-select.scss';
+@import '~assets/styles/default-checkbox.scss';
 
 .register-form {
   width: 280px;
@@ -467,23 +468,6 @@ export default {
   .offer-checkbox {
     margin-top: 20px;
   }
-  .app-checkbox {
-    .v-input--selection-controls__input {
-      margin: auto;
-      width: 16px;
-      height: 16px;
-      border: 1px solid rgba(137, 149, 175, 0.2);
-      border-radius: 2px;
-      .v-input--selection-controls__ripple {
-        left: -16px;
-      }
-    }
-    &.v-input--is-label-active {
-      .v-input--selection-controls__input {
-        border-color: #5699FF;
-        background: url('~assets/images/svg/selection.svg') center/10px auto no-repeat #5699FF;
-      }
-    }
-  }
+
 }
 </style>
