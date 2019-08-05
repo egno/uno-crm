@@ -431,7 +431,7 @@ $saloons: beauty spa cosmetic hairdressers barbershop massage tattoo lash
       }
       @media screen and (min-width: $desktop) {
         height: 755px;
-        background: url('~assets/images/home/bg_clients.png') 180px bottom/43%
+        background: url('~assets/images/home/bg_clients.png') 80% bottom/43%
           no-repeat #fff;
       }
       @media screen and (min-width: $wide) {

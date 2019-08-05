@@ -120,7 +120,7 @@ export default {
             margin: 0 -40px;
           }
         }
-        @media only screen and (min-width: $desktop) {
+        @media only screen and (min-width: $wide) {
           max-width: $max-container-wide-width;
         }
       }

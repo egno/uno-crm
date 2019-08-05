@@ -49,8 +49,9 @@
         <v-layout
           v-show="$route.name !== 'restorePassword' && !alreadyUsedPhone"
           justify-center
+          class="offer-checkbox"
         >
-          <v-checkbox v-model="offerAgree" color="#5699FF" />
+          <v-checkbox v-model="offerAgree" class="app-checkbox" />
           <p class="register-form__disclaimer text-sm-left">
             Нажимая кнопку «Создать», вы соглашаетесь с
             <a
@@ -453,7 +454,7 @@ export default {
     flex-grow: 1;
   }
   .v-input--selection-controls {
-    max-width: 32px;
+    max-width: 27px;
     margin-top: 0;
   }
   .v-messages__message {
@@ -462,6 +463,27 @@ export default {
   .error-message {
     margin-bottom: 20px;
     color: #ef4d37;
+  }
+  .offer-checkbox {
+    margin-top: 20px;
+  }
+  .app-checkbox {
+    .v-input--selection-controls__input {
+      margin: auto;
+      width: 16px;
+      height: 16px;
+      border: 1px solid rgba(137, 149, 175, 0.2);
+      border-radius: 2px;
+      .v-input--selection-controls__ripple {
+        left: -16px;
+      }
+    }
+    &.v-input--is-label-active {
+      .v-input--selection-controls__input {
+        border-color: #5699FF;
+        background: url('~assets/images/svg/selection.svg') center/10px auto no-repeat #5699FF;
+      }
+    }
   }
 }
 </style>
