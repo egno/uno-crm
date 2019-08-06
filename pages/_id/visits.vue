@@ -131,7 +131,7 @@
                   @click.stop="changeWeek(-1)"
                 />
                 <v-btn
-                  class="visit-log__controls-button"
+                  class="visit-log__controls-button right"
                   depressed
                   flat
                   small
@@ -521,7 +521,7 @@
                     @click="selectPrevEmployee"
                   />
                   <v-btn
-                    class="visit-log__controls-button"
+                    class="visit-log__controls-button right"
                     depressed
                     flat
                     small
@@ -1203,10 +1203,8 @@ export default {
   border: 1px solid rgba(137, 149, 175, 0.1);
   border-radius: 50%;
   color: #8995af;
-
-  i {
-    font-size: 19px;
-  }
+  background: url('~assets/images/down.png') center no-repeat;
+  transform: rotate(90deg);
 }
 .visit-log {
   background-color: #e7eaef;
@@ -1285,6 +1283,9 @@ export default {
     color: #8995af !important;
     &:hover {
       background-color: rgba(137, 149, 175, 0.1);
+    }
+    &.right {
+      transform: rotate(-90deg);
     }
   }
   &__week-spacer {
@@ -1699,19 +1700,20 @@ export default {
     .checkbox {
       display: inline-flex;
     }
-  }
-  .checkbox__label {
-    height: 16px;
-    margin: 0;
-    padding: 0 7px;
-    border-radius: 2px;
-    border: 1px solid rgba(137, 149, 175, 0.2);
-    background-color: #fff;
-  }
-  .checkbox__input:checked + .checkbox__label {
-    background: url('~assets/images/svg/selection.svg') center/10px 8px
+    .checkbox__label {
+      height: 16px;
+      margin: 0;
+      padding: 0 7px;
+      border-radius: 2px;
+      border: 1px solid rgba(137, 149, 175, 0.2);
+      background-color: #fff;
+    }
+    .checkbox__input:checked + .checkbox__label {
+      background: url('~assets/images/svg/selection.svg') center/10px 8px
       no-repeat #5699ff;
+    }
   }
+
   .employee-menu-trigger {
     width: 24px;
     height: 24px;

@@ -8,11 +8,11 @@
     "
   /><!--todo make a slot inside HomeHeader for authenticated user -->
   <v-toolbar v-else class="topbar" app height="55px">
-    <!--<v-toolbar-side-icon
+    <v-toolbar-side-icon
       v-if="!navigationVisible"
       class="menu-button"
       @click="setNavigationVisible(true)"
-    />-->
+    />
     <VLayout
       v-if="!$route.path.includes('gallery')"
       row
@@ -143,7 +143,7 @@ export default {
     ...mapActions({
       setActions: 'common/setActions',
       setBusiness: 'business/setBusiness',
-      setNavigationVisible: 'common/setNavigationVisible',
+      setNavigationVisible: 'layout/setNavigationVisible',
       setSearchString: 'common/setSearchString'
     }),
     goHome () {
