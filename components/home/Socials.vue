@@ -11,7 +11,7 @@
     <li class="main-page__link">
       <a
         target="_blank"
-        href="https://www.instagram.com/crm_uno/"
+        href="https://www.facebook.com/unocrm"
         class="fb"
         @click="$emit('click')"
       />
@@ -19,7 +19,7 @@
     <li class="main-page__link">
       <a
         target="_blank"
-        href="https://www.facebook.com/unocrm"
+        href="https://www.instagram.com/crm_uno/"
         class="ig"
         @click="$emit('click')"
       />
