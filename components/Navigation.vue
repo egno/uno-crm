@@ -113,12 +113,14 @@ export default {
     isCompanyLevel: {
       cache: false,
       get () {
+        const loggedIn = this.loggedIn
+        const businessInfo = this.businessInfo
         const res = (
-          this.loggedIn &&
-          this.businessInfo &&
-          (this.businessInfo.type === 'C' ||
-            (this.businessInfo.type === null &&
-              this.businessInfo.parent === null))
+          loggedIn &&
+          businessInfo &&
+          (businessInfo.type === 'C' ||
+            (businessInfo.type === null &&
+              businessInfo.parent === null))
         )
         console.log(res)
         return res
