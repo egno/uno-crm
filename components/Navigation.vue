@@ -110,14 +110,17 @@ export default {
           this.$route.name === 'adminUserList')
       )
     },
-    isCompanyLevel () {
-      return (
-        this.loggedIn &&
-        this.businessInfo &&
-        (this.businessInfo.type === 'C' ||
-          (this.businessInfo.type === null &&
-            this.businessInfo.parent === null))
-      )
+    isCompanyLevel: {
+      cache: false,
+      get () {
+        return (
+          this.loggedIn &&
+          this.businessInfo &&
+          (this.businessInfo.type === 'C' ||
+            (this.businessInfo.type === null &&
+              this.businessInfo.parent === null))
+        )
+      }
     },
     isSalonLevel () {
       return (
