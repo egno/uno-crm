@@ -18,7 +18,8 @@ const state = () => ({
   dayVisits: [],
   businessEmployees: [],
   businessServices: [],
-  isLoadingEmployees: false
+  isLoadingEmployees: false,
+  isLoadingServices: false
 })
 
 const getters = {
@@ -94,6 +95,9 @@ const mutations = {
   },
   SET_LOADING_EMPLOYEES (state, payload) {
     state.isLoadingEmployees = payload
+  },
+  SET_LOADING_SERVICES (state, payload) {
+    state.isLoadingServices = payload
   }
 }
 
@@ -128,7 +132,7 @@ const actions = {
       })
       .catch(err => commit('alerts/ADD_ALERT', makeAlert(err), { root: true }))
   },
-  setBusiness ({ commit, dispatch }, businessId) {
+  setBusiness ({ commit, dispatch, getters }, businessId) {
     if (!(businessId && businessId.length === 36)) {
       commit('SET_BUSINESS_INFO', {})
       return
@@ -140,26 +144,28 @@ const actions = {
       .then((res) => {
         commit('SET_BUSINESS_INFO', res)
         dispatch('employee/loadEmployee', businessId, { root: true })
-        dispatch('loadBusinessServices', businessId)
-        dispatch('loadBusinessEmployees', businessId)
+        if (getters.businessIsFilial) {
+          dispatch('loadBusinessServices', businessId)
+          dispatch('loadBusinessEmployees', businessId)
+        }
       })
       .catch(err => commit('alerts/ADD_ALERT', makeAlert(err), { root: true }))
   },
-  loadBusinessServices ({ commit }, branchId) {
-    if (!branchId) {
+  loadBusinessServices ({ commit, state }, branchId) {
+    if (!branchId || state.isLoadingServices) {
       return
     }
-
-    const path = `business_service?business_id=eq.${branchId}`
-    console.log('loadBusinessServices ')
-    // todo add loading flag and reduce requests
+    commit('SET_LOADING_SERVICES', true)
     Api()
-      .get(path)
+      .get(`business_service?business_id=eq.${branchId}`)
       .then(res => res.data)
       .then((res) => {
         commit('SET_BUSINESS_SERVICES', res)
       })
       .catch(err => commit('alerts/ADD_ALERT', makeAlert(err), { root: true }))
+      .finally(() => {
+        commit('SET_LOADING_SERVICES', false)
+      })
   },
   loadBusinessEmployees ({ commit }, branchId) {
     if (!branchId) {

@@ -106,11 +106,13 @@ export default {
     goHome () {
       this.$router.push({ name: 'index' })
     },
-    loadBusiness () {
+    loadBusiness (newRouteParams, oldRouteParams) {
       if (!this.businessId || this.businessId === 'new') {
         return
       }
-      this.setBusiness(this.businessId)
+      if (!newRouteParams || !oldRouteParams || newRouteParams.id !== oldRouteParams.id) {
+        this.setBusiness(this.businessId)
+      }
     },
     loadVisits () {
       if (!this.actualDate) { return }
