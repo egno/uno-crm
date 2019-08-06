@@ -113,13 +113,15 @@ export default {
     isCompanyLevel: {
       cache: false,
       get () {
-        return (
+        const res = (
           this.loggedIn &&
           this.businessInfo &&
           (this.businessInfo.type === 'C' ||
             (this.businessInfo.type === null &&
               this.businessInfo.parent === null))
         )
+        console.log(res)
+        return res
       }
     },
     isSalonLevel () {
