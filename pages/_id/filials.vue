@@ -307,7 +307,6 @@ export default {
         return
       }
       const id = this.branchToCheckout.id
-      console.log('IN FILIALS')
       this.setBusiness(id)
         .then(() => {
           this.checkoutTo(id)
@@ -365,15 +364,12 @@ export default {
       this.groupBranches()
     },
     getFilials () {
-      const id = this.businessIsFilial
-        ? this.businessInfo && this.businessInfo.parent
-        : this.businessId
-
-      if (!id) { return }
+      const id = this.businessId
+      if (this.businessIsFilial) { return }
       this.getFilialsOf(id).then((res) => {
         if (this.user && this.user.business) {
           this.filterUserFilials(res)
-          console.log('IN FILIALS')
+          /* not sure if setBusiness is still need */
           this.setBusiness(id)
         }
       })

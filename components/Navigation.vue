@@ -122,13 +122,6 @@ export default {
             (businessInfo.type === null &&
               businessInfo.parent === null))
         )
-        console.log('---------------------------------')
-        console.log('res ', res)
-        console.log('has businessInfo ', !!businessInfo)
-        if (businessInfo) {
-          console.log('type ', businessInfo.type)
-          console.log('parent ', businessInfo.parent)
-        }
         return res
       }
     },

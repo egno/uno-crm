@@ -197,7 +197,7 @@ export const filials = {
       }
     },
     getFilialsOf (id) {
-      if (!id) { return [] }
+      if (!id) { return Promise.resolve([]) }
       return Api()
         .get(`business?parent=eq.${id}`)
         .then(res => res.data)
