@@ -31,6 +31,21 @@ build_development:
     - docker build -t $CI_REGISTRY_IMAGE:develop .
     - docker push $CI_REGISTRY_IMAGE:develop
 
+build_production:
+  stage: build
+  image: docker:stable
+  tags:
+    - docker
+  only:
+    - tags
+
+  before_script:
+    - docker info
+
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build -t $CI_REGISTRY_IMAGE:latest .
+    - docker push $CI_REGISTRY_IMAGE:latest
 
 
 
