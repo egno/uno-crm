@@ -189,6 +189,8 @@ export default {
   },
   mounted () {
     this.setActions()
+    this.selectAll()
+    this.selectedOnStart = true
   },
   methods: {
     ...mapActions({
