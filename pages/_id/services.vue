@@ -132,7 +132,6 @@ import ServiceCard from '~/components/services/ServiceCard.vue'
 import Api from '~/api/backend'
 import Modal from '~/components/common/Modal'
 import { conjugateEmployee } from '~/components/utils'
-import Employee from '~/classes/employee'
 import { responseGetId } from '~/api/utils'
 
 export default {
@@ -256,16 +255,6 @@ export default {
       setActions: 'common/setActions',
       loadBusinessServices: 'business/loadBusinessServices'
     }),
-    addServiceToEmployee (serviceId, employeeId) {
-      const employee = new Employee(
-        this.businessEmployees.find(e => e.id === employeeId)
-      )
-
-      if (!employee.services.includes(serviceId)) {
-        employee.j.services.push(serviceId)
-        employee.save()
-      }
-    },
     closeWithoutSaving () {
       this.showCreate = false
       this.showEdit = false
@@ -287,9 +276,6 @@ export default {
         .then(() => {
           this.showCreate = false
           this.loadBusinessServices(this.businessId)
-          // newService.employees.forEach(employeeId => {
-          //   this.addServiceToEmployee(id, employeeId)
-          // })
         })
         .catch((e) => {
           console.log('FAILURE!! ', e)
@@ -305,20 +291,11 @@ export default {
         })
     },
     deleteService (service) {
-      // const oldService = this.businessServices.find(s => s.id === service.id)
-
-      // oldService.j.employees.forEach(employeeId => {
-      //   this.removeEmployeeService(employeeId, service.id)
-      // })
-
       Api()
         .delete(`business_service?id=eq.${service.id}`)
         .then(() => {
           this.showEdit = false
           this.deletingService = null
-          // service.j.employees.forEach(e => {
-          //   this.addServiceToEmployee(service.id, e.id)
-          // })
           this.loadBusinessServices(this.businessId)
         })
         .catch((e) => {
@@ -327,13 +304,6 @@ export default {
     },
     editService (newService) {
       const serviceId = this.editingService.id
-      // const oldService = this.businessServices.find(s => s.id === serviceId)
-
-      // oldService.j.employees.forEach(employeeId => {
-      //   if (!newService.employees.includes(employeeId)) {
-      //     this.removeEmployeeService(employeeId, serviceId)
-      //   }
-      // })
 
       Api()
         .patch(`business_service?id=eq.${serviceId}`, {
@@ -348,9 +318,6 @@ export default {
         .then(() => {
           this.showEdit = false
           this.editingService = null
-          // newService.employees.forEach(employeeId => {
-          //   this.addServiceToEmployee(serviceId, employeeId)
-          // })
           this.loadBusinessServices(this.businessId)
         })
         .catch((e) => {
@@ -381,13 +348,6 @@ export default {
         this.newService = null
       }
     },
-    // removeEmployeeService (employeeId, serviceId) {
-    //   const employee = new Employee(this.businessEmployees.find(e => e.id === employeeId))
-    //   let index = employee.services.indexOf(serviceId)
-
-    //   employee.j.services.splice(index, 1)
-    //   employee.save()
-    // },
     showEditPanel (service) {
       if (this.showEdit) {
         return
