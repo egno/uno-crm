@@ -138,7 +138,7 @@ const actions = {
       return
     }
     const path = `business?id=eq.${businessId}`
-    Api()
+    return Api()
       .get(path)
       .then(res => res.data[0])
       .then((res) => {

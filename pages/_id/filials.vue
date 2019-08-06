@@ -307,9 +307,11 @@ export default {
         return
       }
       const id = this.branchToCheckout.id
-
+      console.log('IN FILIALS')
       this.setBusiness(id)
-      this.checkoutTo(id)
+        .then(() => {
+          this.checkoutTo(id)
+        })
     },
     checkoutTo (id) {
       this.$router.push({
@@ -371,6 +373,7 @@ export default {
       this.getFilialsOf(id).then((res) => {
         if (this.user && this.user.business) {
           this.filterUserFilials(res)
+          console.log('IN FILIALS')
           this.setBusiness(id)
         }
       })

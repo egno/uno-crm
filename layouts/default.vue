@@ -111,6 +111,7 @@ export default {
         return
       }
       if (!newRouteParams || !oldRouteParams || newRouteParams.id !== oldRouteParams.id) {
+        console.log('IN DEFAULT')
         this.setBusiness(this.businessId)
       }
     },
