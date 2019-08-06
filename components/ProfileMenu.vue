@@ -15,15 +15,13 @@
     >
       <template v-slot:activator="{ on }">
         <v-btn flat v-on="on">
-          <VLayout align-center justify-space-between>
-            <Avatar
-              :new-message="newMessage"
-              :size="avatarSize"
-              :name="displayName"
-              :src="avatar"
-            />
-            <div class="profile-expand-more" />
-          </VLayout>
+          <Avatar
+            :new-message="newMessage"
+            :size="avatarSize"
+            :name="displayName"
+            :src="avatar"
+          />
+          <div class="profile-expand-more" />
         </v-btn>
       </template>
       <VList class="menu-list">
@@ -198,7 +196,9 @@ export default {
 <style lang="scss">
 .profile-menu {
   display: flex;
+  height: 55px;
   align-items: center;
+  justify-content: center;
   border-left: 1px solid rgba(137, 149, 175, 0.1);
   box-sizing: border-box;
   @media only screen and (min-width: 1300px) {
@@ -207,11 +207,17 @@ export default {
 
   button {
     position: relative;
-    min-width: 60px;
-    max-width: 60px;
-    padding: 0 3px 0 15px;
+    min-width: 64px;
+    max-width: 64px;
+    justify-content: center;
+    padding: 0 11px;
     &:hover {
       background-color: rgba(137, 149, 175, 0.1);
+    }
+    .v-btn__content {
+      @media only screen and (min-width: 1300px) {
+        justify-content: space-between;
+      }
     }
   }
 

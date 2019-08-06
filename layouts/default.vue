@@ -463,7 +463,7 @@ export default {
     }
   }
   .menu-button {
-    width: 55px;
+    width: 64px;
     height: 55px;
     margin: 0 !important;
     border-radius: 0;

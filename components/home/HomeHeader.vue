@@ -230,10 +230,7 @@ export default {
   }
   &__right {
     height: 100%;
-    display: none;
-    @media only screen and (min-width: $tablet) {
-      display: flex;
-    }
+    display: flex;
   }
   &__tablet-text {
     display: none;
@@ -258,9 +255,11 @@ export default {
   &__button {
     padding: 0 30px;
     &._register {
+      display: none;
       border-radius: 0;
       border-right: 2px solid #07101c;
       @media only screen and (min-width: $tablet) {
+        display: inline-flex;
         width: 283px;
       }
       &.active {

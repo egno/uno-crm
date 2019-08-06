@@ -9,7 +9,7 @@
   /><!--todo make a slot inside HomeHeader for authenticated user -->
   <v-toolbar v-else class="topbar" app height="55px">
     <v-toolbar-side-icon
-      v-if="!navigationVisible"
+      v-if="loggedIn && !navigationVisible"
       class="menu-button"
       @click="setNavigationVisible(true)"
     />
@@ -102,6 +102,7 @@ export default {
     ...mapGetters({
       actions: 'common/actions',
       businessInfo: 'business/businessInfo',
+      loggedIn: 'user/loggedIn',
       navigationVisible: 'layout/navigationVisible',
       userID: 'user/userID',
       myBusinessList: 'user/myBusinessList',
@@ -165,7 +166,7 @@ export default {
 
 .go-home-menu {
   button {
-    width: 66px;
+    width: 64px;
     height: 100%;
     outline: none;
     background: url('~assets/images/svg/menu.svg') center/24px no-repeat;
