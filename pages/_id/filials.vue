@@ -284,7 +284,6 @@ export default {
   },
   watch: {
     businessId: 'getFilials',
-    businessParent: 'goToParent',
     'user.business': 'getFilials'
   },
   created () {
@@ -416,16 +415,6 @@ export default {
           }
         }
         this.isCreating = true
-      }
-    },
-    goToParent () {
-      console.log('go to parent', this.businessParent)
-      if (this.businessParent) {
-        console.log('replace', this.businessParent)
-        this.$router.replace({
-          name: 'id-filials',
-          params: { id: this.businessParent }
-        })
       }
     },
     onClose () {
