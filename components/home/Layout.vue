@@ -9,7 +9,7 @@
             <div class="main-page__heading">
               ЛЮБИМОЕ ДЕЛО<br>СТАНЕТ ПРОЩЕ
             </div>
-            <router-link :to="{ name: 'register' }" class="btn">
+            <router-link id="regbutton_maindown" :to="{ name: 'register' }" class="btn">
               ПОПРОБУЙТЕ БЕСПЛАТНО
             </router-link>
           </div>

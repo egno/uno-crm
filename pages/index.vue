@@ -12,12 +12,13 @@
               НОВАЯ СИСТЕМА УЧЕТА ДЛЯ&nbsp;ИНДУСТРИИ КРАСОТЫ
             </h1>
             <router-link
+              id="regbutton_maintop"
               :to="{ name: 'register' }"
               class="main-page__register-link"
             >
               ПОЛЬЗУЙТЕСЬ БЕСПЛАТНО
             </router-link>
-            <a v-smooth-scroll href="/#product" class="main-page__scroll">
+            <a id="morelink_maintop" v-smooth-scroll href="/#product" class="main-page__scroll">
               <span>УЗНАЙТЕ БОЛЬШЕ</span>
             </a>
           </div>
@@ -109,7 +110,7 @@
               отдельно.
             </div>
           </div>
-          <router-link :to="{ name: 'register' }" class="inner-link layer-1">
+          <router-link id="reglink_mainmiddle" :to="{ name: 'register' }" class="inner-link layer-1">
             ПОЛУЧИТЕ ДОСТУП УЖЕ СЕЙЧАС
           </router-link>
         </div>
@@ -154,6 +155,7 @@
             и&nbsp;удерживать.
           </div>
           <router-link
+            id="morelink_mainmiddle"
             :to="{ name: 'features', hash: '#sms-notifications' }"
             class="inner-link layer-1"
           >

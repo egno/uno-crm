@@ -57,6 +57,7 @@
         </v-btn>
         <v-btn
           v-else-if="!loggedIn"
+          id="reglink_header"
           flat
           :class="[
             'home-header__button _register',

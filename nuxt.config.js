@@ -46,6 +46,10 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.png' }
+    ],
+    noscript: [{ innerHTML: '<img src="https://vk.com/rtrg?p=VK-RTRG-393005-7wBtY" style="position:fixed; left:-999px;" alt=""/>' }],
+    script: [
+      { src: '/vk.js' }
     ]
   },
   /*
@@ -76,7 +80,18 @@ export default {
   */
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    [
+      '@nuxtjs/yandex-metrika',
+      {
+        id: env.VUE_APP_YANDEX_ID,
+        webvisor: true
+        // clickmap:true,
+        // useCDN:false,
+        // trackLinks: true
+        // accurateTrackBounce:true,
+      }
+    ]
   ],
   /*
   ** Axios module configuration

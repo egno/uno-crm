@@ -67,9 +67,22 @@
         </v-layout>
         <v-layout v-show="!alreadyUsedPhone" justify-center>
           <MainButton
+            v-if="restoreMode"
+            :class="{
+              button_disabled: !flogin || !loginIsCorrect
+            }"
+            class="button"
+            type="button"
+            @click="sendLogin"
+          >
+            Восстановить
+          </MainButton>
+          <MainButton
+            v-else
+            id="send_regform"
             :class="{
               button_disabled:
-                ($route.name !== 'restorePassword' && !offerAgree) ||
+                !offerAgree ||
                 !flogin ||
                 !loginIsCorrect
             }"
@@ -77,7 +90,7 @@
             type="button"
             @click="sendLogin"
           >
-            {{ restoreMode ? 'Восстановить' : 'Создать' }}
+            Создать
           </MainButton>
         </v-layout>
       </div>
@@ -144,6 +157,7 @@
         required
       />
       <v-btn
+        id="regbutton_enter"
         type="button"
         class="button"
         :class="{

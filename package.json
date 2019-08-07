@@ -23,6 +23,7 @@
     "@mdi/font": "^3.6.95",
     "@nuxtjs/axios": "^5.3.6",
     "@nuxtjs/vuetify": "^0.5.7",
+    "@nuxtjs/yandex-metrika": "^0.1.2",
     "ajv": "^6.10.0",
     "axios": "^0.18.0",
     "babel-runtime": "^6.26.0",
@@ -36,7 +37,6 @@
     "vue-cache-data": "^1.5.1",
     "vue-carousel": "^0.18.0",
     "vue-svg-loader": "^0.12.0",
-    "vue-yandex-metrika": "^1.8.0",
     "vue2-smooth-scroll": "^1.1.0"
   },
   "devDependencies": {
