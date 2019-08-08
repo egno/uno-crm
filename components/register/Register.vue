@@ -88,6 +88,7 @@
             }"
             class="button"
             type="button"
+            @mousedown.native="$metrika.reachGoal('send_regform')"
             @click="sendLogin"
           >
             Создать
@@ -164,6 +165,7 @@
           button_disabled:
             !fpassword || !fpasswordRepeat || fpassword !== fpasswordRepeat
         }"
+        @mousedown.native="$metrika.reachGoal( 'regbutton_enter')"
         @click="registerAndLogin"
       >
         Войти
