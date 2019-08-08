@@ -65,7 +65,8 @@ export default {
   ** Plugins and directives and filters to load before mounting the App
   */
   plugins: [
-    '~/plugins/directives_filters.js'
+    '~/plugins/directives_filters.js',
+    { src: '~/plugins/ya_metrika.js', ssr: false }
   ],
   /*
   ** Nuxt.js dev-modules
@@ -80,18 +81,7 @@ export default {
   */
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
-    '@nuxtjs/axios',
-    [
-      '@nuxtjs/yandex-metrika',
-      {
-        id: env.VUE_APP_YANDEX_ID,
-        webvisor: true
-        // clickmap:true,
-        // useCDN:false,
-        // trackLinks: true
-        // accurateTrackBounce:true,
-      }
-    ]
+    '@nuxtjs/axios'
   ],
   /*
   ** Axios module configuration

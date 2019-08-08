@@ -68,7 +68,7 @@
                 $route.name === 'news'
             }
           ]"
-          @click="$router.push({ name: 'register' })"
+          @click="$metrika.reachGoal('reglink_header'); $router.push({ name: 'register' })"
         >
           <div class="home-header__icon _register" />
           <div class="home-header__tablet-text">

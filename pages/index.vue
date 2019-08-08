@@ -15,10 +15,11 @@
               id="regbutton_maintop"
               :to="{ name: 'register' }"
               class="main-page__register-link"
+              @mousedown.native="$metrika.reachGoal( 'regbutton_maintop')"
             >
               ПОЛЬЗУЙТЕСЬ БЕСПЛАТНО
             </router-link>
-            <a id="morelink_maintop" v-smooth-scroll href="/#product" class="main-page__scroll">
+            <a id="morelink_maintop" v-smooth-scroll href="/#product" class="main-page__scroll" @mousedown.native="$metrika.reachGoal( 'morelink_maintop')">
               <span>УЗНАЙТЕ БОЛЬШЕ</span>
             </a>
           </div>
@@ -110,7 +111,7 @@
               отдельно.
             </div>
           </div>
-          <router-link id="reglink_mainmiddle" :to="{ name: 'register' }" class="inner-link layer-1">
+          <router-link id="reglink_mainmiddle" :to="{ name: 'register' }" class="inner-link layer-1" @mousedown.native="$metrika.reachGoal( 'reglink_mainmiddle')">
             ПОЛУЧИТЕ ДОСТУП УЖЕ СЕЙЧАС
           </router-link>
         </div>
@@ -158,6 +159,7 @@
             id="morelink_mainmiddle"
             :to="{ name: 'features', hash: '#sms-notifications' }"
             class="inner-link layer-1"
+            @mousedown.native="$metrika.reachGoal( 'morelink_mainmiddle')"
           >
             ПОДРОБНЕЕ О РАБОТЕ С&nbsp;КЛИЕНТАМИ БИЗНЕСА
           </router-link>
