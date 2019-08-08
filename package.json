@@ -17,7 +17,10 @@
     "pre-commit": "lint-staged"
   },
   "husky": {
-    "hooks": {}
+    "hooks": {
+	"pre-commit": "npm run lint --fix",
+	"pre-push": "npm run lint"
+    }
   },
   "dependencies": {
     "@mdi/font": "^3.6.95",
@@ -45,7 +48,7 @@
     "babel-eslint": "^10.0.1",
     "eslint": "^5.15.1",
     "eslint-plugin-nuxt": ">=0.4.2",
-    "husky": "^2.6.0",
+    "husky": "^2.7.0",
     "lato-font": "^3.0.0",
     "lint-staged": "^8.2.1",
     "node-sass": "^4.12.0",
