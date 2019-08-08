@@ -1,103 +1,79 @@
 <template>
   <div class="employee-services">
-    <div v-show="!showServices" class="infocard _edit">
-      <div class="infocard__content">
-        <h2 class="employee-services__title">
-          Выберите категории услуг, которые вы предоставляете
-        </h2>
-        <div class="employee-services__categories">
-          <AppCheckbox
-            v-for="(category, i) in businessServiceCategories"
-            :id="category"
-            :key="i"
-            :checked="selectedServiceGroups.includes(category)"
-            :label="category"
-            name="service_category"
-            :value="category"
-            @change="onGroupsChange(category, $event)"
-          />
-        </div>
-        <MainButton
-          color="success"
-          class="businesscard-form__next"
-          :class="{ button_disabled: !selectedServiceGroups.length }"
-          @click.native.prevent="showServices = true"
-        >
-          К услугам
-        </MainButton>
-      </div>
+    <div class="employee-services__top">
+      <h2 class="employee-services__title">
+        Выберите предоставляемые услуги
+      </h2>
+      <h3 class="employee-services__subtitle _desktop">
+        Укажите минимум 1 услугу для каждой выбранной категории
+      </h3>
     </div>
-    <div v-show="showServices" class="edit-services">
-      <div class="employee-services__header">
-        <div class="employee-services__left">
-          <h2 class="employee-services__title">
-            Выберите предоставляемые услуги из категории
-            {{ selectedServiceGroups[currentStep] }}
-          </h2>
-          <h3 class="employee-services__subtitle">
-            Укажите минимум 1 услугу для каждой выбранной категории
-          </h3>
-        </div>
-        <Steps
-          :current-step="currentStep"
-          :length="selectedServiceGroups.length"
-          header="Категория"
-          @changeStep="currentStep = $event"
+    <div class="employee-services__center">
+      <div class="employee-services__left">
+        <AppCheckbox
+          v-for="(category, i) in businessServiceCategories"
+          :id="category"
+          :key="i"
+          :checked="selectedServiceGroups.includes(category)"
+          :label="category"
+          name="service_category"
+          :value="category"
+          @change="onGroupsChange(category, $event)"
         />
       </div>
-      <div v-for="category in selectedServiceGroups" :key="category">
-        <div
-          v-show="category === selectedServiceGroups[currentStep]"
-          class="employee-services__services"
-        >
-          <ServiceCard
-            v-for="(service, servInd) in businessServices.filter(
-              (s) => s.j.group === category
-            )"
-            :key="servInd"
-            :service="service"
-            :edit-mode="false"
-            :is-selected="selectedServices.includes(service)"
-            :responsive="true"
-            @click="onSelect(service)"
+      <div class="employee-services__right">
+        <h3 class="employee-services__subtitle">
+          Выберите услуги из списка
+          или начните вводить название услуги
+          в строку поиска
+        </h3>
+        <div class="employee-services__search">
+          <v-text-field
+            v-model="search"
+            label="ВВЕДИТЕ УСЛУГУ"
+            flat
           />
         </div>
+        <v-treeview
+          ref="tree"
+          v-model="selectedItems"
+          :search="search"
+          :items="treeItems"
+          item-key="name"
+          open-on-click
+          open-all
+          return-object
+          selectable
+          class="services-tree"
+        />
       </div>
-      <div class="employee-services__buttons">
-        <MainButton
-          color="success"
-          class="employee-services__back"
-          @click.native.prevent="showServices = false"
-        >
-          Назад к категориям
-        </MainButton>
-        <MainButton
-          color="success"
-          class="employee-services__next"
-          :class="{
-            button_disabled: !selectedServices.some(
-              (s) => s.j.group === selectedServiceGroups[currentStep]
-            )
-          }"
-          @click.native.prevent="onNext"
-        >
-          Далее
-        </MainButton>
-      </div>
+    </div>
+    <div class="employee-services__buttons">
+      <MainButton
+        color="success"
+        class="employee-services__back"
+        @click.native.prevent=""
+      >
+        Назад
+      </MainButton>
+      <MainButton
+        color="success"
+        class="button employee-services__next"
+        @click.native.prevent="onSave"
+      >
+        Сохранить
+      </MainButton>
     </div>
   </div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { cloneDeep } from 'lodash'
-import ServiceCard from '~/components/services/ServiceCard.vue'
 import AppCheckbox from '~/components/common/AppCheckbox.vue'
 import MainButton from '~/components/common/MainButton.vue'
-import Steps from '~/components/common/Steps.vue'
 
 export default {
-  components: { AppCheckbox, MainButton, ServiceCard, Steps },
+  components: { AppCheckbox, MainButton },
   props: {
     employeeServices: {
       type: Array,
@@ -114,10 +90,9 @@ export default {
   },
   data () {
     return {
+      search: '',
       selectedServiceGroups: [],
-      selectedServices: [],
-      showServices: false,
-      currentStep: 0
+      selectedItems: []
     }
   },
   computed: {
@@ -126,7 +101,28 @@ export default {
     }),
     ...mapGetters({
       businessServiceCategories: 'business/businessServiceCategories'
-    })
+    }),
+    isDesktop () {
+      if (process.client) {
+        return window && window.innerWidth > 1300
+      } else {
+        return false
+      }
+    },
+    selectedServices () {
+      return this.selectedItems.filter(item => !!item.id)
+    },
+    treeItems () {
+      const categories = this.selectedServiceGroups.map((category) => {
+        const services = this.businessServices.filter(s => s.j.group === category)
+
+        return {
+          name: category,
+          children: services
+        }
+      })
+      return categories
+    }
   },
   watch: {
     employeeServiceGroups: {
@@ -144,7 +140,7 @@ export default {
   methods: {
     init () {
       this.selectedServiceGroups = this.employeeServiceGroups.slice()
-      this.selectedServices = cloneDeep(this.employeeServices)
+      this.selectedItems = this.employeeServices.map(item => ({ name: item.name, id: item.id }))
     },
     onGroupsChange (category, selected) {
       if (selected) {
@@ -154,29 +150,11 @@ export default {
 
         if (i > -1) {
           this.selectedServiceGroups.splice(i, 1)
-          this.selectedServices = this.selectedServices.filter(s =>
-            this.selectedServiceGroups.includes(s.j.group)
-          )
         }
       }
+    },
+    onSave () {
       this.$emit('selected', this.selectedServices)
-    },
-    onNext () {
-      if (this.currentStep === this.selectedServiceGroups.length - 1) {
-        this.$emit('selected', this.selectedServices)
-        this.$emit('nextStep')
-      } else {
-        this.currentStep++
-      }
-    },
-    onSelect (service) {
-      const i = this.selectedServices.indexOf(service)
-
-      if (i > -1) {
-        this.selectedServices.splice(i, 1)
-      } else {
-        this.selectedServices.push(service)
-      }
     }
   }
 }
@@ -186,14 +164,17 @@ export default {
 @import '~assets/styles/common.scss';
 
 .employee-services {
-  &__header {
-    font-family: $lato;
+  max-width: 800px;
+  padding-bottom: 50px;
+  background-color: #fff;
+  &__top {
+    padding: 40px;
     text-align: center;
-
     @media only screen and (min-width: $desktop) {
-      display: flex;
-      justify-content: space-between;
+      padding: 52px 0 32px;
+      margin: 0 50px;
       text-align: left;
+      border-bottom: 1px solid rgba(137, 149, 175, 0.2);
     }
   }
   &__title {
@@ -212,18 +193,45 @@ export default {
     font-weight: normal;
     font-size: 14px;
     color: #8995af;
+    text-align: center;
   }
-  &__categories,
-  &__services {
-    margin-top: 40px;
-  }
-  &__services {
-    padding: 25px 8px 0;
-    border-top: 1px solid rgba(137, 149, 175, 0.1);
+  &__center {
+    margin: 0 30px;
     @media only screen and (min-width: $desktop) {
       display: flex;
-      flex-wrap: wrap;
-      justify-content: flex-start;
+      margin: 0 50px;
+      border-bottom: 1px solid rgba(137, 149, 175, 0.2);
+    }
+  }
+  &__left {
+    display: none;
+    @media only screen and (min-width: $desktop) {
+      display: inline-flex;
+      min-width: 274px;
+      padding: 28px 8px;
+    }
+  }
+  &__right {
+    padding-top: 26px;
+    @media only screen and (min-width: $desktop) {
+      min-height: 300px;
+      padding: 28px 40px;
+      border-left: 1px solid rgba(137, 149, 175, 0.2);
+    }
+  }
+  &__item {
+    display: flex;
+    height: 40px;
+    margin: 5px 0;
+    padding: 0 27px 0 40px;
+    align-items: center;
+    font-weight: normal;
+    font-size: 14px;
+    color: #8995af;
+    border-radius: 20px;
+    &.selected {
+      background: rgba(137, 149, 175, 0.2);
+      color: #07101C;
     }
   }
   &__buttons {
@@ -242,24 +250,58 @@ export default {
       color: #07101c;
     }
   }
-  &__next {
-    width: 240px;
-    color: #fff;
-    background-color: #5699ff;
-  }
-  .edit-services {
-    padding: 30px 37px 60px;
-    background: #fff;
-
-    @media only screen and (min-width: $tablet) {
-      max-width: 524px;
-      margin: 0 auto;
-      box-shadow: 0 2px 12px rgba(137, 149, 175, 0.1);
-    }
+  ._desktop {
+    display: none;
     @media only screen and (min-width: $desktop) {
-      max-width: 100%;
-      margin: 0 40px 0 0;
-      padding: 40px 60px 60px;
+      display: flex;
+    }
+  }
+  .services-tree {
+    &>.v-treeview-node {
+      position: relative;
+      margin: 10px 0;
+      padding-left: 0;
+      border-radius: 20px;
+      background: rgba(137, 149, 175, 0.1);
+      &>.v-treeview-node__root  {
+        padding: 11px 45px 10px 36px;
+        cursor: pointer;
+        .v-treeview-node__label {
+          font-family: Lato, sans-serif;
+          font-weight: 600;
+          font-size: 14px;
+        }
+      }
+      &>.v-treeview-node__children {
+        border-top: 1px solid #fff;
+        padding: 12px 45px 16px 36px;
+      }
+      .v-treeview-node--leaf {
+        margin-left: 0;
+        .v-treeview-node__root {
+          min-height: 28px;
+        }
+        .v-treeview-node__label {
+          font-family: Lato, sans-serif;
+          font-size: 14px;
+        }
+      }
+    }
+    .v-icon.v-treeview-node__checkbox {
+      position: absolute;
+      right: 27px;
+      width: 16px;
+      height: 16px;
+      border: 1px solid rgba(137, 149, 175, 0.2);
+      border-radius: 2px;
+      &.mdi-minus-box {
+        border-color: rgba(137, 149, 175, 0.2);
+        background: url('~assets/images/svg/selection.svg') center/10px auto no-repeat rgba(137, 149, 175, 0.5);
+      }
+      &.mdi-checkbox-marked {
+        border-color: #5699FF;
+        background: url('~assets/images/svg/selection.svg') center/10px auto no-repeat #5699FF;
+      }
     }
   }
 }

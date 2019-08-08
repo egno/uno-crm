@@ -108,9 +108,6 @@
         <v-tab :key="1" ripple>
           Услуги
         </v-tab>
-        <v-tab :key="2" ripple>
-          График работы
-        </v-tab>
       </AppTabs>
       <div class="tab-content">
         <v-form v-if="employee" ref="form" v-model="valid">
@@ -136,24 +133,7 @@
               :employee-services="empServices"
               :employee-service-groups="empServiceGroups"
               @selected="onServicesSelected"
-              @nextStep="activeTab = 2"
             />
-          </div>
-          <div v-show="activeTab === 2" class="infocard _edit">
-            <div class="infocard__content">
-              <BusinessScheduleEdit
-                :week-schedule="employee.schedule"
-                @editWeek="onScheduleEdit"
-              />
-              <MainButton
-                color="success"
-                class="button save-info"
-                :class="{ button_disabled: hasErrors }"
-                @click.native.prevent="save"
-              >
-                Сохранить
-              </MainButton>
-            </div>
           </div>
         </v-form>
       </div>
@@ -172,7 +152,6 @@ import EmployeeEdit from '~/components/employee/EmployeeEdit.vue'
 import EmployeeServices from '~/components/employee/EmployeeServices.vue'
 import PhoneView from '~/components/common/PhoneView.vue'
 import BusinessSchedule from '~/components/business/BusinessSchedule.vue'
-import BusinessScheduleEdit from '~/components/business/BusinessScheduleEdit.vue'
 import Avatar from '~/components/avatar/Avatar.vue'
 import MainButton from '~/components/common/MainButton.vue'
 import ServiceCard from '~/components/services/ServiceCard.vue'
@@ -191,7 +170,6 @@ export default {
     EmployeeServices,
     PhoneView,
     BusinessSchedule,
-    BusinessScheduleEdit,
     MainButton,
     PageLayout,
     ServiceCard
@@ -354,12 +332,12 @@ export default {
           console.log('FAILURE!! ', e)
         })
     },
-    onScheduleEdit (newWeek) {
+    /* onScheduleEdit (newWeek) {
       this.employee.schedule = newWeek
-    },
+    }, */
     onServicesSelected (payload) {
       this.employee.services = payload
-      // this.activeTab = 2
+      this.save()
     },
     save () {
       if (!this.employeeId) { return }

@@ -9,9 +9,9 @@
       type="checkbox"
       class="checkbox__input"
     >
-    <label class="checkbox__label" @click="$emit('change', !checked)">{{
-      label
-    }}</label>
+    <label class="checkbox__label" @click="$emit('change', !checked)">
+      {{ label }}
+    </label>
   </div>
 </template>
 <script>

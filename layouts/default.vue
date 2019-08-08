@@ -402,6 +402,7 @@ export default {
       top: 99px;
       right: 0px;
       margin-right: 13px;
+      z-index: 10;
       background: url('~assets/images/svg/plus-white.svg') no-repeat center/16px
       #ef4d37;
       span {
