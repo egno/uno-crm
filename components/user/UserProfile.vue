@@ -69,9 +69,9 @@
         </VFlex>
       </v-layout>
       <div>
-        <router-link :to="{ name: 'account-accountSetPassword' }">
+        <nuxt-link :to="{ name: 'account-accountSetPassword' }">
           Изменить пароль
-        </router-link>
+        </nuxt-link>
       </div>
       <v-btn color="success" @click="saveProfile">
         Сохранить

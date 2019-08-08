@@ -167,7 +167,7 @@
             </div>
           </template>
           <template slot="footer">
-            <router-link
+            <nuxt-link
               :to="{
                 name: 'id-businessClient',
                 params: {
@@ -177,7 +177,7 @@
               }"
             >
               Перейти в полную карту клиента
-            </router-link>
+            </nuxt-link>
           </template>
         </Accordion>
       </div>

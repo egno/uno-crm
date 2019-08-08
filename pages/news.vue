@@ -11,12 +11,12 @@
             обратной связи регулярно создаем актуальные и&nbsp;полезные
             обновления.
           </div>
-          <router-link
+          <nuxt-link
             :to="{ name: 'news', hash: '#news-adaptive' }"
             class="inner-link"
           >
             ПОДРОБНОЕ ОПИСАНИЕ ОБНОВЛЕНИЙ
-          </router-link>
+          </nuxt-link>
         </div>
       </div>
     </section>
@@ -39,9 +39,9 @@
             чтобы в&nbsp;ваше отсутствие рабочие процессы
             не&nbsp;останавливались.
           </p>
-          <router-link :to="{ name: 'register' }" class="inner-link">
+          <nuxt-link :to="{ name: 'register' }" class="inner-link">
             ПОЛУЧИТЕ ДОСТУП УЖЕ СЕЙЧАС
-          </router-link>
+          </nuxt-link>
         </div>
       </div>
     </section>
@@ -69,9 +69,9 @@
             >договором оферты</a>
             и&nbsp;настроить события отправки сообщений.
           </p>
-          <router-link :to="{ name: 'register' }" class="inner-link layer-1">
+          <nuxt-link :to="{ name: 'register' }" class="inner-link layer-1">
             ПОЛУЧИТЕ ДОСТУП УЖЕ СЕЙЧАС
-          </router-link>
+          </nuxt-link>
         </div>
       </div>
     </section>

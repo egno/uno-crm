@@ -29,18 +29,18 @@
             <li class="update-item">
               <p>
                 Добавлен пункт “Реквизиты” на странице
-                <router-link :to="{ name: 'faq' }">
+                <nuxt-link :to="{ name: 'faq' }">
                   “Продукт”
-                </router-link>.
+                </nuxt-link>.
               </p>
             </li>
             <li class="update-item">
               <p>
                 Добавлена Инструкция во вкладке “Насколько сложно ее внедрить в
                 бизнес?” на странице
-                <router-link :to="{ name: 'faq' }">
+                <nuxt-link :to="{ name: 'faq' }">
                   “Продукт”
-                </router-link>и
+                </nuxt-link>и
                 будет всегда доступна для просмотра из страницы информации о
                 вашей компании.
               </p>

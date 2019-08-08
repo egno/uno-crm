@@ -11,12 +11,12 @@
             Используйте возможности UNO.CRM для работы с&nbsp;клиентами своего
             бизнеса с&nbsp;помощью ряда специальных сервисов.
           </div>
-          <router-link
+          <nuxt-link
             :to="{ name: 'index', hash: '#product' }"
             class="inner-link"
           >
             ПОДРОБНЕЕ О ПРОДУКТЕ
-          </router-link>
+          </nuxt-link>
         </div>
       </div>
     </section>
@@ -39,9 +39,9 @@
             чтобы в&nbsp;ваше отсутствие рабочие процессы
             не&nbsp;останавливались.
           </p>
-          <router-link :to="{ name: 'register' }" class="inner-link">
+          <nuxt-link :to="{ name: 'register' }" class="inner-link">
             ПОЛУЧИТЕ ДОСТУП УЖЕ СЕЙЧАС
-          </router-link>
+          </nuxt-link>
         </div>
       </div>
     </section>
@@ -89,9 +89,9 @@
             >договором оферты</a>
             и&nbsp;настроить события отправки сообщений.
           </p>
-          <router-link :to="{ name: 'register' }" class="inner-link layer-1">
+          <nuxt-link :to="{ name: 'register' }" class="inner-link layer-1">
             ПОЛУЧИТЕ ДОСТУП УЖЕ СЕЙЧАС
-          </router-link>
+          </nuxt-link>
         </div>
       </div>
     </section>
@@ -131,9 +131,9 @@
             специально для&nbsp;тех, кто спешит на&nbsp;сверхсекретную миссию!
             Или забежал «просто подровнять кончики».
           </p>
-          <router-link :to="{ name: 'register' }" class="inner-link layer-1">
+          <nuxt-link :to="{ name: 'register' }" class="inner-link layer-1">
             ПОЛУЧИТЕ ДОСТУП УЖЕ СЕЙЧАС
-          </router-link>
+          </nuxt-link>
         </div>
       </div>
     </section>

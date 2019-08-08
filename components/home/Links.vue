@@ -2,97 +2,97 @@
   <div class="list">
     <div class="column">
       <div>
-        <router-link
+        <nuxt-link
           :to="{ name: 'news' }"
           class="link page-link"
           @click.native="$emit('click')"
         >
           ПОСЛЕДНИЕ ОБНОВЛЕНИЯ
-        </router-link>
+        </nuxt-link>
       </div>
       <div>
-        <router-link
+        <nuxt-link
           :to="{ name: 'index', hash: '#product' }"
           class="link page-link"
           @click.native="$emit('click')"
         >
           ПРОДУКТ
-        </router-link>
+        </nuxt-link>
       </div>
       <div>
-        <router-link
+        <nuxt-link
           :to="{ name: 'index', hash: '#fits' }"
           class="link page-link"
           @click.native="$emit('click')"
         >
           КОМУ ПОДОЙДЕТ СИСТЕМА
-        </router-link>
+        </nuxt-link>
       </div>
     </div>
 
     <div class="column">
       <div>
-        <router-link
+        <nuxt-link
           :to="{ name: 'features' }"
           class="link page-link"
           @click.native="$emit('click')"
         >
           СЕРВИСЫ
-        </router-link>
+        </nuxt-link>
       </div>
       <div>
-        <router-link
+        <nuxt-link
           :to="{ name: 'features', hash: '#adaptive' }"
           class="link tablet"
           @click.native="$emit('click')"
         >
           Мобильная версия
-        </router-link>
+        </nuxt-link>
       </div>
       <div>
-        <router-link
+        <nuxt-link
           :to="{ name: 'features', hash: '#social-networks-integrated' }"
           class="link tablet"
           @click.native="$emit('click')"
         >
           Интеграция с соцсетями
-        </router-link>
+        </nuxt-link>
       </div>
       <div>
-        <router-link
+        <nuxt-link
           :to="{ name: 'features', hash: '#sms-notifications' }"
           class="link tablet"
           @click.native="$emit('click')"
         >
           Рассылка SMS
-        </router-link>
+        </nuxt-link>
       </div>
       <div>
-        <router-link
+        <nuxt-link
           :to="{ name: 'features', hash: '#phone-integration' }"
           class="link tablet"
           @click.native="$emit('click')"
         >
           API телефония
-        </router-link>
+        </nuxt-link>
       </div>
       <div>
-        <router-link
+        <nuxt-link
           :to="{ name: 'features', hash: '#express' }"
           class="link tablet"
           @click.native="$emit('click')"
         >
           Экспресс-запись
-        </router-link>
+        </nuxt-link>
       </div>
       <div>
-        <router-link
+        <nuxt-link
           :to="{ name: 'features', hash: '#aggregation' }"
           class="link tablet"
           @click.native="$emit('click')"
         >
           Агрегатор
-        </router-link>
+        </nuxt-link>
       </div>
     </div>
 

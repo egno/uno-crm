@@ -31,6 +31,15 @@ export default {
         path: '/myBusinessList',
         component: resolve(__dirname, 'pages/businessList.vue')
       })
+    },
+    scrollBehavior (to, from, savedPosition) {
+      if (to.hash) {
+        return { selector: to.hash }
+      } else if (savedPosition) {
+        return savedPosition
+      } else {
+        return { x: 0, y: 0 }
+      }
     }
   },
   /*

@@ -40,9 +40,9 @@
           />
           <div v-if="alreadyUsedPhone" class="error-message">
             На данный номер уже зарегистрирована компания.
-            <router-link :to="{ name: 'login' }">
+            <nuxt-link :to="{ name: 'login' }">
               Авторизоваться
-            </router-link>
+            </nuxt-link>
           </div>
         </div>
         <!--show disclaimer with animation v-show="companyName && userName && flogin"-->
@@ -172,9 +172,9 @@
 
     <div v-show="!alreadyUsedPhone">
       Уже есть аккаунт?
-      <router-link :to="{ name: 'login' }">
+      <nuxt-link :to="{ name: 'login' }">
         Войти
-      </router-link>
+      </nuxt-link>
     </div>
     <div v-if="keyCode">
       {{ badCode }}
