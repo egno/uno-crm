@@ -133,6 +133,7 @@
               :employee-services="empServices"
               :employee-service-groups="empServiceGroups"
               @selected="onServicesSelected"
+              @goBack="activeTab = 0"
             />
           </div>
         </v-form>

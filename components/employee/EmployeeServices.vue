@@ -30,7 +30,7 @@
         <div class="employee-services__search">
           <v-text-field
             v-model="search"
-            label="ВВЕДИТЕ УСЛУГУ"
+            placeholder="ВВЕДИТЕ УСЛУГУ"
             flat
           />
         </div>
@@ -52,7 +52,7 @@
       <MainButton
         color="success"
         class="employee-services__back"
-        @click.native.prevent=""
+        @click.native.prevent="$emit('goBack')"
       >
         Назад
       </MainButton>
@@ -206,17 +206,31 @@ export default {
   &__left {
     display: none;
     @media only screen and (min-width: $desktop) {
-      display: inline-flex;
+      display: block;
       min-width: 274px;
       padding: 28px 8px;
+    }
+    .checkbox {
+      display: inline-flex;
     }
   }
   &__right {
     padding-top: 26px;
     @media only screen and (min-width: $desktop) {
-      min-height: 300px;
+      min-height: 40vh;
       padding: 28px 40px;
       border-left: 1px solid rgba(137, 149, 175, 0.2);
+    }
+  }
+  &__search {
+    width: 290px;
+    margin: 0 auto;
+    input {
+      text-align: center;
+      &::placeholder {
+        font-size: 12px;
+        letter-spacing: 0.25em;
+      }
     }
   }
   &__item {
@@ -277,13 +291,21 @@ export default {
         padding: 12px 45px 16px 36px;
       }
       .v-treeview-node--leaf {
-        margin-left: 0;
+        margin: 5px 0 0;
         .v-treeview-node__root {
+          display: block;
           min-height: 28px;
+        }
+        .v-treeview-node__content {
+          display: inline-block;
         }
         .v-treeview-node__label {
           font-family: Lato, sans-serif;
           font-size: 14px;
+          color: #8995AF;
+        }
+        &.v-treeview-node--selected .v-treeview-node__label {
+          color: #07101C;
         }
       }
     }

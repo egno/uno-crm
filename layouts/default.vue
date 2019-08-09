@@ -513,7 +513,6 @@ export default {
         margin-left: 12px;
         padding: 0 4px;
         color: rgba(137, 149, 175, 0.8) !important;
-        letter-spacing: 25%;
         animation: none !important;
         z-index: 1;
       }
