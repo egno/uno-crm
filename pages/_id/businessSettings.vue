@@ -245,7 +245,7 @@ export default {
         'LMI_SHOPPINGCART.ITEMS[0].NAME': 'Услуга sms-рассылка uno.salon',
         'LMI_SHOPPINGCART.ITEMS[0].QTY': 1,
         'LMI_SHOPPINGCART.ITEMS[0].PRICE': amount,
-        'LMI_SHOPPINGCART.ITEMS[0].TAX': 'vat0',
+        'LMI_SHOPPINGCART.ITEMS[0].TAX': 'no_vat',
         'LMI_SHOPPINGCART.ITEMS[0].AGENT.TYPE': 4,
         'LMI_SHOPPINGCART.ITEMS[0].SUPPLIER.NAME': 'ООО "Электронная отчетность"',
         'LMI_SHOPPINGCART.ITEMS[0].SUBJECT': 10
