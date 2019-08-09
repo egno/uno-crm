@@ -18,8 +18,11 @@
       @blur="onBlur"
     />
     <div
-      v-if="visible && filteredOptions && filteredOptions.length"
+      v-show="visible && filteredOptions && filteredOptions.length"
       class="custom-select__dropdown"
+      tabindex="0"
+      @blur="closeDropdown"
+      @scroll="isScrolling = true"
     >
       <div
         v-for="(option, i) in filteredOptions"
@@ -93,6 +96,7 @@ export default {
   },
   data () {
     return {
+      isScrolling: false,
       visible: false,
       rules: {
         required: value => !!value || 'Это поле обязательно для заполнения',
@@ -120,12 +124,20 @@ export default {
     }
   },
   methods: {
-    onBlur (event) {
+    closeDropdown () {
       this.visible = false
+      this.isScrolling = false
+    },
+    onBlur (event) {
       if (this.required && !this.searchingValue) {
         this.$emit('error', 'Необходимо заполнить все обязательные поля')
       }
       this.$emit('blur', event)
+      setTimeout(() => {
+        if (!this.isScrolling) {
+          this.closeDropdown()
+        }
+      }, 50)
     },
     onInput (e) {
       this.visible = true
@@ -135,7 +147,7 @@ export default {
       }
     },
     select (option) {
-      this.visible = false
+      this.closeDropdown()
       this.$emit('select', option)
     }
   }
