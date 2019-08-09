@@ -207,12 +207,12 @@ export default {
         {
           text: 'Сотрудники',
           disabled: false,
-          href: `/${businessId}/employeeList`
+          href: `/${businessId}/businessEmployees`
         },
         {
           text: `${employee.id ? employee.name : 'Новый сотрудник'}`,
           disabled: true,
-          href: `/${businessId}/employeeList/${employeeId}`
+          href: `/${businessId}/businessEmployees/${employeeId}`
         }
       ]
     },
