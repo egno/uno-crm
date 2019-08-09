@@ -1,16 +1,6 @@
 /* eslint-disable no-mixed-operators */
 import ApiObject from '~/classes/api_object'
 import Api from '~/api/backend'
-import { makeAlert } from '~/api/utils'
-
-let store
-
-if (process.browser) {
-  window.onNuxtReady(({ $store }) => {
-    store = $store
-  })
-}
-// todo remove store, add dispatching 'alerts/alert' in Vue intsances
 
 const roles = [
   'Администратор компании',
@@ -112,10 +102,6 @@ class User extends ApiObject {
     if (!this.company_id) { return Promise.resolve() }
     return Api()
       .post(`user?`, this.jsonObject)
-      .catch((err) => {
-        store.dispatch('alerts/alert', makeAlert(err))
-        return false
-      })
   }
 }
 
