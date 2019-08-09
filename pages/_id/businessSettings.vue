@@ -242,7 +242,7 @@ export default {
         LMI_SUCCESS_URL: returnUrl,
         LMI_FAIL_URL: returnUrl,
         LMI_FAIL_METHOD: 'GET',
-        'LMI_SHOPPINGCART.ITEMS[0].NAME': 'Услуга sms-рассылка',
+        'LMI_SHOPPINGCART.ITEMS[0].NAME': 'Услуга sms-рассылка uno.salon',
         'LMI_SHOPPINGCART.ITEMS[0].QTY': 1,
         'LMI_SHOPPINGCART.ITEMS[0].PRICE': amount,
         'LMI_SHOPPINGCART.ITEMS[0].TAX': 'vat20',
