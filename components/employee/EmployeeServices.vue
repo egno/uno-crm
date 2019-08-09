@@ -10,11 +10,11 @@
     </div>
     <div class="employee-services__center">
       <div class="employee-services__left">
-        <AppCheckbox
-          v-for="(category, i) in businessServiceCategories"
+        <Chip
+          v-for="(services, category) in groupedBranchServices"
           :id="category"
-          :key="i"
-          :checked="selectedServiceGroups.includes(category)"
+          :key="category"
+          :checked="!!selectedServiceGroups[category]"
           :label="category"
           name="service_category"
           :value="category"
@@ -34,18 +34,31 @@
             flat
           />
         </div>
-        <v-treeview
-          ref="tree"
-          v-model="selectedItems"
-          :search="search"
-          :items="treeItems"
-          item-key="name"
-          open-on-click
-          open-all
-          return-object
-          selectable
-          class="services-tree"
-        />
+        <div
+          v-for="(services, category) in groupedBranchServices"
+          :key="category"
+        >
+          <Accordion
+            v-if="!!selectedServiceGroups[category]"
+          >
+            <template slot="heading">
+              <div>{{ category }}</div>
+            </template>
+            <template slot="content">
+              <SmallCheckbox
+                v-for="(service, servI) in groupedBranchServices[category]"
+                :id="service.id"
+                :key="servI"
+                :checked="selectedServices.some(s => s.id === service.id)"
+                name="selected_services"
+                :value="service.name"
+                @change="onServiceChange(service, category, $event)"
+              >
+                {{ service.name }}
+              </SmallCheckbox>
+            </template>
+          </Accordion>
+        </div>
       </div>
     </div>
     <div class="employee-services__buttons">
@@ -68,12 +81,17 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
-import AppCheckbox from '~/components/common/AppCheckbox.vue'
+// import { mapGetters } from 'vuex'
+import { cloneDeep } from 'lodash'
+import Chip from '~/components/common/Chip.vue'
 import MainButton from '~/components/common/MainButton.vue'
+import Accordion from '~/components/common/Accordion.vue'
+import { servicesMixin } from '~/mixins/services'
+import SmallCheckbox from '~/components/common/SmallCheckbox'
 
 export default {
-  components: { AppCheckbox, MainButton },
+  components: { SmallCheckbox, Accordion, Chip, MainButton },
+  mixins: [ servicesMixin ],
   props: {
     employeeServices: {
       type: Array,
@@ -91,37 +109,17 @@ export default {
   data () {
     return {
       search: '',
-      selectedServiceGroups: [],
-      selectedItems: []
+      selectedServiceGroups: {},
+      selectedServices: []
     }
   },
   computed: {
-    ...mapState({
-      businessServices: state => state.business.businessServices
-    }),
-    ...mapGetters({
-      businessServiceCategories: 'business/businessServiceCategories'
-    }),
     isDesktop () {
       if (process.client) {
         return window && window.innerWidth > 1300
       } else {
         return false
       }
-    },
-    selectedServices () {
-      return this.selectedItems.filter(item => !!item.id)
-    },
-    treeItems () {
-      const categories = this.selectedServiceGroups.map((category) => {
-        const services = this.businessServices.filter(s => s.j.group === category)
-
-        return {
-          name: category,
-          children: services
-        }
-      })
-      return categories
     }
   },
   watch: {
@@ -139,17 +137,25 @@ export default {
   },
   methods: {
     init () {
-      this.selectedServiceGroups = this.employeeServiceGroups.slice()
-      this.selectedItems = this.employeeServices.map(item => ({ name: item.name, id: item.id }))
+      this.employeeServiceGroups.forEach((category) => {
+        this.selectedServiceGroups[category] = this.employeeServices.filter(s => s.j.group === category)
+      })
+      this.selectedServices = cloneDeep(this.employeeServices)
     },
     onGroupsChange (category, selected) {
       if (selected) {
-        this.selectedServiceGroups.push(category)
+        this.$set(this.selectedServiceGroups, category, this.businessServices.filter(s => s.j.group === category))
+      } else if (this.selectedServiceGroups[category]) {
+        this.$set(this.selectedServiceGroups, category, null)
+      }
+    },
+    onServiceChange (service, category, selected) {
+      if (selected) {
+        this.selectedServices.push(service)
       } else {
-        const i = this.selectedServiceGroups.indexOf(category)
-
+        const i = this.selectedServices.findIndex(s => s.id === service.id)
         if (i > -1) {
-          this.selectedServiceGroups.splice(i, 1)
+          this.selectedServices.splice(i, 1)
         }
       }
     },
