@@ -40,7 +40,8 @@
         >
           <Accordion
             v-show="isCategoryVisible(category)"
-            :expand-on-start="true"
+            :expanded="search.length ? isCategoryVisible(category) : expanded[category]"
+            @click="expanded[category] = $event"
           >
             <template slot="heading">
               <SmallCheckbox
@@ -120,6 +121,7 @@ export default {
   },
   data () {
     return {
+      expanded: {},
       search: '',
       selectedGroups: [],
       selectedServices: []
@@ -166,6 +168,7 @@ export default {
   },
   created () {
     this.init()
+    Object.keys(this.groupedBranchServices).forEach((key) => { this.$set(this.expanded, key, false) })
   },
   methods: {
     addService (service) {
