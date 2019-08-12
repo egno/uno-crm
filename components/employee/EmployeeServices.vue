@@ -31,14 +31,17 @@
             flat
           />
         </div>
-        <div v-if="search.length && !businessServices.some(isServiceVisible)" class="employee-services__right-text">Не найдено подходящих услуг</div>
+        <div v-if="search.length && !businessServices.some(isServiceVisible)" class="employee-services__right-text">
+          Не найдено подходящих услуг
+        </div>
         <div
           v-for="(services, category) in groupedBranchServices"
           :key="category"
         >
           <Accordion
             v-show="isCategoryVisible(category)"
-            :expand-on-start="true">
+            :expand-on-start="true"
+          >
             <template slot="heading">
               <SmallCheckbox
                 :id="category"

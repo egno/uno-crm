@@ -13,7 +13,7 @@
       <span>
         <slot name="default" />
       </span>
-      <span class="default-checkbox__checkbox" @click.stop="$emit('change', !checked)"></span>
+      <span class="default-checkbox__checkbox" @click.stop="$emit('change', !checked)" />
     </label>
   </div>
 </template>
