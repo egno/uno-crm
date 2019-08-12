@@ -1,5 +1,5 @@
 <template>
-  <div class="default-checkbox">
+  <div :class="{ checked, 'default-checkbox': true}">
     <input
       :id="id"
       :checked="checked"
@@ -9,8 +9,11 @@
       type="checkbox"
       class="default-checkbox__input"
     >
-    <label class="default-checkbox__label" @click="$emit('change', !checked)">
-      <slot name="default" />
+    <label class="default-checkbox__label">
+      <span>
+        <slot name="default" />
+      </span>
+      <span class="default-checkbox__checkbox" @click.stop="$emit('change', !checked)"></span>
     </label>
   </div>
 </template>
@@ -31,6 +34,7 @@ export default {
 <style lang="scss">
   @import '~assets/styles/common.scss';
   .default-checkbox {
+    margin-top: 8px;
     &__input {
       position: absolute;
       z-index: -1;
@@ -38,19 +42,26 @@ export default {
     }
 
     &__label {
-      &:after {
-        display: inline-block;
-        vertical-align: baseline;
-        width: 16px;
-        height: 16px;
-        border: 1px solid rgba(137, 149, 175, 0.2);
-        content: '';
-      }
+      display: flex;
+      justify-content: space-between;
+      color: #8995AF;
     }
 
-    &__input:checked + &__label:after {
-      border-color: #5699FF;
-      background: url('~assets/images/svg/selection.svg') center/10px auto no-repeat #5699FF;
+    &__checkbox {
+      display: inline-flex;
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      border: 1px solid rgba(137, 149, 175, 0.8);
+      background: #fff;
+    }
+
+    &__input:checked + label{
+      color: #07101c;
+      &>.default-checkbox__checkbox {
+        border-color: #5699FF;
+        background: url('~assets/images/svg/selection.svg') center/10px auto no-repeat #5699FF;
+      }
     }
   }
 </style>

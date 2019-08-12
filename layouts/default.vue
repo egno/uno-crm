@@ -140,10 +140,10 @@ export default {
 <style lang="scss">
   @import 'lato-font/scss/_public-api.scss';
   $lato-font-path: '~lato-font/fonts';
-  @include lato-include-font('light');
-  @include lato-include-font('normal');
-  @include lato-include-font('bold');
-  @include lato-include-font('heavy');
+  @include lato-include-font('light'); // font-weight: 300
+  @include lato-include-font('normal'); // font-weight: 400;
+  @include lato-include-font('bold'); // font-weight: 600;
+  @include lato-include-font('heavy'); // font-weight: 800;
 
   @import '~assets/styles/common';
 

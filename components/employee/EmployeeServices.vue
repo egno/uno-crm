@@ -4,9 +4,6 @@
       <h2 class="employee-services__title">
         Выберите предоставляемые услуги
       </h2>
-      <h3 class="employee-services__subtitle _desktop">
-        Укажите минимум 1 услугу для каждой выбранной категории
-      </h3>
     </div>
     <div class="employee-services__center">
       <div class="employee-services__left">
@@ -14,11 +11,11 @@
           v-for="(services, category) in groupedBranchServices"
           :id="category"
           :key="category"
-          :checked="!!selectedServiceGroups[category]"
-          :label="category"
+          :checked="selectedGroups.includes(category)"
+          :label="filterText(category)"
           name="service_category"
           :value="category"
-          @change="onGroupsChange(category, $event)"
+          @change="onFilterClick(category, $event)"
         />
       </div>
       <div class="employee-services__right">
@@ -34,28 +31,41 @@
             flat
           />
         </div>
+        <div v-if="search.length && !businessServices.some(isServiceVisible)" class="employee-services__right-text">Не найдено подходящих услуг</div>
         <div
           v-for="(services, category) in groupedBranchServices"
           :key="category"
         >
           <Accordion
-            v-if="!!selectedServiceGroups[category]"
-          >
+            v-show="isCategoryVisible(category)"
+            :expand-on-start="true">
             <template slot="heading">
-              <div>{{ category }}</div>
+              <SmallCheckbox
+                :id="category"
+                :checked="groupedSelectedServices[category] && groupedSelectedServices[category].length === groupedBranchServices[category].length"
+                name="category"
+                :value="category"
+                @change="toggleCategory(category, $event)"
+              >
+                {{ category }}
+              </SmallCheckbox>
             </template>
             <template slot="content">
-              <SmallCheckbox
+              <div
                 v-for="(service, servI) in groupedBranchServices[category]"
-                :id="service.id"
                 :key="servI"
-                :checked="selectedServices.some(s => s.id === service.id)"
-                name="selected_services"
-                :value="service.name"
-                @change="onServiceChange(service, category, $event)"
               >
-                {{ service.name }}
-              </SmallCheckbox>
+                <SmallCheckbox
+                  v-show="isServiceVisible"
+                  :id="service.id"
+                  :checked="selectedServices.some(s => s.id === service.id)"
+                  name="selected_services"
+                  :value="service.name"
+                  @change="onServiceChange(service, $event)"
+                >
+                  {{ service.name }}
+                </SmallCheckbox>
+              </div>
             </template>
           </Accordion>
         </div>
@@ -81,7 +91,6 @@
 </template>
 
 <script>
-// import { mapGetters } from 'vuex'
 import { cloneDeep } from 'lodash'
 import Chip from '~/components/common/Chip.vue'
 import MainButton from '~/components/common/MainButton.vue'
@@ -109,7 +118,7 @@ export default {
   data () {
     return {
       search: '',
-      selectedServiceGroups: {},
+      selectedGroups: [],
       selectedServices: []
     }
   },
@@ -120,6 +129,26 @@ export default {
       } else {
         return false
       }
+    },
+    groupedSelectedServices () {
+      const obj = {}
+
+      this.selectedServices.forEach((s) => {
+        if (!s.j || !s.j.group) {
+          return
+        }
+        const category = s.j.group
+
+        if (!obj[category]) {
+          obj[category] = []
+        }
+
+        if (!obj[category].includes(s)) {
+          obj[category].push(s)
+        }
+      })
+
+      return obj
     }
   },
   watch: {
@@ -136,31 +165,78 @@ export default {
     this.init()
   },
   methods: {
+    addService (service) {
+      const category = service.j.group
+      if (this.selectedServices.some(s => s.id === service.id)) {
+        return
+      }
+      this.selectedServices.push(service)
+      if (!this.selectedGroups.includes(category)) {
+        this.selectedGroups.push(category)
+      }
+    },
+    filterText (category) {
+      const selectedServices = this.groupedSelectedServices[category] || []
+      return `${category} ${selectedServices.length}/${this.groupedBranchServices[category].length}`
+    },
     init () {
-      this.employeeServiceGroups.forEach((category) => {
-        this.selectedServiceGroups[category] = this.employeeServices.filter(s => s.j.group === category)
+      this.employeeServices.forEach((s) => {
+        if (s.j.group && !this.selectedGroups.includes(s.j.group)) {
+          this.selectedGroups.push(s.j.group)
+        }
       })
       this.selectedServices = cloneDeep(this.employeeServices)
     },
-    onGroupsChange (category, selected) {
-      if (selected) {
-        this.$set(this.selectedServiceGroups, category, this.businessServices.filter(s => s.j.group === category))
-      } else if (this.selectedServiceGroups[category]) {
-        this.$set(this.selectedServiceGroups, category, null)
-      }
+    isCategoryVisible (category) {
+      const search = this.search
+      return search.length
+        ? search.length > 2 && this.groupedBranchServices[category].some(this.isServiceVisible)
+        : this.selectedGroups.includes(category)
     },
-    onServiceChange (service, category, selected) {
-      if (selected) {
-        this.selectedServices.push(service)
+    isServiceVisible (service) {
+      return service.name.toLowerCase().includes(this.search.toLowerCase())
+    },
+    onFilterClick (category, selected) {
+      if (selected && !this.selectedGroups.includes(category)) {
+        this.selectedGroups.push(category)
       } else {
-        const i = this.selectedServices.findIndex(s => s.id === service.id)
+        if (this.groupedSelectedServices[category]) {
+          return
+        }
+        const i = this.selectedGroups.indexOf(category)
         if (i > -1) {
-          this.selectedServices.splice(i, 1)
+          this.selectedGroups.splice(i, 1)
         }
       }
     },
+    onServiceChange (service, selected) {
+      if (selected) {
+        this.addService(service)
+      } else {
+        this.removeService(service)
+      }
+    },
     onSave () {
-      this.$emit('selected', this.selectedServices)
+      if (this.selectedGroups.length) {
+        this.$emit('selected', this.selectedServices)
+      } else {
+        this.$emit('selected', [])
+      }
+    },
+    removeService (service) {
+      const i = this.selectedServices.findIndex(s => s.id === service.id)
+      if (i > -1) { this.selectedServices.splice(i, 1) }
+    },
+    toggleCategory (category, selected) {
+      if (selected) {
+        this.groupedBranchServices[category].forEach((filialService) => {
+          this.addService(filialService)
+        })
+      } else {
+        this.groupedSelectedServices[category].forEach((selectedService) => {
+          this.removeService(selectedService)
+        })
+      }
     }
   }
 }
@@ -213,7 +289,8 @@ export default {
     display: none;
     @media only screen and (min-width: $desktop) {
       display: block;
-      min-width: 274px;
+      width: 274px;
+      flex-shrink: 0;
       padding: 28px 8px;
     }
     .checkbox {
@@ -238,6 +315,10 @@ export default {
         letter-spacing: 0.25em;
       }
     }
+  }
+  &__right-text {
+    text-align: center;
+    color: #EF4D37;
   }
   &__item {
     display: flex;
@@ -276,60 +357,16 @@ export default {
       display: flex;
     }
   }
-  .services-tree {
-    &>.v-treeview-node {
-      position: relative;
-      margin: 10px 0;
-      padding-left: 0;
-      border-radius: 20px;
-      background: rgba(137, 149, 175, 0.1);
-      &>.v-treeview-node__root  {
-        padding: 11px 45px 10px 36px;
-        cursor: pointer;
-        .v-treeview-node__label {
-          font-family: Lato, sans-serif;
-          font-weight: 600;
-          font-size: 14px;
-        }
-      }
-      &>.v-treeview-node__children {
-        border-top: 1px solid #fff;
-        padding: 12px 45px 16px 36px;
-      }
-      .v-treeview-node--leaf {
-        margin: 5px 0 0;
-        .v-treeview-node__root {
-          display: block;
-          min-height: 28px;
-        }
-        .v-treeview-node__content {
-          display: inline-block;
-        }
-        .v-treeview-node__label {
-          font-family: Lato, sans-serif;
-          font-size: 14px;
-          color: #8995AF;
-        }
-        &.v-treeview-node--selected .v-treeview-node__label {
-          color: #07101C;
-        }
-      }
+  .accordion__header {
+    padding-right: 23px;
+    &:after {
+      left: 20px;
     }
-    .v-icon.v-treeview-node__checkbox {
-      position: absolute;
-      right: 27px;
-      width: 16px;
-      height: 16px;
-      border: 1px solid rgba(137, 149, 175, 0.2);
-      border-radius: 2px;
-      &.mdi-minus-box {
-        border-color: rgba(137, 149, 175, 0.2);
-        background: url('~assets/images/svg/selection.svg') center/10px auto no-repeat rgba(137, 149, 175, 0.5);
-      }
-      &.mdi-checkbox-marked {
-        border-color: #5699FF;
-        background: url('~assets/images/svg/selection.svg') center/10px auto no-repeat #5699FF;
-      }
+    .default-checkbox {
+      margin: 0;
+    }
+    .default-checkbox__label {
+      color: #07101c;
     }
   }
 }
