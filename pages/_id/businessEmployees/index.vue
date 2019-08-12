@@ -152,8 +152,7 @@ export default {
         rightButton: 'УДАЛИТЬ'
       },
       hasVisits: false,
-      newEmp: undefined,
-      selectedOnStart: false
+      newEmp: undefined
     }
   },
   computed: {
@@ -190,7 +189,6 @@ export default {
   mounted () {
     this.setActions()
     this.selectAll()
-    this.selectedOnStart = true
   },
   methods: {
     ...mapActions({

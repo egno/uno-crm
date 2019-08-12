@@ -1,5 +1,5 @@
 <template>
-  <Accordion>
+  <Accordion class="business-schedule-view">
     <template slot="heading">
       <div>Режим работы</div>
     </template>
@@ -44,59 +44,64 @@ export default {
 </script>
 
 <style lang="scss">
-.schedule {
-  padding: 20px 0 0;
+@import '~assets/styles/day-schedule.scss';
 
-  &__header {
-    position: relative;
-    padding: 11px 17px 10px 36px;
-    min-width: 246px;
-    border-radius: 20px;
-    cursor: pointer;
-    background: rgba(137, 149, 175, 0.1);
-    font-family: Lato, sans-serif;
-    font-weight: 900;
-    font-size: 14px;
-    border-bottom: 1px solid transparent;
+.business-schedule-view {
+  .accordion {
+    padding: 20px 0 0;
 
-    &:before {
-      position: absolute;
-      top: 13px;
-      left: 12px;
-      content: '';
-      width: 14px;
-      height: 14px;
-      background: url('~assets/images/svg/clock.svg') center no-repeat;
-    }
+    &__header {
+      position: relative;
+      padding: 11px 17px 10px 36px;
+      min-width: 246px;
+      border-radius: 20px;
+      cursor: pointer;
+      background: rgba(137, 149, 175, 0.1);
+      font-family: Lato, sans-serif;
+      font-weight: 900;
+      font-size: 14px;
+      border-bottom: 1px solid transparent;
 
-    &:after {
-      position: absolute;
-      top: 18px;
-      right: 20px;
-      content: '';
-      width: 10px;
-      height: 6px;
-      background: url('~assets/images/svg/down.svg') center no-repeat;
-    }
-  }
-
-  &__container {
-    padding: 17px 23px 26px 36px;
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
-    background: rgba(137, 149, 175, 0.1);
-  }
-
-  &._expanded {
-    .schedule__header {
-      border-bottom-left-radius: 0;
-      border-bottom-right-radius: 0;
-      border-bottom-color: #fff;
+      &:before {
+        position: absolute;
+        top: 13px;
+        left: 12px;
+        content: '';
+        width: 14px;
+        height: 14px;
+        background: url('~assets/images/svg/clock.svg') center no-repeat;
+      }
 
       &:after {
-        transform: rotate(180deg);
+        position: absolute;
+        top: 18px;
+        right: 20px;
+        content: '';
+        width: 10px;
+        height: 6px;
+        background: url('~assets/images/svg/down.svg') center no-repeat;
+      }
+    }
+
+    &__container {
+      padding: 17px 23px 26px 36px;
+      border-bottom-left-radius: 20px;
+      border-bottom-right-radius: 20px;
+      background: rgba(137, 149, 175, 0.1);
+    }
+
+    &._expanded {
+      .schedule__header {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        border-bottom-color: #fff;
+
+        &:after {
+          transform: rotate(180deg);
+        }
       }
     }
   }
 }
+
 </style>

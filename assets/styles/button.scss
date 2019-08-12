@@ -1,20 +1,19 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto+Slab');
-
+@mixin big-button {
+  width: 240px;
+  height: 56px;
+}
 #app .button {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+  @include big-button;
   box-sizing: border-box;
   color: #fff;
   background-color: #b69768;
   outline: none;
+  border-radius: 0;
   transition: background-color 0.4s 0s;
   cursor: pointer;
   font: bold 18px Roboto Slab, Times New Roman, Times, serif;
   @media only screen and (min-width : 1300px) {
-    width: 240px;
-    height: 56px;
-    border-radius: 0;
     &:hover {
       background-color: #07101C;;
     }
@@ -28,10 +27,17 @@
 
   &_attractive {
     @extend .button;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
     font-weight: normal;
     background-color: #EF4D37;
-    &:hover {
-      background-color: #EC2E2E;
+    @media only screen and (min-width : 1300px) {
+      @include big-button;
+      border-radius: 0;
+      &:hover {
+        background-color: #EC2E2E;
+      }
     }
   }
 }

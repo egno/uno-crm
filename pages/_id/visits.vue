@@ -390,7 +390,7 @@
                             {{ category }}
                             {{ groupedEmployees[category].length }}
                           </div>
-                          <AppCheckbox
+                          <Chip
                             v-if="displayMode === 'day'"
                             :id="category"
                             :checked="
@@ -426,7 +426,7 @@
                           </div>
                         </VLayout>
 
-                        <AppCheckbox
+                        <Chip
                           v-if="displayMode === 'day'"
                           :id="emp.j.name + i"
                           :checked="
@@ -436,7 +436,7 @@
                           :value="emp.id"
                           @change="changeVisibleEmployees(emp, $event)"
                         />
-                        <AppCheckbox
+                        <Chip
                           v-else
                           :id="emp.j.name + i"
                           :checked="selectedEmployee.id === emp.id"
@@ -554,7 +554,7 @@
               <div>Все мастера</div>
             </template>
             <template slot="content">
-              <AppCheckbox
+              <Chip
                 v-for="(category, i) in employeesCategories"
                 :id="category"
                 :key="i"
@@ -683,7 +683,7 @@ import { mapState, mapActions, mapGetters } from 'vuex'
 import Api from '~/api/backend'
 import MainButton from '~/components/common/MainButton.vue'
 import Accordion from '~/components/common/Accordion.vue'
-import AppCheckbox from '~/components/common/AppCheckbox.vue'
+import Chip from '~/components/common/Chip.vue'
 import Avatar from '~/components/avatar/Avatar.vue'
 import CalendarDayColumn from '~/components/calendar/CalendarDayColumn.vue'
 import EmployeeCard from '~/components/employee/EmployeeCard.vue'
@@ -714,7 +714,7 @@ if (process.client) {
 export default {
   components: {
     Accordion,
-    AppCheckbox,
+    Chip,
     Avatar,
     BreakEdit,
     EmployeeCard,

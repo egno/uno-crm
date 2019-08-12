@@ -133,6 +133,7 @@ import Api from '~/api/backend'
 import Modal from '~/components/common/Modal'
 import { conjugateEmployee } from '~/components/utils'
 import { responseGetId } from '~/api/utils'
+import { servicesMixin } from '~/mixins/services'
 
 export default {
   components: {
@@ -146,6 +147,7 @@ export default {
       return conjugateEmployee(n)
     }
   },
+  mixins: [ servicesMixin ],
   data () {
     return {
       formActions: [
@@ -172,8 +174,7 @@ export default {
   },
   computed: {
     ...mapState({
-      businessEmployees: state => state.business.businessEmployees,
-      businessServices: state => state.business.businessServices
+      businessEmployees: state => state.business.businessEmployees
     }),
     ...mapGetters({
       serviceGroups: 'service/serviceGroups',
@@ -183,26 +184,6 @@ export default {
     }),
     id () {
       return this.$route.params.id
-    },
-    groupedBranchServices () {
-      const obj = {}
-
-      this.businessServices.forEach((s) => {
-        if (!s.j || !s.j.group) {
-          return
-        }
-        const category = s.j.group
-
-        if (!obj[category]) {
-          obj[category] = []
-        }
-
-        if (!obj[category].includes(s)) {
-          obj[category].push(s)
-        }
-      })
-
-      return obj
     },
     branchServiceCategories () {
       const res = []

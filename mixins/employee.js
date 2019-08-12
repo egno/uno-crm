@@ -3,7 +3,8 @@ import { mapState } from 'vuex'
 export const employeesCategorized = {
   data () {
     return {
-      selectedCategories: []
+      selectedCategories: [],
+      selectedOnStart: false
     }
   },
   computed: {
@@ -25,6 +26,9 @@ export const employeesCategorized = {
         return
       }
       this.selectedCategories = this.employeesCategories.slice()
+      if (!this.selectedOnStart) {
+        this.selectedOnStart = true
+      }
     },
     toggleAll () {
       if (this.selectedCategories.length === this.employeesCategories.length) {

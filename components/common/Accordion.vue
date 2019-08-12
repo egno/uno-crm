@@ -1,12 +1,12 @@
 <template>
-  <div class="accordion" :class="{ _expanded: expanded }">
-    <div class="accordion__header" @click="expanded = !expanded">
+  <div class="accordion" :class="{ _expanded: isOpen }">
+    <div class="accordion__header" @click="onClick">
       <slot name="heading" />
     </div>
-    <div v-show="expanded" class="accordion__container">
+    <div v-show="isOpen" class="accordion__container">
       <slot name="content" />
     </div>
-    <div v-show="$slots.footer && expanded" class="accordion__footer">
+    <div v-show="$slots.footer && isOpen" class="accordion__footer">
       <slot name="footer" />
     </div>
   </div>
@@ -14,9 +14,35 @@
 
 <script>
 export default {
+  model: {
+    prop: 'expanded',
+    event: 'click'
+  },
+  props: {
+    expanded: {
+      type: Boolean,
+      default: null
+    }
+  },
   data () {
     return {
-      expanded: false
+      expandedData: false
+    }
+  },
+  computed: {
+    isOpen () {
+      return this.expanded !== null ? this.expanded : this.expandedData
+    }
+  },
+  created () {
+    if (this.expanded !== null) {
+      this.expandedData = this.expanded
+    }
+  },
+  methods: {
+    onClick () {
+      this.expandedData = !this.expandedData
+      this.$emit('click', !this.expanded)
     }
   }
 }
@@ -33,7 +59,7 @@ export default {
     cursor: pointer;
     background: rgba(137, 149, 175, 0.1);
     font-family: Lato, sans-serif;
-    font-weight: 900;
+    font-weight: 600;
     font-size: 14px;
     border-bottom: 1px solid transparent;
 
