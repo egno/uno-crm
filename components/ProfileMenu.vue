@@ -106,7 +106,7 @@ export default {
     ...mapGetters({
       loggedIn: 'user/loggedIn',
       avatar: 'user/userAvatar',
-      userID: 'user/userLogin',
+      userID: 'user/userID',
       userInfo: 'user/userInfo'
     }),
     menuList () {
