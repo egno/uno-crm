@@ -37,12 +37,6 @@ export const getters = {
   userInfo: (state) => {
     return state.userInfo
   },
-  userLogin: (state, getters) => {
-    const info = getters.userInfo
-    if (info) {
-      return info.login
-    }
-  },
   userRole: (state, getters) => {
     const info = getters.userInfo
     if (info) {

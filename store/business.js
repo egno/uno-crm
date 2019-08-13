@@ -16,7 +16,6 @@ const state = () => ({
     'Барбершоп'
   ],
   dayVisits: [],
-  businessEmployees: [],
   businessServices: [],
   isLoadingEmployees: false,
   isLoadingServices: false
@@ -48,8 +47,6 @@ const getters = {
   }),
   businessName: (state, getters) =>
     getters.businessInfo && getters.businessInfo.name,
-  businessInn: state =>
-    state.businessInfo && state.businessInfo.j && state.businessInfo.j.inn,
   businessServiceCount: (state, getters) =>
     getters.businessServices && getters.businessServices.length,
   businessServiceCategories: (state) => {
@@ -89,9 +86,6 @@ const mutations = {
   },
   SET_BUSINESS_SERVICES (state, payload) {
     state.businessServices = payload
-  },
-  SET_BUSINESS_EMPLOYEES (state, payload) {
-    state.businessEmployees = payload
   },
   SET_LOADING_EMPLOYEES (state, payload) {
     state.isLoadingEmployees = payload
@@ -143,7 +137,7 @@ const actions = {
       .then(res => res.data[0])
       .then((res) => {
         commit('SET_BUSINESS_INFO', res)
-        dispatch('employee/loadEmployee', businessId, { root: true })
+        dispatch('employee/loadEmployees', businessId, { root: true })
         if (getters.businessIsFilial) {
           dispatch('loadBusinessServices', businessId)
           dispatch('loadBusinessEmployees', businessId)
@@ -179,7 +173,7 @@ const actions = {
       .get(path)
       .then(res => res.data)
       .then((res) => {
-        commit('SET_BUSINESS_EMPLOYEES', sortBy(res, e => e.j.name))
+        commit('employee/LOAD_EMPLOYEES', sortBy(res, e => e.j.name), { root: true })
       })
       .catch(err => commit('alerts/ADD_ALERT', makeAlert(err), { root: true }))
       .finally(() => {

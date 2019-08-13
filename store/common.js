@@ -127,13 +127,6 @@ export const mutations = {
 }
 
 export const actions = {
-  // todo check where does it need
-  closeMessageWindow ({ commit, dispatch }, payload) {
-    if (payload) {
-      dispatch('sendMessage', payload)
-    }
-    commit('MESSAGE_WINDOW', false)
-  },
   closeProfileDrawer ({ commit }) {
     commit('PROFILE_DRAWER', false)
   },
@@ -142,24 +135,6 @@ export const actions = {
   },
   selectVisit ({ commit }, payload) {
     commit('SELECT_VISIT', payload)
-  },
-  sendMessage ({ commit }, payload) {
-    if (!payload) { return }
-    const path = 'rpc/send_message'
-    Api()
-      .post(path, payload)
-      .then(res => res.data)
-      .then((res) => {
-        if (res.status === 'sended') {
-          commit('alerts/ADD_ALERT', {
-            message:
-              'Мы уже решаем эту проблему! При необходимости мы свяжемся с вами'
-          }, { root: true })
-        } else {
-          commit('alerts/ADD_ALERT', res, { root: true })
-        }
-      })
-      .catch(err => commit('alerts/ADD_ALERT', makeAlert(err), { root: true }))
   },
   setActions ({ commit }, payload) {
     commit('SET_ACTIONS', payload)

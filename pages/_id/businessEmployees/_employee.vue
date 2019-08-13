@@ -280,7 +280,7 @@ export default {
     ...mapActions({
       alert: 'alerts/alert',
       deleteEmployee: 'employee/deleteEmployee',
-      setEmployeeItem: 'employee/setEmployeeItem',
+      addEmployeeItem: 'employee/addEmployeeItem',
       loadBusinessServices: 'business/loadBusinessServices'
     }),
     ...mapMutations({
@@ -301,7 +301,7 @@ export default {
         this.employeeId === 'new' ? { parent: this.id } : {}
       )
       this.employee.load(this.employeeId).then((res) => {
-        this.setEmployeeItem(cloneDeep(res))
+        this.addEmployeeItem(cloneDeep(res))
       })
     },
     onAvatarChange (img) {
