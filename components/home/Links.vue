@@ -145,7 +145,7 @@
         </div>
         <div>
           <a
-            href="https://drive.google.com/file/d/16Lm-dS-9qN1dgbKp5gJQHiHqgOz6dz4U/view?usp=sharing"
+            href="https://drive.google.com/file/d/1nFp-fbvBCY-rX7TkJ1M0CKJsArkB9su1/view?usp=sharing"
             target="_blank"
             rel="nofollow"
             @click.native="$emit('click')"
