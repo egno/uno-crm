@@ -188,21 +188,21 @@
       <div v-if="visit.id" class="right-attached-panel__field-block _reminder">
         <v-switch
           v-if="visit.isFuture"
-          v-model="visit.status"
+          v-model="status"
           label="Клиент подтвердил запись"
           color="#5BCD5E"
           value="confirmed"
         />
         <v-switch
           v-if="!visit.isFuture"
-          v-model="visit.status"
+          v-model="status"
           label="Клиент не пришел"
           color="#EF4D37"
           value="unvisited"
         />
         <v-switch
           v-if="visit.isFuture"
-          v-model="visit.status"
+          v-model="status"
           label="Клиент отменил запись"
           color="#8995AF"
           value="canceled"
@@ -213,7 +213,7 @@
         class="right-attached-panel__field-block _reminder"
       >
         <VSelect
-          v-model="visit.j.remind"
+          v-model="remind"
           :items="reminders"
           label="напоминание"
           attach=".right-attached-panel__field-block._reminder"
@@ -221,7 +221,7 @@
       </div>
       <div class="right-attached-panel__field-block">
         <v-textarea
-          v-model="visit.j.notes"
+          v-model="notes"
           label="Комментарий"
           maxlength="500"
           counter="500"
@@ -235,18 +235,18 @@
         </div>
         <div class="visit-edit__colors">
           <div
-            v-for="color in colors"
-            :key="color"
+            v-for="col in colors"
+            :key="col"
             class="visit-edit__color-block"
           >
             <input
-              :id="color"
-              v-model="visit.j.color"
+              :id="col"
+              v-model="color"
               type="radio"
-              :value="`#${color}`"
+              :value="`#${col}`"
             >
-            <label :for="color" class="visit-edit__color-label">
-              <div :style="{ background: `#${color}` }" />
+            <label :for="col" class="visit-edit__color-label">
+              <div :style="{ background: `#${col}` }" />
             </label>
           </div>
         </div>
@@ -269,8 +269,8 @@
         </button>
         <button
           v-if="
-            visit.status === 'canceled' ||
-              visit.status === 'unvisited' ||
+            status === 'canceled' ||
+              status === 'unvisited' ||
               visit.displayStatus === 'Завершен'
           "
           type="button"
@@ -286,7 +286,7 @@
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
-import { isEqual, debounce } from 'lodash'
+import { isEqual, debounce, cloneDeep } from 'lodash'
 import TimeSelect from '~/components/calendar/TimeSelect.vue'
 import {
   dateFromISO,
@@ -298,6 +298,7 @@ import {
 import Api from '~/api/backend'
 import { makeAlert } from '~/api/utils'
 import clientMixin from '~/mixins/client'
+import Visit from '~/classes/visit'
 
 import PhoneEdit from '~/components/common/PhoneEdit.vue'
 
@@ -339,6 +340,7 @@ export default {
   data () {
     return {
       active: 0,
+      color: '',
       colors: [
         'DFC497',
         'F3AA57',
@@ -356,7 +358,9 @@ export default {
       freeTimes: [],
       message: '',
       name: '',
+      notes: '',
       phone: '',
+      remind: 0,
       reminders: [
         {
           value: 60,
@@ -387,6 +391,7 @@ export default {
       selectedEmployee: null,
       selectedServices: [],
       selectedTime: null,
+      status: '',
       suggestedClientsByPhone: [],
       lastFreeTimesRequest: {}
     }
@@ -535,23 +540,30 @@ export default {
       const startTime = `${this.selectedDate}T${this.selectedTime}:00`
       const ts1 = dateFromISO(startTime)
       const ts2 = new Date()
+      const newVisit = new Visit(cloneDeep(this.visit))
 
       ts2.setTime(ts1.getTime() + 60000 * duration)
-      this.visit.business_id = this.selectedEmployee
+      newVisit.business_id = this.selectedEmployee
         ? this.selectedEmployee.id
         : this.businessId
-      this.visit.j.duration = duration
-      this.visit.j.client.name = this.expressRecord ? null : this.name.trim()
-      this.visit.j.client.phone = this.expressRecord ? null : this.phone.trim()
-      this.visit.ts_begin = startTime
-      this.visit.ts_end = `${formatDate(ts2)}T${formatTime(ts2)}`
-      this.visit.j.services = this.selectedServices
-      if (!this.visit.j.color) {
-        this.visit.j.color =
-          '#' + this.colors[Math.floor(Math.random() * this.colors.length)]
+      newVisit.j.duration = duration
+      newVisit.j.client.name = this.expressRecord ? null : this.name.trim()
+      newVisit.j.client.phone = this.expressRecord ? null : this.phone.trim()
+      newVisit.ts_begin = startTime
+      newVisit.ts_end = `${formatDate(ts2)}T${formatTime(ts2)}`
+      newVisit.j.services = this.selectedServices
+      newVisit.j.color = this.color
+        ? this.color
+        : '#' + this.colors[Math.floor(Math.random() * this.colors.length)]
+      if (this.status) {
+        newVisit.status = this.status
       }
+      if (this.remind) {
+        newVisit.j.remind = this.remind
+      }
+      newVisit.j.notes = this.notes
 
-      this.$emit('onSave', this.visit)
+      this.$emit('onSave', newVisit)
     },
     selectClient (field, value) {
       if (value && typeof value === 'object') {
@@ -613,6 +625,20 @@ export default {
       }
       if (this.visit.id && !this.visit.clientPhone) {
         this.expressRecord = true
+      }
+      if (this.visit.status) {
+        this.status = this.visit.status
+      }
+      if (this.visit.j) {
+        if (this.visit.j.remind) {
+          this.remind = this.visit.j.remind
+        }
+        if (this.visit.j.color) {
+          this.color = this.visit.j.color
+        }
+        if (this.visit.j.notes) {
+          this.notes = this.visit.j.notes
+        }
       }
       this.loadFreeTimes()
     }

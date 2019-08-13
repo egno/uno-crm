@@ -1,7 +1,7 @@
 import { mapGetters, mapActions, mapMutations } from 'vuex'
-import Api from '@/api/backend'
-import { formatDate, getWeeks, monthDisplay } from '@/components/calendar/utils'
-import Visit from '@/classes/visit'
+import Api from '~/api/backend'
+import { formatDate, getWeeks, monthDisplay } from '~/components/calendar/utils'
+import Visit from '~/classes/visit'
 
 export default {
   data () {
