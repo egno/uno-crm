@@ -125,7 +125,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import ServicesLayout from '~/components/services/ServicesLayout.vue'
 import EditService from '~/components/services/EditService.vue'
 import ServiceCard from '~/components/services/ServiceCard.vue'
@@ -173,10 +173,8 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-      businessEmployees: state => state.business.businessEmployees
-    }),
     ...mapGetters({
+      businessEmployees: 'employee/employees',
       serviceGroups: 'service/serviceGroups',
       businessServiceCategories: 'business/businessServiceCategories',
       searchString: 'common/searchString',

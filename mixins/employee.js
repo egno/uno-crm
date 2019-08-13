@@ -1,4 +1,4 @@
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export const employeesCategorized = {
   data () {
@@ -8,8 +8,8 @@ export const employeesCategorized = {
     }
   },
   computed: {
-    ...mapState({
-      businessEmployees: state => state.business.businessEmployees
+    ...mapGetters({
+      businessEmployees: 'employee/employees'
     }),
     employeesCategories () {
       return [

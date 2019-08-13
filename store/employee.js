@@ -20,16 +20,6 @@ const getters = {
 }
 
 const mutations = {
-  ADD_CATEGORIE (state, payload) {
-    if (!payload) { return }
-    if (state.employeeCategories.some(x => x.name === payload)) { return }
-    state.employeeCategories.unshift({ name: payload })
-  },
-  ADD_POSITION (state, payload) {
-    if (!payload) { return }
-    if (state.employeePositions.some(x => x.name === payload)) { return }
-    state.employeePositions.unshift({ name: payload })
-  },
   LOAD_EMPLOYEES (state, payload) {
     state.employees = payload || []
   },
@@ -43,27 +33,16 @@ const mutations = {
   SET_CATEGORIES (state, payload) {
     state.employeeCategories = payload
   },
-  SET_EMPLOYEE_ITEM (state, payload) {
+  ADD_EMPLOYEE_ITEM (state, payload) {
     if (!(payload && payload.id)) { return }
     const idx = state.employees.findIndex(x => x.id === payload.id)
-    if (idx !== -1) {
-      state.employees.splice(idx, 1, payload)
-    } else {
+    if (idx === -1) {
       state.employees.push(payload)
     }
-  },
-  SET_POSITIONS (state, payload) {
-    state.employeePositions = payload
   }
 }
 
 const actions = {
-  addCategorie ({ commit }, payload) {
-    commit('ADD_CATEGORIE', payload)
-  },
-  addPosition ({ commit }, payload) {
-    commit('ADD_POSITION', payload)
-  },
   deleteEmployee ({ commit }, payload) {
     if (!payload) { return }
     Api()
@@ -75,7 +54,7 @@ const actions = {
         this.alert(makeAlert(err))
       })
   },
-  loadEmployee ({ commit }, businessId) {
+  loadEmployees ({ commit }, businessId) {
     commit('LOAD_EMPLOYEES', null)
     if (!businessId) {
       return
@@ -99,18 +78,8 @@ const actions = {
       })
       .catch(err => commit('alerts/ADD_ALERT', makeAlert(err), { root: true }))
   },
-  loadEmployeePositions ({ commit }) {
-    const path = 'employee_positions?name=not.is.null'
-    Api()
-      .get(path)
-      .then(res => res.data)
-      .then((res) => {
-        commit('SET_POSITIONS', res.map(x => x.name))
-      })
-      .catch(err => commit('alerts/ADD_ALERT', makeAlert(err), { root: true }))
-  },
-  setEmployeeItem ({ commit }, payload) {
-    commit('SET_EMPLOYEE_ITEM', payload)
+  addEmployeeItem ({ commit, state }, payload) {
+    commit('ADD_EMPLOYEE_ITEM', payload)
   }
 }
 
