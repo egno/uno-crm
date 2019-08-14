@@ -36,10 +36,10 @@ import Accordion from '~/components/common/Accordion.vue'
 
 export default {
   components: { Accordion },
-  mixins: [scheduleMixin],
+  mixins: [ scheduleMixin ],
   props: {
-    expanded: { type: Boolean, default: false }
-  }
+    expanded: { type: Boolean, default: false },
+  },
 }
 </script>
 

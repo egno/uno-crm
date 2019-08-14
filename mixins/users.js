@@ -4,7 +4,7 @@ import { User } from '~/classes/user'
 export default {
   data () {
     return {
-      user: {}
+      user: {},
     }
   },
   computed: {
@@ -12,11 +12,11 @@ export default {
       userLoadingState: 'user/userLoadingState',
       loggedIn: 'user/loggedIn',
       userRole: 'user/userRole',
-      userInfo: 'user/userInfo'
+      userInfo: 'user/userInfo',
     }),
     isEditorUser () {
       return this.userRole !== 'anon' && this.userRole !== 'client'
-    }
+    },
   },
   watch: {
     loggedIn (newVal) {
@@ -26,12 +26,12 @@ export default {
       } else {
         this.user = {}
       }
-    }
+    },
   },
   mounted () {
     if (this.userInfo && this.userInfo.id) {
       this.user = new User({ id: this.userInfo.id })
       this.user.load(this.userInfo.id)
     }
-  }
+  },
 }

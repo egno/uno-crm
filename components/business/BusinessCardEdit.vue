@@ -298,20 +298,20 @@ export default {
     BusinessScheduleEdit,
     Avatar,
     VueAvatarEditor,
-    MainButton
+    MainButton,
   },
-  mixins: [backendMixins, businessMixins, scheduleMixin],
+  mixins: [ backendMixins, businessMixins, scheduleMixin ],
   props: {
     businessInfo: {
       type: Object,
       default () {
         return {}
-      }
+      },
     },
     currentTab: {
       type: String,
-      default: 'infoTab'
-    }
+      default: 'infoTab',
+    },
   },
   data () {
     const newBusiness = cloneDeep(this.businessInfo)
@@ -329,7 +329,7 @@ export default {
           true,
         required: v => !!v || 'Обязательное поле',
         uriLength: value =>
-          (value && (value.length <= 150 || 'Слишком длинная ссылка')) || true
+          (value && (value.length <= 150 || 'Слишком длинная ссылка')) || true,
       },
       valid: false,
       schedule: undefined,
@@ -338,17 +338,17 @@ export default {
       focusedOtherLink: undefined,
       hasAddress: false,
       hasSchedule: false,
-      hasFocused: false
+      hasFocused: false,
     }
   },
   computed: {
     ...mapState({
-      categories: state => state.business.businessCategories
+      categories: state => state.business.businessCategories,
     }),
     ...mapGetters({
       userInfo: 'user/userInfo',
       businessCategories: 'business/businessCategories',
-      businessIsIndividual: 'business/businessIsIndividual'
+      businessIsIndividual: 'business/businessIsIndividual',
     }),
     avatar () {
       if (this.data.j) {
@@ -397,10 +397,10 @@ export default {
         return
       }
       return this.data.j.address.point.replace(' ', ',')
-    }
+    },
   },
   watch: {
-    'data.j.links': 'checkAddLink'
+    'data.j.links': 'checkAddLink',
   },
   created () {
     this.fetchData()
@@ -410,18 +410,18 @@ export default {
   methods: {
     ...mapActions({ alert: 'alerts/alert' }),
     ...mapMutations({
-      setBusinessInfo: 'business/SET_BUSINESS_INFO'
+      setBusinessInfo: 'business/SET_BUSINESS_INFO',
     }),
     addLink () {
       if (!this.data.j.links) {
         this.data.j.links = {
           vk: '',
           instagram: '',
-          others: [{ uri: '' }]
+          others: [ { uri: '' } ],
         }
       }
       if (!this.data.j.links.others || !this.data.j.links.others.length) {
-        this.data.j.links.others = [{ uri: '' }]
+        this.data.j.links.others = [ { uri: '' } ]
       }
 
       this.checkAddLink()
@@ -574,8 +574,8 @@ export default {
       this.schedule = newWeek
       this.hasSchedule = this.checkSchedule()
       this.$emit('formChange')
-    }
-  }
+    },
+  },
 }
 </script>
 

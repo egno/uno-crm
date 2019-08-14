@@ -100,24 +100,24 @@ export default {
   props: {
     showCategoryCheckbox: {
       type: Boolean,
-      default: false
+      default: false,
     },
     selectedEmployee: {
       type: Object,
       default () {
         return {}
-      }
+      },
     },
     visibleEmployees: {
       type: Array,
       default () {
         return []
-      }
-    }
+      },
+    },
   },
   data () {
     return {
-      showMenu: false
+      showMenu: false,
     }
   },
   computed: {
@@ -140,7 +140,7 @@ export default {
       })
 
       return obj
-    }
+    },
   },
   methods: {
     changeVisibleEmployees (employee, selected) {
@@ -173,8 +173,8 @@ export default {
       this.groupedEmployees[category].forEach(e =>
         this.changeVisibleEmployees(e, selected)
       )
-    }
-  }
+    },
+  },
 }
 </script>
 

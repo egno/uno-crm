@@ -75,24 +75,23 @@ export default {
       rules: {
         required: value => !!value || 'Обязательно для заполнения.',
         password: value => value.length > 5 || 'Слишком короткий пароль.',
-        repeatMatches: value =>
-          value === this.password || 'Введенные пароли не совпадают.'
+        repeatMatches: value => value === this.password || 'Введенные пароли не совпадают.',
       },
       show1: false,
       show2: false,
-      status: ''
+      status: '',
     }
   },
   computed: {
     ...mapGetters({ userID: 'user/userID' }),
     passwordRules () {
-      return [this.rules.required, this.rules.password]
+      return [ this.rules.required, this.rules.password ]
     },
     repeatPasswordRules () {
       return [
         this.rules.required,
         this.rules.password,
-        this.rules.repeatMatches
+        this.rules.repeatMatches,
       ]
     },
     success () {
@@ -102,10 +101,10 @@ export default {
         !!this.repeatPassword &&
         !this.repeatPasswordRules.some(r => r(this.repeatPassword) !== true)
       )
-    }
+    },
   },
   watch: {
-    response: 'processResponse'
+    response: 'processResponse',
   },
   methods: {
     processResponse () {
@@ -115,7 +114,7 @@ export default {
     save () {
       if (!this.success) { return }
       const data = {
-        pass: this.password
+        pass: this.password,
       }
       Api()
         .post('rpc/passwd', data)
@@ -123,7 +122,7 @@ export default {
         .then((res) => {
           this.response = res
         })
-    }
-  }
+    },
+  },
 }
 </script>

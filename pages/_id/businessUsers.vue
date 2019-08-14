@@ -174,7 +174,7 @@ export default {
     Avatar,
     DeleteButton,
     PageLayout,
-    Modal
+    Modal,
   },
   filters: {
     numberFormat (value) {
@@ -182,9 +182,9 @@ export default {
         return ''
       }
       return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
-    }
+    },
   },
-  mixins: [filials, Users],
+  mixins: [ filials, Users ],
   data () {
     return {
       deleteConfirm: false,
@@ -195,7 +195,9 @@ export default {
         { text: 'Роль пользователя', value: '', sortable: false },
         { text: 'Филиал', value: '', sortable: false },
         { text: 'Комментарий', value: '', sortable: false },
-        { text: '', value: '', sortable: false, width: '1' }
+        {
+          text: '', value: '', sortable: false, width: '1',
+        },
       ],
       item: {},
       items: [],
@@ -204,7 +206,7 @@ export default {
       totalItems: 0,
       visitsPanel: false,
       tooltip: false,
-      lastQuery: ''
+      lastQuery: '',
     }
   },
   computed: {
@@ -212,7 +214,7 @@ export default {
       businessId: 'business/businessId',
       businessInfo: 'business/businessInfo',
       businessIsFilial: 'business/businessIsFilial',
-      searchString: 'common/searchString'
+      searchString: 'common/searchString',
     }),
     userId () {
       return this.$route && this.$route.params && this.$route.params.user
@@ -227,27 +229,27 @@ export default {
       if (!this.pagination.rowsPerPage || !this.totalItems) { return 0 }
 
       return Math.ceil(this.totalItems / this.pagination.rowsPerPage)
-    }
+    },
   },
   watch: {
     pagination: {
       handler () {
         this.fetchData()
       },
-      deep: true
+      deep: true,
     },
     searchString: {
       handler () {
         this.debouncedFetch()
-      }
+      },
     },
     businessId: 'fetchData',
     '$route.params': {
       handler: 'onClientChange',
-      deep: true
+      deep: true,
     },
     edit: 'closeUserEditor',
-    businessIsFilial: 'getFilials'
+    businessIsFilial: 'getFilials',
   },
   created () {
     this.getFilials()
@@ -263,12 +265,12 @@ export default {
   methods: {
     ...mapActions({
       addClientsCounter: 'business/addClientsCounter',
-      alert: 'alerts/alert'
+      alert: 'alerts/alert',
     }),
     userEdit (item) {
       this.$router.push({
         name: 'id-businessUser',
-        params: { id: this.businessId, user: item.user_id }
+        params: { id: this.businessId, user: item.user_id },
       })
     },
     clientVisits (item) {
@@ -279,22 +281,24 @@ export default {
       if (!this.edit) {
         this.$router.push({
           name: 'id-businessUsers',
-          params: { id: this.businessId }
+          params: { id: this.businessId },
         })
       }
     },
     fetchData (force = false) {
       if (!this.businessId) { return }
 
-      const { sortBy, descending, page, rowsPerPage } = this.pagination
+      const {
+        sortBy, descending, page, rowsPerPage,
+      } = this.pagination
       const filter = [
         `company_id.eq.${this.businessId}`,
-        this.querySearchString
+        this.querySearchString,
       ]
         .filter(x => !!x)
         .join(',')
       const filterString = `and=(${filter})`
-      const params = [filterString]
+      const params = [ filterString ]
 
       if (sortBy && sortBy.length) {
         params.push(
@@ -391,8 +395,8 @@ export default {
           this.alert(makeAlert(err))
           return false
         })
-    }
-  }
+    },
+  },
 }
 </script>
 

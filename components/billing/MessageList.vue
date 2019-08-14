@@ -98,7 +98,7 @@ import { displayRESTTime, displayRESTDate } from '~/components/calendar/utils'
 
 export default {
   props: {
-    businessId: { type: String, default: '' }
+    businessId: { type: String, default: '' },
   },
   data () {
     return {
@@ -110,9 +110,9 @@ export default {
         {
           text: 'Статус сообщения',
           value: 'statuses->0->>code',
-          sortable: false
+          sortable: false,
         },
-        { text: 'Событие', value: 'message', sortable: false }
+        { text: 'Событие', value: 'message', sortable: false },
       ],
       smsItems: [],
       smsIsLoading: false,
@@ -120,8 +120,8 @@ export default {
       smsTotalItems: 0,
       statuses: {
         SMSDelivered: 'Доставлено',
-        SMSReserveSum: 'Отправляется'
-      }
+        SMSReserveSum: 'Отправляется',
+      },
     }
   },
   computed: {
@@ -132,11 +132,11 @@ export default {
       if (!this.smsPagination.rowsPerPage || !this.smsTotalItems) { return 0 }
 
       return Math.ceil(this.smsTotalItems / this.smsPagination.rowsPerPage)
-    }
+    },
   },
   watch: {
     businessId: 'getData',
-    page: 'getData'
+    page: 'getData',
   },
   mounted () {
     this.$nextTick(function () {
@@ -190,7 +190,7 @@ export default {
     },
     statusText (status) {
       return this.statuses[status] || status
-    }
-  }
+    },
+  },
 }
 </script>

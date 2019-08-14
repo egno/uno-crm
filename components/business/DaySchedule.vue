@@ -31,27 +31,27 @@ import ScheduleDay from '~/classes/scheduleDay'
 
 export default {
   components: { TimeEdit },
-  mixins: [scheduleMixin],
+  mixins: [ scheduleMixin ],
   props: {
     daySchedule: {
       type: Object,
       default () {
         return new ScheduleDay({
           start: '',
-          end: ''
+          end: '',
         })
-      }
-    }
+      },
+    },
   },
   data () {
     return {
       newDaySchedule: new ScheduleDay(this.daySchedule),
-      errors: []
+      errors: [],
     }
   },
   computed: {},
   watch: {
-    daySchedule: 'update'
+    daySchedule: 'update',
   },
   methods: {
     onEdit (prop, value) {
@@ -61,8 +61,8 @@ export default {
     },
     update () {
       this.newDaySchedule = new ScheduleDay(this.daySchedule)
-    }
-  }
+    },
+  },
 }
 </script>
 

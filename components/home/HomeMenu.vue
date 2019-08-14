@@ -27,13 +27,13 @@ import Links from '~/components/home/Links.vue'
 export default {
   name: 'HomeMenu',
   components: {
-    Links
+    Links,
   },
   data () {
     return {
-      menuActive: false
+      menuActive: false,
     }
-  }
+  },
 }
 </script>
 

@@ -65,14 +65,14 @@ export default {
   data () {
     return {
       showDetails: false,
-      filials: []
+      filials: [],
     }
   },
   computed: {
-    ...mapGetters({ businessId: 'business/businessId' })
+    ...mapGetters({ businessId: 'business/businessId' }),
   },
   watch: {
-    businessId: 'load'
+    businessId: 'load',
   },
   mounted () {
     this.load()
@@ -96,8 +96,8 @@ export default {
       el.select()
       document.execCommand('copy')
       document.body.removeChild(el)
-    }
-  }
+    },
+  },
 }
 </script>
 

@@ -110,21 +110,21 @@ export default {
       type: Array,
       default () {
         return []
-      }
+      },
     },
     employeeServiceGroups: {
       type: Array,
       default () {
         return []
-      }
-    }
+      },
+    },
   },
   data () {
     return {
       expanded: {},
       search: '',
       selectedGroups: [],
-      selectedServices: []
+      selectedServices: [],
     }
   },
   computed: {
@@ -154,17 +154,17 @@ export default {
       })
 
       return obj
-    }
+    },
   },
   watch: {
     employeeServiceGroups: {
       handler: 'init',
-      deep: true
+      deep: true,
     },
     employeeServices: {
       handler: 'init',
-      deep: true
-    }
+      deep: true,
+    },
   },
   created () {
     this.init()
@@ -243,8 +243,8 @@ export default {
           this.removeService(selectedService)
         })
       }
-    }
-  }
+    },
+  },
 }
 </script>
 

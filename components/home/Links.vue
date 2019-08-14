@@ -162,8 +162,8 @@ import Socials from '~/components/home/Socials.vue'
 export default {
   name: 'LinksVue',
   components: {
-    Socials
-  }
+    Socials,
+  },
 }
 </script>
 

@@ -4,21 +4,21 @@ export const employeesCategorized = {
   data () {
     return {
       selectedCategories: [],
-      selectedOnStart: false
+      selectedOnStart: false,
     }
   },
   computed: {
     ...mapGetters({
-      businessEmployees: 'employee/employees'
+      businessEmployees: 'employee/employees',
     }),
     employeesCategories () {
       return [
         ...new Set(
           this.businessEmployees &&
             this.businessEmployees.map(x => x.j && x.j.category)
-        )
+        ),
       ].sort((a, b) => (a < b ? -1 : 1))
-    }
+    },
   },
   methods: {
     removeVisibleEmployee (employee) {
@@ -52,6 +52,6 @@ export const employeesCategorized = {
       } else {
         this.selectedCategories.push(category)
       }
-    }
-  }
+    },
+  },
 }

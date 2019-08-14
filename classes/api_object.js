@@ -7,7 +7,7 @@ class ApiObject {
 
   get jsonObject () {
     if (typeof this._exportedProps === 'string') {
-      this._exportedProps = [this._exportedProps]
+      this._exportedProps = [ this._exportedProps ]
     }
     return Object.keys(this)
       .filter(

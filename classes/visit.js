@@ -25,7 +25,7 @@ class Visit {
       this.j = {
         client: {},
         services: [],
-        notes: ''
+        notes: '',
       }
     }
 
@@ -85,7 +85,7 @@ class Visit {
       { display: 'Завершен', done: true },
       { display: 'В процессе' },
       { display: 'Запись', color: '#5699ff' },
-      { display: 'Подтвердил', code: 'confirmed', color: '#5BCD5E' }
+      { display: 'Подтвердил', code: 'confirmed', color: '#5BCD5E' },
     ]
   }
 

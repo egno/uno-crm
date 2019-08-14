@@ -19,8 +19,8 @@ export default {
     this.logout()
   },
   methods: {
-    ...mapActions({ setActions: 'common/setActions', logout: 'user/logout' })
-  }
+    ...mapActions({ setActions: 'common/setActions', logout: 'user/logout' }),
+  },
 }
 </script>
 

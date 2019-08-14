@@ -82,7 +82,7 @@ export default {
     src: { type: String, default: '' },
     tile: { type: Boolean, default: false },
     required: { type: Boolean, default: false },
-    validError: { type: Boolean, default: false }
+    validError: { type: Boolean, default: false },
   },
   data () {
     return {
@@ -108,9 +108,9 @@ export default {
         { bg: 'yellow', text: 'darken' },
         { bg: 'amber', text: 'darken' },
         { bg: 'orange', text: 'darken' },
-        { bg: 'deep-orange', text: 'lighten' }
+        { bg: 'deep-orange', text: 'lighten' },
       ],
-      image_exists: false
+      image_exists: false,
     }
   },
   computed: {
@@ -133,7 +133,7 @@ export default {
     },
     validationError () {
       return !this.src
-    }
+    },
   },
   watch: {
     src (value) {
@@ -141,7 +141,7 @@ export default {
       this.$nextTick(function () {
         if (value) { this.loadImage() }
       })
-    }
+    },
   },
   mounted () {
     this.$nextTick(function () {
@@ -163,8 +163,8 @@ export default {
         }
         img.src = this.imagePath
       }, this.delay)
-    }
-  }
+    },
+  },
 }
 </script>
 

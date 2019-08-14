@@ -34,12 +34,12 @@ export default {
       type: Object,
       default () {
         return {}
-      }
-    }
+      },
+    },
   },
   data () {
     return {
-      providers: []
+      providers: [],
     }
   },
   computed: {
@@ -50,7 +50,7 @@ export default {
         this.providers &&
         this.providers.find(x => x.name === this.provider.name)
       )
-    }
+    },
   },
   mounted () {
     this.loadProviders()
@@ -66,7 +66,7 @@ export default {
     setProvider (payload) {
       this.provider.name = payload.name
       this.$emit('change', this.provider)
-    }
-  }
+    },
+  },
 }
 </script>

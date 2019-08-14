@@ -56,10 +56,10 @@ export default {
       type: String,
       default () {
         return ''
-      }
+      },
     },
     removable: { type: Boolean, default: true },
-    error: { type: Boolean, default: false }
+    error: { type: Boolean, default: false },
   },
   data () {
     return {
@@ -67,19 +67,19 @@ export default {
       rules: {
         required: value => !!value || 'Это поле обязательно для заполнения',
         counter: value =>
-          value.length === 10 || 'В номере должно быть 10 цифр'
+          value.length === 10 || 'В номере должно быть 10 цифр',
       },
-      focused: false
+      focused: false,
     }
   },
   computed: {
     allRules () {
       if (this.removable) {
-        return [this.rules.counter]
+        return [ this.rules.counter ]
       } else {
-        return [this.rules.required, this.rules.counter]
+        return [ this.rules.required, this.rules.counter ]
       }
-    }
+    },
   },
   watch: { phone: 'update' },
   mounted () {
@@ -91,7 +91,7 @@ export default {
     },
     update () {
       this.newPhone = (this.phone || '').replace(/(\+?\d?)(\d{10})$/g, '$2')
-    }
-  }
+    },
+  },
 }
 </script>

@@ -143,7 +143,9 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
+import {
+  mapState, mapGetters, mapActions, mapMutations,
+} from 'vuex'
 import axios from 'axios'
 import { cloneDeep } from 'lodash'
 import Accordion from '~/components/common/Accordion.vue'
@@ -173,9 +175,9 @@ export default {
     BusinessSchedule,
     MainButton,
     PageLayout,
-    ServiceCard
+    ServiceCard,
   },
-  mixins: [businessMixins],
+  mixins: [ businessMixins ],
   data () {
     return {
       activeTab: 0,
@@ -183,21 +185,21 @@ export default {
       dialog: false,
       isEditMode: false,
       scheduleExpanded: false,
-      valid: false
+      valid: false,
     }
   },
   computed: {
     ...mapState({
-      businessServices: state => state.business.businessServices
+      businessServices: state => state.business.businessServices,
     }),
     ...mapGetters({
       businessId: 'business/businessId',
-      businessInfo: 'business/businessInfo'
+      businessInfo: 'business/businessInfo',
     }),
     breadcrumbs () {
       const businessId = this.id
-      const employeeId = this.employeeId
-      const employee = this.employee
+      const { employeeId } = this
+      const { employee } = this
 
       if (!businessId || !employeeId || !employee) {
         return []
@@ -207,13 +209,13 @@ export default {
         {
           text: 'Сотрудники',
           disabled: false,
-          href: `/${businessId}/businessEmployees`
+          href: `/${businessId}/businessEmployees`,
         },
         {
           text: `${employee.id ? employee.name : 'Новый сотрудник'}`,
           disabled: true,
-          href: `/${businessId}/businessEmployees/${employeeId}`
-        }
+          href: `/${businessId}/businessEmployees/${employeeId}`,
+        },
       ]
     },
     empServices () {
@@ -228,7 +230,7 @@ export default {
       return [
         ...new Set(
           this.empServices.map(s => s.j && s.j.group).filter(g => !!g)
-        )
+        ),
       ]
     },
     fullName () {
@@ -262,16 +264,16 @@ export default {
       )
     },
     workDaysCount () {
-      const schedule = this.employee.j.schedule
+      const { schedule } = this.employee.j
       if (!schedule || !schedule.data || !schedule.data.length) {
         return 0
       }
 
       return schedule.data.filter(day => day && day.start && day.end).length
-    }
+    },
   },
   watch: {
-    employeeId: 'loadEmployee'
+    employeeId: 'loadEmployee',
   },
   mounted () {
     this.loadEmployee()
@@ -281,10 +283,10 @@ export default {
       alert: 'alerts/alert',
       deleteEmployee: 'employee/deleteEmployee',
       addEmployeeItem: 'employee/addEmployeeItem',
-      loadBusinessServices: 'business/loadBusinessServices'
+      loadBusinessServices: 'business/loadBusinessServices',
     }),
     ...mapMutations({
-      LOAD_EMPLOYEES: 'employee/LOAD_EMPLOYEES'
+      LOAD_EMPLOYEES: 'employee/LOAD_EMPLOYEES',
     }),
     deleteItem () {
       if (this.employeeId && this.employeeId !== 'new') {
@@ -314,7 +316,7 @@ export default {
       for (let i = 0; i < blobBin.length; i++) {
         array.push(blobBin.charCodeAt(i))
       }
-      const file = new Blob([new Uint8Array(array)], { type: 'image/png' })
+      const file = new Blob([ new Uint8Array(array) ], { type: 'image/png' })
       const formData = new FormData()
       const newFileName = `${this.uuidv4()}.png`
 
@@ -323,13 +325,13 @@ export default {
       axios
         .post(process.env.VUE_APP_UPLOAD, formData, {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('accessToken')}`
-          }
+            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+          },
         })
         .then(() => {
           this.employee.image = newFileName
         })
-        .catch(function (e) {
+        .catch((e) => {
           console.log('FAILURE!! ', e)
         })
     },
@@ -343,17 +345,16 @@ export default {
     save () {
       if (!this.employeeId) { return }
 
-      this.employee.services =
-        this.employee.services && this.employee.services.length
-          ? this.employee.services
-            .map(s => (s && typeof s === 'object' ? s.id : s))
-            .filter(s => !!s)
-          : []
+      this.employee.services = this.employee.services && this.employee.services.length
+        ? this.employee.services
+          .map(s => (s && typeof s === 'object' ? s.id : s))
+          .filter(s => !!s)
+        : []
 
       if (!this.workDaysCount) {
         this.employee.j.schedule = this.employee.j.schedule || {
           data: [],
-          type: 'week'
+          type: 'week',
         }
         this.employee.j.schedule.data = this.businessInfo.j.schedule.data
       }
@@ -365,7 +366,7 @@ export default {
         if (this.employeeId === 'new') {
           this.$router.replace({
             name: 'id-businessEmployees-employee',
-            params: { id: this.id, employee: res }
+            params: { id: this.id, employee: res },
           })
         } else {
           this.isEditMode = false
@@ -375,8 +376,8 @@ export default {
         .catch((err) => {
           this.alert(makeAlert(err))
         })
-    }
-  }
+    },
+  },
 }
 </script>
 

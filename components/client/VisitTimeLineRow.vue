@@ -56,8 +56,8 @@ export default {
       type: Object,
       default () {
         return new Visit()
-      }
-    }
+      },
+    },
   },
   data () {
     return {}
@@ -78,8 +78,8 @@ export default {
       return this.visit.status
         ? this.visit.statuses.find(s => s.code === this.visit.status)
         : this.visit.getCurrentStatus(new Date())
-    }
-  }
+    },
+  },
 }
 </script>
 

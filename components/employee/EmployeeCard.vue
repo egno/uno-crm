@@ -57,24 +57,24 @@ export default {
   filters: {
     formatServices (n) {
       return conjugateServices(n)
-    }
+    },
   },
   props: {
     employee: {
       type: Object,
       default: () => {
         return {}
-      }
+      },
     },
     servicesCount: {
       type: Number,
-      default: 0
-    }
+      default: 0,
+    },
   },
   data () {
     return {
       captionClass:
-        'caption font-weight-bold text-no-wrap grey--text text--darken-1'
+        'caption font-weight-bold text-no-wrap grey--text text--darken-1',
     }
   },
   computed: {
@@ -84,7 +84,7 @@ export default {
         this.employee.j &&
         (this.employee.j.avatar || this.employee.j.image)
       )
-    }
+    },
   },
   methods: {
     fullName (emp) {
@@ -92,8 +92,8 @@ export default {
     },
     onSave (payload) {
       this.$emit('onSave', payload)
-    }
-  }
+    },
+  },
 }
 </script>
 

@@ -15,9 +15,9 @@ export default {
   props: {
     time: {
       type: String,
-      default: ''
+      default: '',
     },
-    placeholder: { type: String, default: '00:00' }
+    placeholder: { type: String, default: '00:00' },
   },
   data () {
     return {
@@ -31,12 +31,12 @@ export default {
             !!value.match(/^(24:00|([01]?[0-9]|2[0-3]):[0-5][0-9])/) ||
             'Время должно быть в промежутке от 00:00 до 24:00'
           )
-        }
-      }
+        },
+      },
     }
   },
   watch: {
-    time: 'loadVal'
+    time: 'loadVal',
   },
   mounted () {
     this.loadVal()
@@ -50,8 +50,8 @@ export default {
       if (res && typeof res === 'boolean') {
         this.$emit('correctInput', this.val)
       }
-    }
-  }
+    },
+  },
 }
 </script>
 

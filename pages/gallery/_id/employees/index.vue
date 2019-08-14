@@ -65,10 +65,10 @@ import AddCover from '~/components/gallery/AddCover.vue'
 
 export default {
   components: { AddCover },
-  mixins: [Gallery],
+  mixins: [ Gallery ],
   data () {
     return {
-      changingEmployee: {}
+      changingEmployee: {},
     }
   },
   computed: {
@@ -82,27 +82,27 @@ export default {
             title: fullName(x),
             subtitle: x.j.category,
             /* images - фотографии самого мастера, а не его работ */
-            images: x.j.image ? [{ id: x.j.image }] : undefined
+            images: x.j.image ? [ { id: x.j.image } ] : undefined,
           }))
           .sort((a, b) => (a.subtitle < b.subtitle ? -1 : 1))
       )
     },
     breadcrumbs () {
-      const businessId = this.businessId
+      const { businessId } = this
 
       return [
         {
           text: 'Галерея',
           disabled: false,
-          href: `/gallery/${businessId}`
+          href: `/gallery/${businessId}`,
         },
         {
           text: 'Сотрудники',
           disabled: true,
-          href: `/gallery/${businessId}/employees`
-        }
+          href: `/gallery/${businessId}/employees`,
+        },
       ]
-    }
+    },
   },
   methods: {
     ...mapActions({ alert: 'alerts/alert' }),
@@ -133,13 +133,13 @@ export default {
       }
       if (!data.j.schedule.data) {
         data.j.schedule.data = [
-          ['', ''],
-          ['', ''],
-          ['', ''],
-          ['', ''],
-          ['', ''],
-          ['', ''],
-          ['', '']
+          [ '', '' ],
+          [ '', '' ],
+          [ '', '' ],
+          [ '', '' ],
+          [ '', '' ],
+          [ '', '' ],
+          [ '', '' ],
         ]
       }
       return data
@@ -161,7 +161,7 @@ export default {
       if (!employeeId) { return }
       this.changingEmployee.j = {
         ...this.changingEmployee.j,
-        ...{ image: fileNames[0].path }
+        ...{ image: fileNames[0].path },
       }
 
       Api()
@@ -172,8 +172,8 @@ export default {
         .catch((err) => {
           this.alert(makeAlert(err))
         })
-    }
-  }
+    },
+  },
 }
 </script>
 

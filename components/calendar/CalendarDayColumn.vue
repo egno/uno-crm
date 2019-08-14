@@ -86,7 +86,7 @@ import {
   areSameDates,
   dateFromISO,
   formatDate,
-  formatTime
+  formatTime,
 } from '~/components/calendar/utils'
 import Avatar from '~/components/avatar/Avatar.vue'
 
@@ -97,45 +97,45 @@ export default {
       type: Object,
       default () {
         return {}
-      }
+      },
     },
     displayFrom: {
       type: String,
-      default: ''
+      default: '',
     },
     displayTo: {
       type: String,
-      default: ''
+      default: '',
     },
     employee: {
       type: Object,
       default () {
         return {}
-      }
+      },
     },
     employeeSchedule: {
       type: Array,
       default () {
         return []
-      }
+      },
     },
     holiday: {
       type: Boolean,
-      default: false
+      default: false,
     },
     now: {
       type: Date,
       default () {
         return new Date()
-      }
+      },
     },
     showTime: { type: Boolean, default: true },
     visits: {
       type: Array,
       default () {
         return []
-      }
-    }
+      },
+    },
   },
   data () {
     const minutesOffset = this.getMinutesOffset()
@@ -159,14 +159,14 @@ export default {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
-        weekday: 'long'
-      }
+        weekday: 'long',
+      },
     }
   },
   computed: {
     ...mapGetters({
       apiTimeZone: 'common/apiTimeZone',
-      calendar: 'common/calendar'
+      calendar: 'common/calendar',
     }),
     minuteHeight () {
       /* height in pixels */
@@ -197,7 +197,7 @@ export default {
       }
 
       const times = [
-        ...Array((this.hours * this.minutes) / this.slotDuration)
+        ...Array((this.hours * this.minutes) / this.slotDuration),
       ].map((x, i) => {
         const dateTime = this.day.date.getTime()
         const d1 = new Date(dateTime + 60000 * (i * this.slotDuration))
@@ -208,13 +208,13 @@ export default {
         return {
           begin: {
             date: d1,
-            display: displayTime1
+            display: displayTime1,
           },
           end: {
             date: d2,
-            display: displayTime2
+            display: displayTime2,
           },
-          visit: this.visits.find(v => v.time === displayTime1)
+          visit: this.visits.find(v => v.time === displayTime1),
         }
       })
 
@@ -222,7 +222,7 @@ export default {
     },
     todayString () {
       return formatDate(this.today)
-    }
+    },
   },
   created () {
     this.timerId = setInterval(this.setTopOffset, 60 * 1000)
@@ -318,8 +318,8 @@ export default {
     },
     parseTime (timeString) {
       return dateFromISO(`${this.day.dateKey}T${timeString}:00`).getTime()
-    }
-  }
+    },
+  },
 }
 </script>
 

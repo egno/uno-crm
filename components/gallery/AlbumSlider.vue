@@ -79,7 +79,7 @@ import { imagePath } from '@/components/gallery/utils'
 export default {
   model: {
     prop: 'display',
-    event: 'input'
+    event: 'input',
   },
   props: {
     display: { type: Boolean, default: false },
@@ -87,13 +87,13 @@ export default {
     images: { type: Array, default: undefined },
     current: { type: Number, default: 0 },
     title: { type: String, default: '' },
-    subtitle: { type: String, default: '' }
+    subtitle: { type: String, default: '' },
   },
   data () {
     return {
       sliderCount: 4,
       selected: 0,
-      previewsParentEl: null
+      previewsParentEl: null,
     }
   },
   computed: {
@@ -107,8 +107,8 @@ export default {
       },
       set () {
         this.$emit('close')
-      }
-    }
+      },
+    },
   },
   watch: {
     display (visible) {
@@ -116,7 +116,7 @@ export default {
         this.selected = this.current
         this.scrollToSelected()
       }
-    }
+    },
   },
   methods: {
     imagePath (image) {
@@ -152,8 +152,8 @@ export default {
           .querySelector('._selected')
           .scrollIntoView({ behavior: 'smooth' })
       })
-    }
-  }
+    },
+  },
 }
 </script>
 

@@ -37,9 +37,9 @@ import { debounce } from 'lodash'
 
 export default {
   props: {
-    value: { type: [String, Object], default: undefined },
+    value: { type: [ String, Object ], default: undefined },
     label: { type: String, default: undefined },
-    prependIcon: { type: String, default: undefined }
+    prependIcon: { type: String, default: undefined },
   },
   data () {
     const vm = this
@@ -59,8 +59,8 @@ export default {
             vm.success ||
             `Адрес не найден. Проверьте правильность введенных данных`
           )
-        }
-      }
+        },
+      },
     }
   },
   computed: {
@@ -70,7 +70,7 @@ export default {
         (this.items &&
           this.items.map(x => x.name).some(x => x === this.search))
       )
-    }
+    },
   },
   watch: {
     address (val) {
@@ -83,7 +83,7 @@ export default {
         return
       }
       val !== this.address.name && this.debouncedGeocode(val)
-    }
+    },
   },
   created () {
     this.debouncedGeocode = debounce(this.geocode, 300)
@@ -141,7 +141,7 @@ export default {
                 addressComponents,
                 point:
                   x.GeoObject && x.GeoObject.Point && x.GeoObject.Point.pos,
-                updated: dt.toISOString()
+                updated: dt.toISOString(),
               }
             })
           this.loading = false
@@ -149,8 +149,8 @@ export default {
         .catch(() => {
           this.loading = false
         })
-    }
-  }
+    },
+  },
 }
 </script>
 

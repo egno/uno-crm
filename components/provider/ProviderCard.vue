@@ -22,13 +22,13 @@ export default {
       type: Object,
       default () {
         return {}
-      }
-    }
+      },
+    },
   },
   methods: {
     logo (provider) {
       return logo(provider)
-    }
-  }
+    },
+  },
 }
 </script>

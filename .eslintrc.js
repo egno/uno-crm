@@ -24,18 +24,20 @@ module.exports = {
     'import/no-unassigned-import': 0,
     'semi': ['error', 'never'],
     'no-console': 'off',
-    'object-curly-spacing': ["error", "always"],
-    "space-before-function-paren": [
-      "error",
+    'object-curly-spacing': ['error', 'always'],
+    'array-bracket-spacing': ['error', 'always'],
+    'space-before-function-paren': [
+      'error',
       {
-        "anonymous": "always",
-        "named": "always",
-        "asyncArrow": "always"
+        'anonymous': 'always',
+        'named': 'always',
+        'asyncArrow': 'always'
       }
     ],
     'vue/max-attributes-per-line': 0,
     'vue/no-parsing-error': [2, {
-      "invalid-first-character-of-tag-name": false
-    }]
+      'invalid-first-character-of-tag-name': false
+    }],
+    'comma-dangle': ['error', 'always-multiline'],
   }
 }

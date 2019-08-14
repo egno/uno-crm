@@ -19,15 +19,15 @@ import AddressLink from '~/components/yandex/AddressLink.vue'
 export default {
   components: { AddressLink },
   props: {
-    address: { type: [String, Object], default: null },
+    address: { type: [ String, Object ], default: null },
     captionClass: {
       type: String,
-      default: ''
-    }
+      default: '',
+    },
   },
   data () {
     return {
-      showDetails: false
+      showDetails: false,
     }
   },
   computed: {
@@ -36,7 +36,7 @@ export default {
         return this.address.name
       }
       return this.address
-    }
-  }
+    },
+  },
 }
 </script>

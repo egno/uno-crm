@@ -42,22 +42,22 @@ export function numberText (n, textArray) {
 }
 
 export function conjugateEmployee (n) {
-  const forms = ['мастер', 'мастера', 'мастеров', 'Нет мастеров']
+  const forms = [ 'мастер', 'мастера', 'мастеров', 'Нет мастеров' ]
   return numberText(n, forms)
 }
 
 export function conjugateFilial (n) {
-  const forms = ['филиал', 'филиала', 'филиалов', 'Нет филиалов']
+  const forms = [ 'филиал', 'филиала', 'филиалов', 'Нет филиалов' ]
   return numberText(n, forms)
 }
 
 export function conjugateServices (n) {
-  const forms = ['услуга', 'услуги', 'услуг', 'Нет услуг']
+  const forms = [ 'услуга', 'услуги', 'услуг', 'Нет услуг' ]
   return numberText(n, forms)
 }
 
 export function conjugateVisits (n) {
-  const forms = ['визит', 'визита', 'визитов', 'Нет визитов']
+  const forms = [ 'визит', 'визита', 'визитов', 'Нет визитов' ]
   return numberText(n, forms)
 }
 

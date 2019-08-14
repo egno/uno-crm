@@ -194,7 +194,7 @@ import MainButton from '~/components/common/MainButton.vue'
 export default {
   components: { PhoneEdit, MainButton },
   props: {
-    frole: { type: String, default: 'business' }
+    frole: { type: String, default: 'business' },
   },
   data () {
     return {
@@ -204,7 +204,7 @@ export default {
           const val = '7' + value.replace(/[^0-9]/g, '')
           return pattern.test(val) || 'Введите действительный номер телефона.'
         },
-        required: value => !!value || 'Обязательно для заполнения'
+        required: value => !!value || 'Обязательно для заполнения',
       },
       companyName: '',
       fpasswordRepeat: '',
@@ -218,26 +218,26 @@ export default {
       codeTries: 1,
       flogin: '',
       fcode: null,
-      fcodeRules: [v => !!v || 'Введите код.'],
-      froleRules: [v => !!v || 'Выберите тип бизнеса'],
+      fcodeRules: [ v => !!v || 'Введите код.' ],
+      froleRules: [ v => !!v || 'Выберите тип бизнеса' ],
       loginRules: [
         v => !!v || 'Введите действительный номер телефона или e-mail',
         v =>
           (v && v.length >= 6) ||
-          'Введите действительный номер телефона или e-mail'
+          'Введите действительный номер телефона или e-mail',
       ],
       passRules: [
         v => !!v || 'Пароль должен содержать не менее 6 символов',
         v =>
-          (v && v.length >= 6) || 'Пароль должен содержать не менее 6 символов'
+          (v && v.length >= 6) || 'Пароль должен содержать не менее 6 символов',
       ],
       passRepeatRules: [
-        v => (!!v && v === this.fpassword) || 'Пароли не совпадают'
+        v => (!!v && v === this.fpassword) || 'Пароли не совпадают',
       ],
       offerAgree: false,
       userAlreadyInitialized: false,
       userName: '',
-      alreadyUsedPhone: false
+      alreadyUsedPhone: false,
     }
   },
   computed: {
@@ -246,7 +246,7 @@ export default {
       roles: 'business/businessCategories',
       avatar: 'user/userAvatar',
       userID: 'user/userID',
-      userInfo: 'user/userInfo'
+      userInfo: 'user/userInfo',
     }),
     keyCode () {
       return this.$route.params.code
@@ -266,7 +266,7 @@ export default {
     },
     restoreMode () {
       return this.$route && this.$route.name === 'restorePassword'
-    }
+    },
   },
   watch: {
     userID (newVal, oldVal) {
@@ -279,7 +279,7 @@ export default {
         this.goHome()
       }
     },
-    keyCode: 'checkKeyCode'
+    keyCode: 'checkKeyCode',
   },
   mounted () {
     this.checkKeyCode()
@@ -290,7 +290,7 @@ export default {
       login: 'user/login',
       logout: 'user/logout',
       openMessageWindow: 'common/openMessageWindow',
-      register: 'common/register'
+      register: 'common/register',
     }),
     checkKeyCode () {
       if (!this.keyCode) {
@@ -300,7 +300,7 @@ export default {
     },
     goHome () {
       this.$router.push({
-        name: 'home'
+        name: 'home',
       })
     },
     registerAndLogin () {
@@ -308,7 +308,7 @@ export default {
         this.register({
           role: this.frole,
           login: this.flogin,
-          pass: this.fpassword
+          pass: this.fpassword,
         }).then(() => {
           this.$router.push({ name: 'login' })
         })
@@ -323,8 +323,8 @@ export default {
           j: {
             business_category: this.ftype,
             company_name: this.companyName,
-            user_name: this.userName
-          }
+            user_name: this.userName,
+          },
         }
         if (this.restoreMode) {
           data.j.restore = true
@@ -338,7 +338,7 @@ export default {
 
             if (data.seconds) {
               this.alert({
-                message: 'Новый код можно будет отправить через ' + data.seconds
+                message: 'Новый код можно будет отправить через ' + data.seconds,
               })
             }
             this.$nextTick(function () {
@@ -362,7 +362,7 @@ export default {
         Api()
           .post(this.url, {
             login: this.flogin,
-            code: this.fcode
+            code: this.fcode,
           })
           .then((res) => {
             if (
@@ -394,7 +394,7 @@ export default {
       Api()
         .post('rpc/check_email', {
           login: null,
-          code
+          code,
         })
         .then((res) => {
           if (res.data.status === 'confirmed') {
@@ -412,8 +412,8 @@ export default {
           console.log(err)
           this.alert(makeAlert(err))
         })
-    }
-  }
+    },
+  },
 }
 </script>
 

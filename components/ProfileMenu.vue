@@ -88,7 +88,7 @@ import Avatar from '~/components/avatar/Avatar.vue'
 export default {
   components: { Avatar },
   props: {
-    source: { type: String, default: () => '' }
+    source: { type: String, default: () => '' },
   },
   data: () => ({
     avatarSize: '24px',
@@ -100,40 +100,40 @@ export default {
     menu: false,
     snack: false,
     snackText: '',
-    snackColor: 'error'
+    snackColor: 'error',
   }),
   computed: {
     ...mapGetters({
       loggedIn: 'user/loggedIn',
       avatar: 'user/userAvatar',
       userID: 'user/userID',
-      userInfo: 'user/userInfo'
+      userInfo: 'user/userInfo',
     }),
     menuList () {
       return [
         {
           title: 'Мой профиль',
           action: 'drawer',
-          count: '!'
+          count: '!',
         },
         {
           title: 'Сообщения',
           route: { name: 'messages' },
           count: 2,
           hide:
-            this.userInfo.role !== 'admin' && this.userInfo.role !== 'manager'
+            this.userInfo.role !== 'admin' && this.userInfo.role !== 'manager',
         },
         {
           title: 'Личный кабинет',
           route: { name: 'myBusinessList' },
           hide:
-            this.userInfo.role !== 'admin' && this.userInfo.role !== 'manager'
+            this.userInfo.role !== 'admin' && this.userInfo.role !== 'manager',
         },
         {
           title: 'Выйти',
           action: 'logout',
-          url: ''
-        }
+          url: '',
+        },
       ]
     },
     displayName () {
@@ -149,7 +149,7 @@ export default {
             (this.userInfo.data.j.surname || '')) ||
         this.userID
       )
-    }
+    },
   },
   watch: {
     userInfo (newVal, oldVal) {
@@ -170,12 +170,12 @@ export default {
       ) {
         this.$router.push({ name: 'index' })
       }
-    }
+    },
   },
   methods: {
     ...mapActions({
       logout: 'user/logout',
-      openProfileDrawer: 'common/openProfileDrawer'
+      openProfileDrawer: 'common/openProfileDrawer',
     }),
     menuHandler (action) {
       this.menu = false
@@ -189,8 +189,8 @@ export default {
           break
         default:
       }
-    }
-  }
+    },
+  },
 }
 </script>
 <style lang="scss">

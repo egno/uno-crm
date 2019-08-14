@@ -40,8 +40,8 @@ class DaySchedule extends ApiObject {
       return [
         {
           timeBegin: formatTime(this._data[1]),
-          timeEnd: formatTime(this._data[2])
-        }
+          timeEnd: formatTime(this._data[2]),
+        },
       ]
     }
     return []

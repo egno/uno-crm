@@ -41,14 +41,14 @@ export default {
       type: Object,
       default () {
         return {}
-      }
-    }
+      },
+    },
   },
   computed: {
     isActiveItem () {
       return this.item.route && this.item.route.name === this.$route.name
-    }
-  }
+    },
+  },
 }
 </script>
 

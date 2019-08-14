@@ -39,24 +39,24 @@
 import PhoneEdit from '~/components/common/PhoneEdit.vue'
 export default {
   components: {
-    PhoneEdit
+    PhoneEdit,
   },
   props: {
     captionClass: {
       type: String,
       default:
-        'caption font-weight-bold text-no-wrap grey--text text--lighten-1'
+        'caption font-weight-bold text-no-wrap grey--text text--lighten-1',
     },
     phones: {
       type: Array,
       default () {
-        return ['']
-      }
-    }
+        return [ '' ]
+      },
+    },
   },
   data () {
     return {
-      newPhones: ['']
+      newPhones: [ '' ],
     }
   },
   computed: {
@@ -65,7 +65,7 @@ export default {
     },
     hasWrongPhone () {
       return this.newPhones.some(x => !x.match(/^7?\d{10}$/))
-    }
+    },
   },
   watch: { phones: 'update' },
   mounted () {
@@ -85,8 +85,8 @@ export default {
       if (!this.newPhones.length) {
         this.newPhones.push('')
       }
-    }
-  }
+    },
+  },
 }
 </script>
 <style lang="scss">

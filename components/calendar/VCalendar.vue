@@ -103,20 +103,20 @@ import calendarMixin from '~/mixins/calendar'
 export default {
   components: {
     CalendarDayBtn,
-    CalendarDayCard
+    CalendarDayCard,
   },
-  mixins: [calendarMixin],
+  mixins: [ calendarMixin ],
   props: {
     employee: {
       type: Array,
       default () {
         return []
-      }
+      },
     },
     newVisit: { type: Boolean, default: false },
     kind: { type: String, default: 'mini' },
     period: { type: String, default: 'month' },
-    showHeader: { type: Boolean, default: true }
+    showHeader: { type: Boolean, default: true },
   },
   data () {
     return {
@@ -125,8 +125,8 @@ export default {
       expanded: true,
       timeEdit: false,
       visits: [],
-      dow: ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'],
-      tooltip: false
+      dow: [ 'пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс' ],
+      tooltip: false,
     }
   },
   computed: {
@@ -134,16 +134,16 @@ export default {
       businessInfo: 'business/businessInfo',
       calendar: 'common/calendar',
       businessDayVisits: 'business/businessDayVisits',
-      schedule: 'common/schedule'
+      schedule: 'common/schedule',
     }),
     currentEmployee () {
       return this.employee[0] || this.businessId
-    }
+    },
   },
   watch: {
     workDate: 'fetchData',
     newVisit: 'onNewVisit',
-    edit: 'onCloseEdit'
+    edit: 'onCloseEdit',
   },
   mounted () {
     this.fetchData()
@@ -172,8 +172,8 @@ export default {
         this.currentVisit = visitInit()
         this.edit = true
       }
-    }
-  }
+    },
+  },
 }
 </script>
 <style lang="scss">

@@ -55,21 +55,21 @@ import { makeAlert } from '~/api/utils'
 
 export default {
   components: { AlbumSlider, GalleryImages, EmployeeBadge },
-  mixins: [Gallery],
+  mixins: [ Gallery ],
   data () {
     return {
       defaultEmployeeImage: require('@/assets/user.svg'),
       editMode: false,
       selectedImage: null,
-      fullScreen: false
+      fullScreen: false,
     }
   },
   computed: {
     ...mapGetters({ businessInfo: 'business/businessInfo' }),
     breadcrumbs () {
-      const businessId = this.businessId
-      const personalId = this.personalId
-      const currentEmployee = this.currentEmployee
+      const { businessId } = this
+      const { personalId } = this
+      const { currentEmployee } = this
 
       if (!businessId || !personalId || !currentEmployee) {
         return
@@ -79,22 +79,22 @@ export default {
         {
           text: 'Галерея',
           disabled: false,
-          href: `/gallery/${businessId}`
+          href: `/gallery/${businessId}`,
         },
         {
           text: 'Сотрудники',
           disabled: false,
-          href: `/gallery/${businessId}/employees`
+          href: `/gallery/${businessId}/employees`,
         },
         {
           text: `${currentEmployee.name} ${currentEmployee.surname}`,
           disabled: false,
-          href: `/gallery/${businessId}/employees/${personalId}`
+          href: `/gallery/${businessId}/employees/${personalId}`,
         },
         {
           text: this.service,
-          disabled: true
-        }
+          disabled: true,
+        },
       ]
     },
     service () {
@@ -105,15 +105,14 @@ export default {
         return
       }
       return this.personalServicesImages(this.personalId).filter(
-        imgData =>
-          imgData.j &&
+        imgData => imgData.j &&
           imgData.j.service &&
           imgData.j.service.includes(this.service)
       )
     },
     isSliderVisible () {
       return this.selectedImage !== null && this.selectedImage !== undefined
-    }
+    },
   },
   methods: {
     ...mapActions({ alert: 'alerts/alert' }),
@@ -138,20 +137,18 @@ export default {
     },
     addImage ({ fileNames }) {
       const url = 'gallery'
-      const personalId = this.personalId
+      const { personalId } = this
       const serviceName = this.service
 
-      const payload = fileNames.map((fileName) => {
-        return {
-          id: fileName.path,
-          business_id: this.businessId,
-          j: {
-            file_name: fileName.file,
-            service: [serviceName],
-            employee: [personalId]
-          }
-        }
-      })
+      const payload = fileNames.map(fileName => ({
+        id: fileName.path,
+        business_id: this.businessId,
+        j: {
+          file_name: fileName.file,
+          service: [ serviceName ],
+          employee: [ personalId ],
+        },
+      }))
 
       Api()
         .post(url, payload)
@@ -161,8 +158,8 @@ export default {
         .catch((err) => {
           this.alert(makeAlert(err))
         })
-    }
-  }
+    },
+  },
 }
 </script>
 

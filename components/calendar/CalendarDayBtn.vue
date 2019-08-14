@@ -46,28 +46,28 @@ export default {
       type: Object,
       default () {
         return {}
-      }
-    }
+      },
+    },
   },
   data () {
     return {
       noWorkingDay: false, // для тултипа в нерабочих днях
       tooltip: false,
       x: 0,
-      y: 0
+      y: 0,
     }
   },
   computed: {
     ...mapGetters({
       actualDate: 'common/actualDate',
-      calendar: 'common/calendar'
+      calendar: 'common/calendar',
     }),
     isDayOff () {
       return this.holiday
     },
     color () {
       return this.day.outOfRange ? 'grey' : this.isDayOff ? 'red' : ''
-    }
+    },
   },
   methods: {
     move (e) {
@@ -79,8 +79,8 @@ export default {
     onClickDate (dt) {
       this.tooltip = true
       this.$emit('onClickDate', dt)
-    }
-  }
+    },
+  },
 }
 </script>
 <style lang="scss" scoped>

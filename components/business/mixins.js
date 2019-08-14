@@ -19,8 +19,8 @@ export const businessMixins = {
       if (Array.isArray(this.data.j.phones)) {
         return this.data.j.phones
       }
-      return [this.data.j.phones]
-    }
+      return [ this.data.j.phones ]
+    },
   },
   methods: {
     prependHttpToUrl (url) {
@@ -44,7 +44,7 @@ export const businessMixins = {
         data.j.links = {
           vk: '',
           instagram: '',
-          others: [{ uri: '' }]
+          others: [ { uri: '' } ],
         }
       }
       if (!data.j.address) {
@@ -58,13 +58,13 @@ export const businessMixins = {
       }
       if (!data.j.weekSchedule.data) {
         data.j.weekSchedule.data = [
-          ['', ''],
-          ['', ''],
-          ['', ''],
-          ['', ''],
-          ['', ''],
-          ['', ''],
-          ['', '']
+          [ '', '' ],
+          [ '', '' ],
+          [ '', '' ],
+          [ '', '' ],
+          [ '', '' ],
+          [ '', '' ],
+          [ '', '' ],
         ]
       }
       return data
@@ -77,8 +77,8 @@ export const businessMixins = {
         const v = c === 'x' ? r : (r & 0x3) | 0x8
         return v.toString(16)
       })
-    }
-  }
+    },
+  },
 }
 
 export const scheduleMixin = {
@@ -87,14 +87,14 @@ export const scheduleMixin = {
       type: Object,
       default () {
         return {}
-      }
-    }
+      },
+    },
   },
   watch: {
     weekSchedule () {
       this.update()
       this.setDays()
-    }
+    },
   },
   data () {
     return {
@@ -105,11 +105,11 @@ export const scheduleMixin = {
         'Четверг',
         'Пятница',
         'Суббота',
-        'Воскресенье'
+        'Воскресенье',
       ],
       newWeekSchedule:
         this.weekSchedule && new BusinessSchedule(this.weekSchedule),
-      days: undefined
+      days: undefined,
     }
   },
   created () {
@@ -129,7 +129,7 @@ export const scheduleMixin = {
         days.push({
           dayName,
           dayIndex,
-          value: weekSchedule[dayIndex]
+          value: weekSchedule[dayIndex],
         })
       })
 
@@ -170,10 +170,10 @@ export const scheduleMixin = {
     },
     getTimeArray (timeString) {
       return !timeString
-        ? [null, null]
+        ? [ null, null ]
         : timeString.split(':').map(str => parseInt(str))
-    }
-  }
+    },
+  },
 }
 
 export const filials = {
@@ -201,6 +201,6 @@ export const filials = {
       return Api()
         .get(`business?parent=eq.${id}`)
         .then(res => res.data)
-    }
-  }
+    },
+  },
 }

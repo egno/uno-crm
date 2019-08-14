@@ -8,5 +8,5 @@ export default {
   "VUE_APP_YANDEX_ID": 0,
   "VUE_APP_DEV_PAYMASTER_ID": "0c4c55fd-2d06-416c-9f6f-54806100c501",
   "VUE_APP_PAYMASTER_ID": "1dbe24cb-c3f9-4016-b0ca-54e122225f81",
-  "VUE_APP_PROD_HOST_NAME": "uno.salon"
+  "VUE_APP_PROD_HOST_NAME": "uno.salon",
 }

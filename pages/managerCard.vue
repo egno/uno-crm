@@ -12,18 +12,18 @@ import UserProfile from '~/components/user/UserProfile.vue'
 
 export default {
   components: {
-    UserProfile
+    UserProfile,
   },
   data () {
     return {
-      data: null
+      data: null,
     }
   },
   computed: {},
   watch: {},
   mounted () {},
   methods: {
-    ...mapActions({ setActions: 'common/setActions' })
-  }
+    ...mapActions({ setActions: 'common/setActions' }),
+  },
 }
 </script>

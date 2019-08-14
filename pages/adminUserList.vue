@@ -58,7 +58,7 @@ export default {
         { text: 'Имя', value: 'j->>name' },
         { text: 'Фамилия', value: 'j->>surname' },
         { text: 'E-mail', value: 'email' },
-        { text: 'Телефон', value: 'phone' }
+        { text: 'Телефон', value: 'phone' },
       ],
       manager: undefined,
       managers: [],
@@ -66,32 +66,32 @@ export default {
       pagination: { rowsPerPage: 10 },
       totalItems: 0,
       dialog: false,
-      table: 'managers'
+      table: 'managers',
     }
   },
   computed: {
     ...mapGetters({
       loggedIn: 'user/loggedIn',
       searchString: 'common/searchString',
-      userRole: 'user/userRole'
+      userRole: 'user/userRole',
     }),
     querySearchString () {
       if (!this.searchString) {
         return null
       }
       return `or=(j->>email.ilike.*${this.searchString}*,j->>name.ilike.*${this.searchString}*,j->>name.ilike.${this.searchString}*,j->>surname.ilike.${this.searchString}*)`
-    }
+    },
   },
   watch: {
     pagination: {
       handler () {
         this.fetchData()
       },
-      deep: true
+      deep: true,
     },
     table: 'fetchData',
     searchString: 'fetchData',
-    userRole: 'fetchData'
+    userRole: 'fetchData',
   },
   methods: {
     ...mapActions({ alert: 'alerts/alert' }),
@@ -109,8 +109,10 @@ export default {
 
       this.progressQuery = true
       this.managers = []
-      const { sortBy, descending, page, rowsPerPage } = this.pagination
-      const params = [this.querySearchString]
+      const {
+        sortBy, descending, page, rowsPerPage,
+      } = this.pagination
+      const params = [ this.querySearchString ]
       if (sortBy && sortBy.length) {
         params.push(
           `order=${sortBy}${descending ? '.desc.nullslast' : '.asc.nullsfirst'}`
@@ -169,7 +171,7 @@ export default {
             this.alert(makeAlert(err))
           })
       }
-    }
-  }
+    },
+  },
 }
 </script>

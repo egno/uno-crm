@@ -131,17 +131,13 @@ import { formatDate } from '~/components/calendar/utils'
 import { conjugateVisits } from '~/components/utils'
 
 export default {
-  params: {
-    items: { type: Array, default: [] },
-    search: { type: String, default: '' }
-  },
   components: { PageLayout, EmployeeCard, Modal },
   filters: {
     formatVisit (n) {
       return conjugateVisits(n)
-    }
+    },
   },
-  mixins: [employeesCategorized],
+  mixins: [ employeesCategorized ],
   data () {
     return {
       edit: false,
@@ -149,20 +145,20 @@ export default {
       deleteModalVisible: false,
       deleteTemplate: {
         leftButton: 'ОТМЕНА',
-        rightButton: 'УДАЛИТЬ'
+        rightButton: 'УДАЛИТЬ',
       },
       hasVisits: false,
-      newEmp: undefined
+      newEmp: undefined,
     }
   },
   computed: {
     ...mapState({
-      businessServices: state => state.business.businessServices
+      businessServices: state => state.business.businessServices,
     }),
     ...mapGetters({ searchString: 'common/searchString' }),
     id () {
       return this.$route.params.id
-    }
+    },
   },
   watch: {
     employeesCategories: {
@@ -174,7 +170,7 @@ export default {
           this.selectAll()
           this.selectedOnStart = true
         }
-      }
+      },
     },
     searchString () {
       this.selectedCategories = [
@@ -182,9 +178,9 @@ export default {
           this.businessEmployees
             .filter(e => this.isMatchingSearch(e))
             .map(s => s.j.category)
-        )
+        ),
       ]
-    }
+    },
   },
   mounted () {
     this.setActions()
@@ -193,7 +189,7 @@ export default {
   methods: {
     ...mapActions({
       setActions: 'common/setActions',
-      loadBusinessEmployees: 'business/loadBusinessEmployees'
+      loadBusinessEmployees: 'business/loadBusinessEmployees',
     }),
     deleteEmployee () {
       Api()
@@ -219,8 +215,8 @@ export default {
         name: 'id-visits',
         params: {
           id: this.id,
-          date: formatDate(new Date())
-        }
+          date: formatDate(new Date()),
+        },
       })
     },
     onSave (payload) {
@@ -239,7 +235,7 @@ export default {
       data.parent = this.id
       data.type = 'E'
       if (!data.id) {
-        Api().post(`employee`, data)
+        Api().post('employee', data)
       } else {
         Api().patch(`employee?id=eq.${data.id}`, data)
       }
@@ -257,8 +253,8 @@ export default {
           this.empToDelete = emp
         })
     },
-    showEditPanel () {}
-  }
+    showEditPanel () {},
+  },
 }
 </script>
 

@@ -16,13 +16,13 @@ export default {
     ...mapGetters({ alerts: 'alerts/alerts' }),
     alert () {
       return this.alerts && this.alerts.slice(-1)[0]
-    }
+    },
   },
   methods: {
     ...mapActions({ delAlert: 'alerts/delAlert' }),
     onClose () {
       this.delAlert()
-    }
-  }
+    },
+  },
 }
 </script>

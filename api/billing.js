@@ -12,8 +12,8 @@ export default () => {
       'Content-Type': 'application/json',
       'Range-Unit': 'items',
       Prefer: 'count=exact',
-      'X-Request-ID': requestId
-    }
+      'X-Request-ID': requestId,
+    },
   }
   return axios.create(options)
 }

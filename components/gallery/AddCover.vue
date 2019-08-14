@@ -18,8 +18,8 @@ import ImageLoader from '@/components/common/ImageLoader.vue'
 export default {
   components: { ImageLoader },
   props: {
-    text: { type: String, default: 'Добавить обложку' }
-  }
+    text: { type: String, default: 'Добавить обложку' },
+  },
 }
 </script>
 

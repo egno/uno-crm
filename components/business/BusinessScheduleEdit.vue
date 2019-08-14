@@ -48,10 +48,10 @@ import Tumbler from '~/components/common/Tumbler.vue'
 
 export default {
   components: { DaySchedule, Tumbler },
-  mixins: [scheduleMixin],
+  mixins: [ scheduleMixin ],
   data () {
     return {
-      forAllDays: false
+      forAllDays: false,
     }
   },
   methods: {
@@ -142,8 +142,8 @@ export default {
       }
 
       return false
-    }
-  }
+    },
+  },
 }
 </script>
 <style lang="scss">

@@ -13,12 +13,12 @@ const state = () => ({
     'Тату салон',
     'Студия красоты',
     'Массажный салон',
-    'Барбершоп'
+    'Барбершоп',
   ],
   dayVisits: [],
   businessServices: [],
   isLoadingEmployees: false,
-  isLoadingServices: false
+  isLoadingServices: false,
 })
 
 const getters = {
@@ -26,7 +26,7 @@ const getters = {
   businessParent: state => state.businessInfo && state.businessInfo.parent,
   businessCategories: state => [
     ...state.businessCategories,
-    ...state.businessIndividualCategories
+    ...state.businessIndividualCategories,
   ],
   businessCategory: state =>
     state.businessInfo && state.businessInfo.j && state.businessInfo.j.category,
@@ -38,12 +38,12 @@ const getters = {
       category:
         state.businessInfo &&
         state.businessInfo.j &&
-        state.businessInfo.j.category
+        state.businessInfo.j.category,
     },
     ...{
       name:
-        state.businessInfo && state.businessInfo.j && state.businessInfo.j.name
-    }
+        state.businessInfo && state.businessInfo.j && state.businessInfo.j.name,
+    },
   }),
   businessName: (state, getters) =>
     getters.businessInfo && getters.businessInfo.name,
@@ -55,7 +55,7 @@ const getters = {
         state.businessServices
           .map(service => service.j && service.j.group)
           .filter(name => !!name)
-      )
+      ),
     ]
   },
   businessDayVisits: state => state.dayVisits,
@@ -68,7 +68,7 @@ const getters = {
   businessIsFilial: state =>
     state.businessInfo && !!state.businessInfo.parent,
   businessSchedule: state =>
-    state.businessInfo && state.businessInfo.j && state.businessInfo.j.schedule
+    state.businessInfo && state.businessInfo.j && state.businessInfo.j.schedule,
 }
 
 const mutations = {
@@ -92,7 +92,7 @@ const mutations = {
   },
   SET_LOADING_SERVICES (state, payload) {
     state.isLoadingServices = payload
-  }
+  },
 }
 
 const actions = {
@@ -179,12 +179,12 @@ const actions = {
       .finally(() => {
         commit('SET_LOADING_EMPLOYEES', false)
       })
-  }
+  },
 }
 
 export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 }

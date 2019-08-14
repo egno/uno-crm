@@ -97,27 +97,27 @@ export default {
       type: Date,
       default () {
         return new Date()
-      }
+      },
     },
     selected: { type: Boolean, default: false },
     services: {
       type: Array,
       default () {
         return []
-      }
+      },
     },
     visit: {
       type: Object,
       default () {
         return {}
-      }
-    }
+      },
+    },
   },
   data () {
     return {
       slotDuration: 15 /* smallest slot duration in minutes  */,
       slotHeight: 55.5 /* smallest slot height in px */,
-      showTooltip: false
+      showTooltip: false,
     }
   },
   computed: {
@@ -158,12 +158,12 @@ export default {
     },
     timeStart () {
       return this.visit.time
-    }
+    },
   },
   methods: {
     ...mapActions({
       selectBreak: 'common/selectBreak',
-      selectVisit: 'common/selectVisit'
+      selectVisit: 'common/selectVisit',
     }),
     onSelect () {
       this.$emit('unselectOthers')
@@ -182,11 +182,11 @@ export default {
     clientName () {
       const arr = this.visit.clientName
         ? this.visit.clientName.split(' ')
-        : ['Аноним', '']
+        : [ 'Аноним', '' ]
 
       return `${arr[0]} ${arr[1] ? arr[1].substring(0, 1) + '.' : ''}`
-    }
-  }
+    },
+  },
 }
 </script>
 

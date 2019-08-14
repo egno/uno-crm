@@ -251,36 +251,36 @@ import SearchSelect from '~/components/common/SearchSelect.vue'
 
 export default {
   components: { Accordion, MainButton, PhoneEdit, SearchSelect },
-  mixins: [clientMixin],
+  mixins: [ clientMixin ],
   model: {
     prop: 'visible',
-    event: 'close'
+    event: 'close',
   },
   props: {
     visible: {
       type: Boolean,
       default: false,
-      required: true
+      required: true,
     },
     client: {
       type: Object,
       default () {
         return newClient()
-      }
+      },
     },
     create: {
       type: Boolean,
       default: false,
-      required: true
+      required: true,
     },
     filial: {
       type: String,
-      default: ''
+      default: '',
     },
     companyId: {
       type: String,
-      default: ''
-    }
+      default: '',
+    },
   },
   data () {
     return {
@@ -296,17 +296,17 @@ export default {
           (value && (value.length <= length || 'Слишком длинный текст')) ||
           true,
         discount: val =>
-          !val || ((val > 0 && val <= 100) || 'Неверное количество процентов')
+          !val || ((val > 0 && val <= 100) || 'Неверное количество процентов'),
       },
-      samePhone: ''
+      samePhone: '',
     }
   },
   watch: {
     'client.id': 'checkPhones',
     'client.phones': {
       handler: 'checkPhones',
-      deep: true
-    }
+      deep: true,
+    },
   },
   beforeMount () {
     this.checkPhones()
@@ -405,7 +405,7 @@ export default {
       const month = match[2]
       const year = match[3]
       const age = currentYear - year
-      const monthLength = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+      const monthLength = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ]
 
       // Adjust for leap years
       if (year % 400 === 0 || (year % 100 !== 0 && year % 4 === 0)) {
@@ -460,8 +460,8 @@ export default {
       } else {
         this.client.fullName = client
       }
-    }
-  }
+    },
+  },
 }
 </script>
 

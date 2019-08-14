@@ -117,12 +117,13 @@ import Avatar from '~/components/avatar/Avatar.vue'
 import PhoneView from '~/components/common/PhoneView.vue'
 import { makeAlert } from '~/api/utils'
 import { displayRESTDate } from '~/components/calendar/utils'
+
 export default {
   components: { Avatar, PhoneView },
   filters: {
     date (val) {
       return val ? displayRESTDate(val) : ''
-    }
+    },
   },
   data () {
     return {
@@ -131,22 +132,22 @@ export default {
           label: 'Добавить',
           href: '/new/businessCard',
           target: '_blank',
-          default: true
-        }
+          default: true,
+        },
       ],
       data: [],
       pagination: { rowsPerPage: 10 },
       progressQuery: false,
       totalItems: 0,
       managers: [],
-      edit: undefined
+      edit: undefined,
     }
   },
   computed: {
     ...mapGetters({
       loggedIn: 'user/loggedIn',
       searchString: 'common/searchString',
-      userRole: 'user/userRole'
+      userRole: 'user/userRole',
     }),
     allowChangeManager () {
       return this.managers && this.managers.length && this.userRole === 'admin'
@@ -158,7 +159,7 @@ export default {
         { text: 'ИНН', value: 'j->>inn' },
         { text: 'Адрес', value: 'j->>address' },
         { text: 'Телефон', value: '', sortable: false },
-        { text: 'Менеджер', value: 'j->manager->>email' }
+        { text: 'Менеджер', value: 'j->manager->>email' },
       ]
       if (this.$route.name === 'myBusinessList') {
         headers.push({ text: 'Последний вход', value: 'last_login' })
@@ -174,18 +175,18 @@ export default {
         return null
       }
       return `or=(j->>email.ilike.*${this.searchString}*,j->>name.ilike.*${this.searchString}*,j->>inn.ilike.${this.searchString}*,j->>address.ilike.*${this.searchString}*)`
-    }
+    },
   },
   watch: {
     pagination: {
       handler () {
         this.fetchData()
       },
-      deep: true
+      deep: true,
     },
     table: 'changeTable',
     searchString: 'fetchData',
-    userRole: 'loadManagers'
+    userRole: 'loadManagers',
   },
   mounted () {
     this.loadManagers()
@@ -207,8 +208,10 @@ export default {
     fetchData () {
       this.progressQuery = true
       this.data = []
-      const { sortBy, descending, page, rowsPerPage } = this.pagination
-      const params = [this.querySearchString]
+      const {
+        sortBy, descending, page, rowsPerPage,
+      } = this.pagination
+      const params = [ this.querySearchString ]
       params.push('parent=is.null')
       if (sortBy && sortBy.length) {
         params.push(
@@ -222,7 +225,7 @@ export default {
         params.push(`offset=${(page - 1) * rowsPerPage}`)
       }
       if (this.$route.name === 'myBusinessList') {
-        params.push(`manager_id=not.is.null`)
+        params.push('manager_id=not.is.null')
       }
       Api()
         .get(`${this.table}?${params.filter(x => !!x).join('&')}`)
@@ -251,7 +254,7 @@ export default {
     itemSave (item) {
       this.edit = undefined
       const data = {
-        j: item.j
+        j: item.j,
       }
       Api()
         .patch(`business?id=eq.${item.id}`, data)
@@ -279,12 +282,10 @@ export default {
       Api()
         .get('managers')
         .then((res) => {
-          this.managers = res.data.map((x) => {
-            return { id: x.id, email: x.email }
-          })
+          this.managers = res.data.map(x => ({ id: x.id, email: x.email }))
         })
-    }
-  }
+    },
+  },
 }
 </script>
 

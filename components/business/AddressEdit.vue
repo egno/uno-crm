@@ -20,15 +20,15 @@ export default {
   props: {
     value: { type: String, default: undefined },
     label: { type: String, default: undefined },
-    prependIcon: { type: String, default: undefined }
+    prependIcon: { type: String, default: undefined },
   },
   data () {
     return {
-      address: ''
+      address: '',
     }
   },
   watch: {
-    value: 'fetchValue'
+    value: 'fetchValue',
   },
   mounted () {
     this.fetchValue()
@@ -37,7 +37,7 @@ export default {
   methods: {
     fetchValue () {
       this.address = this.value
-    }
-  }
+    },
+  },
 }
 </script>

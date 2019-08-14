@@ -142,16 +142,16 @@ import Accordion from '~/components/common/Accordion.vue'
 export default {
   components: {
     Accordion,
-    Slide
+    Slide,
   },
   data () {
     return {
       newsIndicators: [
         { class: 'critical', color: '#EF4D37', active: true },
         { class: 'visit-calendar', color: '#5699FF', active: true },
-        { class: 'visual', color: '#5BCD5E', active: true }
-      ]
+        { class: 'visual', color: '#5BCD5E', active: true },
+      ],
     }
-  }
+  },
 }
 </script>

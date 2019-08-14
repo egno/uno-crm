@@ -89,13 +89,13 @@ import Users from '~/mixins/users'
 export default {
   components: {
     HomeHeader,
-    ProfileMenu
+    ProfileMenu,
   },
-  mixins: [Users],
+  mixins: [ Users ],
   data () {
     return {
       searchString: '',
-      goHomeMenuActive: false
+      goHomeMenuActive: false,
     }
   },
   computed: {
@@ -106,7 +106,7 @@ export default {
       navigationVisible: 'layout/navigationVisible',
       userID: 'user/userID',
       myBusinessList: 'user/myBusinessList',
-      businessIsFilial: 'business/businessIsFilial'
+      businessIsFilial: 'business/businessIsFilial',
     }),
     defaultAction () {
       if (!(this.actions && Array.isArray(this.actions))) {
@@ -124,7 +124,7 @@ export default {
       return isBusinessRoute(this.$route.name)
     },
     showSearchInput () {
-      const routes = ['businessList', 'myBusinessList']
+      const routes = [ 'businessList', 'myBusinessList' ]
       return routes.includes(this.$route.name)
     },
     target () {
@@ -132,10 +132,10 @@ export default {
         return this.defaultAction.target
       }
       return null
-    }
+    },
   },
   watch: {
-    searchString: 'setStoreSearchString'
+    searchString: 'setStoreSearchString',
   },
   mounted () {
     this.setStoreSearchString()
@@ -145,7 +145,7 @@ export default {
       setActions: 'common/setActions',
       setBusiness: 'business/setBusiness',
       setNavigationVisible: 'layout/setNavigationVisible',
-      setSearchString: 'common/setSearchString'
+      setSearchString: 'common/setSearchString',
     }),
     goHome () {
       this.$router.push({ name: 'index' })
@@ -157,8 +157,8 @@ export default {
     },
     setStoreSearchString (newVal) {
       this.setSearchString(newVal && newVal.toLowerCase())
-    }
-  }
+    },
+  },
 }
 </script>
 <style lang="scss" scoped>

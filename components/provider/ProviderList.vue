@@ -35,15 +35,15 @@ export default {
     providers: {
       type: Array,
       default () {
-        return [{}]
-      }
-    }
+        return [ {} ]
+      },
+    },
   },
   data () {
     return {
-      showProviders: false
+      showProviders: false,
     }
-  }
+  },
 }
 </script>
 

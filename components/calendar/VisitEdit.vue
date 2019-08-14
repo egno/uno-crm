@@ -293,7 +293,7 @@ import {
   formatDate,
   formatTime,
   visitInit,
-  hyphensStringToDate
+  hyphensStringToDate,
 } from '~/components/calendar/utils'
 import Api from '~/api/backend'
 import { makeAlert } from '~/api/utils'
@@ -304,10 +304,10 @@ import PhoneEdit from '~/components/common/PhoneEdit.vue'
 
 export default {
   components: { PhoneEdit, TimeSelect },
-  mixins: [clientMixin],
+  mixins: [ clientMixin ],
   model: {
     prop: 'visible',
-    event: 'close'
+    event: 'close',
   },
   props: {
     companyId: { type: String, default: '' },
@@ -315,27 +315,27 @@ export default {
     visible: {
       type: Boolean,
       default: false,
-      required: true
+      required: true,
     },
     visit: {
       type: Object,
       default () {
         return visitInit()
-      }
+      },
     },
     page: { type: Number, default: null },
     employees: {
       type: Array,
       default () {
         return []
-      }
+      },
     },
     employee: {
       type: Object,
       default () {
         return {}
-      }
-    }
+      },
+    },
   },
   data () {
     return {
@@ -351,7 +351,7 @@ export default {
         'F37F6B',
         'DF8CB2',
         'B88AB2',
-        '8589DF'
+        '8589DF',
       ],
       error: '',
       expressRecord: false,
@@ -364,28 +364,28 @@ export default {
       reminders: [
         {
           value: 60,
-          text: 'За час'
+          text: 'За час',
         },
         {
           value: 180,
-          text: 'За 3 часа'
+          text: 'За 3 часа',
         },
         {
           value: 360,
-          text: 'За 6 часов'
+          text: 'За 6 часов',
         },
         {
           value: 720,
-          text: 'За 12 часов'
+          text: 'За 12 часов',
         },
         {
           value: 1440,
-          text: 'За сутки'
+          text: 'За сутки',
         },
         {
           value: null,
-          text: 'Не напоминать'
-        }
+          text: 'Не напоминать',
+        },
       ],
       selectedDate: null,
       selectedEmployee: null,
@@ -393,16 +393,16 @@ export default {
       selectedTime: null,
       status: '',
       suggestedClientsByPhone: [],
-      lastFreeTimesRequest: {}
+      lastFreeTimesRequest: {},
     }
   },
   computed: {
     ...mapState({
-      businessServices: state => state.business.businessServices
+      businessServices: state => state.business.businessServices,
     }),
     ...mapGetters({
       businessId: 'business/businessId',
-      businessServiceCategories: 'business/businessServiceCategories'
+      businessServiceCategories: 'business/businessServiceCategories',
     }),
     duration () {
       const reducer = (accumulator, currentService) =>
@@ -416,7 +416,7 @@ export default {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
-        weekday: 'short'
+        weekday: 'short',
       }
       return hyphensStringToDate(this.selectedDate).toLocaleString(
         'ru',
@@ -445,7 +445,7 @@ export default {
     },
     todayString () {
       return formatDate(new Date())
-    }
+    },
   },
   watch: {
     visit: 'setSelectedValues',
@@ -458,7 +458,7 @@ export default {
     },
     selectedDate: 'loadFreeTimes',
     'selectedServices.length': 'loadFreeTimes',
-    selectedEmployee: 'loadFreeTimes'
+    selectedEmployee: 'loadFreeTimes',
   },
   created () {
     this.debouncedGetClientsByPhone = debounce(this.getClientsByPhone, 350)
@@ -488,7 +488,7 @@ export default {
         dt: `${this.selectedDate}${
           this.selectedTime ? 'T' + this.selectedTime + ':00' : ''
         }`,
-        business_id: this.businessId
+        business_id: this.businessId,
       }
 
       if (this.selectedEmployee) {
@@ -641,8 +641,8 @@ export default {
         }
       }
       this.loadFreeTimes()
-    }
-  }
+    },
+  },
 }
 </script>
 

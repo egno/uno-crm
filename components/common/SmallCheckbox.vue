@@ -21,14 +21,14 @@
 export default {
   model: {
     prop: 'checked',
-    event: 'change'
+    event: 'change',
   },
   props: {
     checked: { type: Boolean, default: false },
     id: { type: String, required: true },
     name: { type: String, default: '' },
-    value: { type: String, default: '' }
-  }
+    value: { type: String, default: '' },
+  },
 }
 </script>
 <style lang="scss">

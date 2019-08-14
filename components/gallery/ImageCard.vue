@@ -14,13 +14,13 @@ export default {
     editMode: { type: Boolean, default: false },
     title: { type: String, default: '' },
     subtitle: { type: String, default: '' },
-    src: { type: String, default: undefined }
+    src: { type: String, default: undefined },
   },
   methods: {
     deleteImage () {
       this.$emit('deleteImage')
-    }
-  }
+    },
+  },
 }
 </script>
 

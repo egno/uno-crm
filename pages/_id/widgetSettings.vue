@@ -129,12 +129,12 @@ export default {
     AppTabs,
     PageLayout,
     WidgetButtonSettings,
-    FilialWidgetSettings
+    FilialWidgetSettings,
   },
   data () {
     return {
       activeTab: 0,
-      businessSettings: new BusinessSettings()
+      businessSettings: new BusinessSettings(),
     }
   },
   computed: {
@@ -142,7 +142,7 @@ export default {
     link () {
       const host = widgetHost()
       return `${host}?b=${this.businessId}`
-    }
+    },
   },
   methods: {
     copyLink () {
@@ -152,8 +152,8 @@ export default {
       el.select()
       document.execCommand('copy')
       document.body.removeChild(el)
-    }
-  }
+    },
+  },
 }
 </script>
 

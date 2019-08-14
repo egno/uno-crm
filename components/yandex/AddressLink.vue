@@ -9,11 +9,11 @@ import * as utils from '~/components/yandex/utils'
 
 export default {
   props: {
-    address: { type: String, default: null }
+    address: { type: String, default: null },
   },
   data () {
     return {
-      ymapEventBus: utils.emitter
+      ymapEventBus: utils.emitter,
     }
   },
   mounted () {
@@ -36,6 +36,6 @@ export default {
       this.ymapEventBus.$on('scriptIsLoaded', () => {})
     }
   },
-  beforeDestroy () {}
+  beforeDestroy () {},
 }
 </script>

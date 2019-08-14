@@ -19,15 +19,15 @@ import BillingApi from '~/api/billing'
 
 export default {
   props: {
-    businessId: { type: String, default: '' }
+    businessId: { type: String, default: '' },
   },
   data () {
     return {
-      balance: 0.0
+      balance: 0.0,
     }
   },
   watch: {
-    businessId: 'getBalance'
+    businessId: 'getBalance',
   },
   mounted () {
     this.$nextTick(function () {
@@ -55,7 +55,7 @@ export default {
           console.log(err)
           this.request = false
         })
-    }
-  }
+    },
+  },
 }
 </script>

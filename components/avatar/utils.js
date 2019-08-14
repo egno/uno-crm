@@ -6,7 +6,7 @@ export function canvasToFormData (img, fileName) {
   for (let i = 0; i < blobBin.length; i++) {
     array.push(blobBin.charCodeAt(i))
   }
-  const file = new Blob([new Uint8Array(array)], { type: 'image/png' })
+  const file = new Blob([ new Uint8Array(array) ], { type: 'image/png' })
   const formData = new FormData()
   const newFileName = fileName || `${uuidv4()}.png`
   formData.append('file', file, newFileName)

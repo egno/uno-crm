@@ -16,13 +16,13 @@ export default {
       type: Object,
       default () {
         return new Client()
-      }
-    }
+      },
+    },
   },
   data () {
     return {
-      item: new Client(this.client)
+      item: new Client(this.client),
     }
-  }
+  },
 }
 </script>

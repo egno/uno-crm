@@ -621,7 +621,7 @@ import {
   formatDate,
   hyphenStrToDay,
   hyphensStringToDate,
-  visitInit
+  visitInit,
 } from '~/components/calendar/utils'
 
 let Carousel
@@ -646,15 +646,15 @@ export default {
     VisitEdit,
     Carousel,
     Slide,
-    Spinner
+    Spinner,
   },
-  mixins: [calendarMixin, employeesCategorized],
+  mixins: [ calendarMixin, employeesCategorized ],
   data () {
     return {
       currentBreak: undefined,
       currentVisit: undefined,
       displayMode: 'day' /* day or week */,
-      dow: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'],
+      dow: [ 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс' ],
       edit: false,
       editVisitPage: undefined,
       now: new Date(),
@@ -662,32 +662,32 @@ export default {
       visibleEmployees: [],
       notifyHasVisits: false,
       formActions: [
-        { label: 'Создать запись', action: 'newVisit', default: true }
+        { label: 'Создать запись', action: 'newVisit', default: true },
       ],
       showEditBreak: false,
-      showDateMenu: [false, false, false, false, false, false, false],
+      showDateMenu: [ false, false, false, false, false, false, false ],
       showDesktopMenu: false,
       showMobileMenu: false,
       showSuccessModal: false,
       successTemplate: {
         master: '',
         date: '',
-        time: ''
+        time: '',
       },
       timerId: null,
-      irregularDays: []
+      irregularDays: [],
     }
   },
   computed: {
     ...mapState({
       businessServices: state => state.business.businessServices,
-      isLoadingEmployees: state => state.business.isLoadingEmployees
+      isLoadingEmployees: state => state.business.isLoadingEmployees,
     }),
     ...mapGetters({
       businessInfo: 'business/businessInfo',
       businessSchedule: 'business/businessSchedule',
       selectedBreak: 'common/selectedBreak',
-      selectedVisit: 'common/selectedVisit'
+      selectedVisit: 'common/selectedVisit',
     }),
     selectedDOW () {
       if (!this.selectedWeek) {
@@ -702,11 +702,9 @@ export default {
     },
     displayTimes () {
       const selectedEmployeeSchedule = this.selectedEmployee.j.schedule.data
-      let start =
-        selectedEmployeeSchedule &&
+      let start = selectedEmployeeSchedule &&
         selectedEmployeeSchedule.find(day => !!day[0])[0]
-      let end =
-        selectedEmployeeSchedule &&
+      let end = selectedEmployeeSchedule &&
         selectedEmployeeSchedule.find(day => !!day[1])[1]
 
       if (this.displayMode === 'day') {
@@ -743,12 +741,12 @@ export default {
     },
     todayString () {
       return formatDate(this.now)
-    }
+    },
   },
   watch: {
     '$route.params': {
       handler: 'fetchData',
-      deep: true
+      deep: true,
     },
     businessEmployees: 'initEmployee',
     businessServices: 'initEmployee',
@@ -756,7 +754,7 @@ export default {
       if (this.selectedBreak) {
         this.currentBreak = {
           ...this.selectedBreak,
-          j: { ...this.selectedBreak.j }
+          j: { ...this.selectedBreak.j },
         }
         this.showEditBreak = true
       } else {
@@ -773,12 +771,12 @@ export default {
     },
     selectedWeek: {
       handler: 'fetchData',
-      deep: true
+      deep: true,
     },
     selectedEmployee: {
       handler: 'getIrregularDays',
-      deep: true
-    }
+      deep: true,
+    },
   },
   mounted () {
     this.initEmployee()
@@ -797,7 +795,7 @@ export default {
       alert: 'alerts/alert',
       setActions: 'common/setActions',
       selectBreak: 'common/selectBreak',
-      selectVisit: 'common/selectVisit'
+      selectVisit: 'common/selectVisit',
     }),
     addNotesToBreak (payload) {
       this.currentBreak.j.notes = payload
@@ -813,7 +811,7 @@ export default {
       this.successTemplate = {
         master: '',
         date: '',
-        time: ''
+        time: '',
       }
     },
     createBreak (date, employeeId) {
@@ -821,8 +819,8 @@ export default {
         ts_begin: dateISOInLocalTimeZone(date),
         business_id: this.selectedEmployee.id,
         j: {
-          type: 'break'
-        }
+          type: 'break',
+        },
       })
 
       if (employeeId) {
@@ -836,7 +834,7 @@ export default {
     },
     createVisit (employeeId, date) {
       const visit = visitInit({
-        ts_begin: dateISOInLocalTimeZone(ceilMinutes(new Date()))
+        ts_begin: dateISOInLocalTimeZone(ceilMinutes(new Date())),
       })
 
       if (date) {
@@ -875,7 +873,7 @@ export default {
           this.irregularDays = data.map(x => ({
             date: x.dt,
             schedule: x.j.schedule,
-            employeeId: x.business_id
+            employeeId: x.business_id,
           }))
         })
     },
@@ -888,8 +886,7 @@ export default {
       ) {
         return
       }
-      const serviceWithEmployee =
-        this.businessServices &&
+      const serviceWithEmployee = this.businessServices &&
         this.businessServices.find(s => s.j.employees && s.j.employees.length)
 
       if (!serviceWithEmployee) {
@@ -958,7 +955,7 @@ export default {
         .patch(
           `/business_calendar?business_id=eq.${this.selectedEmployee.id}&dt=eq.${day.dateKey}`,
           {
-            j: { schedule: isDayOff ? averageDay : [] }
+            j: { schedule: isDayOff ? averageDay : [] },
           }
         )
         .then(() => {
@@ -969,10 +966,9 @@ export default {
       const time = payload.substring(11, 16)
       const endOfWorkDay = this.displayTimes.end
 
-      this.currentBreak.ts_end =
-        time <= endOfWorkDay
-          ? payload
-          : `${payload.substring(0, 10)}T${endOfWorkDay}`
+      this.currentBreak.ts_end = time <= endOfWorkDay
+        ? payload
+        : `${payload.substring(0, 10)}T${endOfWorkDay}`
     },
     onVisitSave (payload) {
       // todo move saving into Visit class
@@ -986,7 +982,7 @@ export default {
       ).toLocaleString('ru-RU', {
         day: 'numeric',
         month: 'long',
-        weekday: 'short'
+        weekday: 'short',
       })
       this.successTemplate.time = payload.ts_begin.substring(11, 16)
       this.successTemplate.master = master
@@ -1028,32 +1024,29 @@ export default {
         e => e.id === this.selectedEmployee.id
       )
 
-      this.selectedEmployee =
-        index < this.businessEmployees.length - 1
-          ? this.businessEmployees[index + 1]
-          : this.businessEmployees[0]
+      this.selectedEmployee = index < this.businessEmployees.length - 1
+        ? this.businessEmployees[index + 1]
+        : this.businessEmployees[0]
     },
     selectPrevEmployee () {
       const index = this.businessEmployees.findIndex(
         e => e.id === this.selectedEmployee.id
       )
 
-      this.selectedEmployee =
-        index === 0
-          ? this.businessEmployees[this.businessEmployees.length - 1]
-          : this.businessEmployees[index - 1]
+      this.selectedEmployee = index === 0
+        ? this.businessEmployees[this.businessEmployees.length - 1]
+        : this.businessEmployees[index - 1]
     },
     sendData (data) {
       if (data && data.id) {
         return Api().patch(`visit?id=eq.${data.id}`, data)
-      } else {
-        return Api().post('visit', data)
       }
+      return Api().post('visit', data)
     },
     updateStatus () {
       this.now = new Date()
-    }
-  }
+    },
+  },
 }
 </script>
 

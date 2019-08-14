@@ -70,9 +70,9 @@ import { formatDate } from '~/components/calendar/utils'
 
 export default {
   components: { MainButton, Spinner },
-  mixins: [Users],
+  mixins: [ Users ],
   props: {
-    source: { type: String, default: () => '' }
+    source: { type: String, default: () => '' },
   },
   data: () => ({
     drawer: null,
@@ -83,22 +83,22 @@ export default {
     snackText: '',
     snackColor: 'error',
     rules: {
-      required: value => !!value || 'Это поле обязательно для заполнения'
+      required: value => !!value || 'Это поле обязательно для заполнения',
     },
-    isLoading: false
+    isLoading: false,
   }),
   computed: {
     ...mapGetters({ userID: 'user/userID' }),
     loaded () {
       return this.userInfo !== undefined
-    }
+    },
   },
   watch: {
     loggedIn (newVal) {
       if (newVal) {
         this.loadBusiness()
       }
-    }
+    },
   },
   mounted () {
     this.loadBusiness()
@@ -107,7 +107,7 @@ export default {
     ...mapActions({
       login: 'user/login',
       logout: 'user/logout',
-      loadMyBusinessList: 'user/loadMyBusinessList'
+      loadMyBusinessList: 'user/loadMyBusinessList',
     }),
     goRestorePassword () {
       this.$router.push({ name: 'restorePassword' })
@@ -123,7 +123,7 @@ export default {
           this.businessCount = res.length
           if (this.userRole === 'manager' || this.userRole === 'admin') {
             this.$router.push({
-              name: 'myBusinessList'
+              name: 'myBusinessList',
             })
             return
           }
@@ -133,7 +133,7 @@ export default {
           if (this.businessCount === 1 && res[0].id && !company && !filial) {
             this.$router.push({
               name: 'id-businessCard',
-              params: { id: res[0].id }
+              params: { id: res[0].id },
             })
             return
           }
@@ -144,13 +144,13 @@ export default {
                 name: 'id-visits',
                 params: {
                   id: filial.id,
-                  date: formatDate(new Date())
-                }
+                  date: formatDate(new Date()),
+                },
               })
             } else if (filial) {
               this.$router.push({
                 name: 'id-filials',
-                params: { id: filial.parent }
+                params: { id: filial.parent },
               })
             }
             return
@@ -159,7 +159,7 @@ export default {
           if (company) {
             this.$router.push({
               name: 'id-businessCard',
-              params: { id: company.id }
+              params: { id: company.id },
             })
           }
         })
@@ -173,8 +173,8 @@ export default {
     sendLogout () {
       this.logout()
       this.$router.push({ name: 'login' })
-    }
-  }
+    },
+  },
 }
 </script>
 

@@ -79,26 +79,26 @@ export default {
   props: {
     isButtonVisible: {
       type: Boolean,
-      default: false
+      default: false,
     },
     isEditMode: {
       type: Boolean,
-      default: false
+      default: false,
     },
     isEditVisible: {
       type: Boolean,
-      default: false
+      default: false,
     },
     template: {
       type: Object,
       default () {
         return {
           headerText: '',
-          buttonText: ''
+          buttonText: '',
         }
-      }
-    }
-  }
+      },
+    },
+  },
 }
 </script>
 

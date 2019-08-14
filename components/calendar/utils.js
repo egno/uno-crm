@@ -52,7 +52,7 @@ export function formatDate (date) {
   return [
     d.getFullYear(),
     ('0' + (d.getMonth() + 1)).slice(-2),
-    ('0' + d.getDate()).slice(-2)
+    ('0' + d.getDate()).slice(-2),
   ].join('-')
 }
 
@@ -63,7 +63,7 @@ function displayDate (date) {
   return [
     ('0' + d.getDate()).slice(-2),
     ('0' + (d.getMonth() + 1)).slice(-2),
-    d.getFullYear()
+    d.getFullYear(),
   ].join('.')
 }
 
@@ -73,7 +73,7 @@ export function formatTime (date) {
 
   return [
     ('0' + d.getHours()).slice(-2),
-    ('0' + d.getMinutes()).slice(-2)
+    ('0' + d.getMinutes()).slice(-2),
   ].join(':')
 }
 
@@ -161,13 +161,13 @@ export function visitInit (visit) {
 
 export function dowDisplay (dt, format = 0) {
   const dow = [
-    ['воскресенье', 'вс'],
-    ['понедельник', 'пн'],
-    ['вторник', 'вт'],
-    ['среда', 'ср'],
-    ['четверг', 'чт'],
-    ['пятница', 'пт'],
-    ['суббота', 'сб']
+    [ 'воскресенье', 'вс' ],
+    [ 'понедельник', 'пн' ],
+    [ 'вторник', 'вт' ],
+    [ 'среда', 'ср' ],
+    [ 'четверг', 'чт' ],
+    [ 'пятница', 'пт' ],
+    [ 'суббота', 'сб' ],
   ]
   return dow[dt.getDay()][format]
 }
@@ -178,7 +178,7 @@ export function monthDisplay (dt) {
 
 export function visitStatus (status, time) {
   const s = {
-    unvisited: 'Не пришел'
+    unvisited: 'Не пришел',
   }
   const now = new Date()
   const t = dateFromISO(time)
@@ -210,7 +210,7 @@ export function hyphenStrToDay (str) {
 
   const today = new Date()
   const day = {
-    date: hyphensStringToDate(str)
+    date: hyphensStringToDate(str),
   }
 
   day.today = areSameDates(day.date, today)

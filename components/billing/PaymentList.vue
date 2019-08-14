@@ -55,7 +55,7 @@ import { displayRESTTime, displayRESTDate } from '~/components/calendar/utils'
 
 export default {
   props: {
-    businessId: { type: String, default: '' }
+    businessId: { type: String, default: '' },
   },
   data () {
     return {
@@ -63,15 +63,15 @@ export default {
         { text: 'Дата', value: 'ts', sortable: false },
         { text: 'Платежи', value: 'id', sortable: false },
         { text: 'Сумма', value: 'amount', sortable: false },
-        { text: 'Статус', value: 'status', sortable: false }
+        { text: 'Статус', value: 'status', sortable: false },
       ],
       paymentItems: [],
       paymentIsLoading: false,
       paymentPagination: { rowsPerPage: 10 },
       paymentTotalItems: 0,
       statuses: {
-        success: 'Платёж проведён'
-      }
+        success: 'Платёж проведён',
+      },
     }
   },
   computed: {
@@ -84,11 +84,11 @@ export default {
       return Math.ceil(
         this.paymentTotalItems / this.paymentPagination.rowsPerPage
       )
-    }
+    },
   },
   watch: {
     businessId: 'getData',
-    page: 'getData'
+    page: 'getData',
   },
   mounted () {
     this.$nextTick(function () {
@@ -127,7 +127,7 @@ export default {
     },
     statusText (status) {
       return this.statuses[status] || status
-    }
-  }
+    },
+  },
 }
 </script>

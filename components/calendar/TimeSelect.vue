@@ -29,22 +29,22 @@
 import {
   displayRESTTime,
   dateISOInLocalTimeZone,
-  ceilMinutes
+  ceilMinutes,
 } from '~/components/calendar/utils'
 
 export default {
   props: {
     selectedTime: {
       type: String,
-      default: ''
+      default: '',
     },
     times: {
       type: Array,
       default () {
         return []
-      }
+      },
     },
-    progress: { type: Boolean, default: false }
+    progress: { type: Boolean, default: false },
   },
   data () {
     return {
@@ -53,8 +53,8 @@ export default {
         { display: 'Утро', value: 2 },
         { display: 'День', value: 3 },
         { display: 'Вечер', value: 4 },
-        { display: 'Ночь', value: 1 }
-      ]
+        { display: 'Ночь', value: 1 },
+      ],
     }
   },
   computed: {
@@ -66,7 +66,7 @@ export default {
             this.times
               .filter(x => x.time.begin >= today)
               .map(x => displayRESTTime(x.time.begin))
-          )
+          ),
         ]
       )
     },
@@ -74,10 +74,10 @@ export default {
       return this.availableFreeTimes.filter(
         x => !this.timeOfDay || this.dayPart(x) === this.timeOfDay
       )
-    }
+    },
   },
   watch: {
-    times: 'init'
+    times: 'init',
   },
   methods: {
     dayPart (tsISO) {
@@ -88,8 +88,8 @@ export default {
     },
     init () {
       this.timeOfDay = this.timeOfDay || this.dayPart()
-    }
-  }
+    },
+  },
 }
 </script>
 

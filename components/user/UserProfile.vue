@@ -98,7 +98,7 @@ import { canvasToFormData, imagePath } from '~/components/avatar/utils'
 export default {
   components: {
     Avatar,
-    VueAvatarEditor
+    VueAvatarEditor,
   },
   data () {
     return {
@@ -119,7 +119,7 @@ export default {
         ' Косметолог',
         ' Персональный Тренер',
         ' Диетолог',
-        ' Массажист'
+        ' Массажист',
       ],
       required: v => !!v || 'Обязательное поле',
       lastNameRequired: v =>
@@ -129,7 +129,7 @@ export default {
       email: (value) => {
         const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         return !value || pattern.test(value) || 'Введите действительный e-mail.'
-      }
+      },
     }
   },
   computed: {
@@ -140,7 +140,7 @@ export default {
       userEmail: 'user/userEmail',
       userPhone: 'user/userPhone',
       userInfo: 'user/userInfo',
-      userID: 'user/userID'
+      userID: 'user/userID',
     }),
     avatarPath () {
       return imagePath(this.userAvatar)
@@ -156,10 +156,10 @@ export default {
     },
     name () {
       return this.initiales || null
-    }
+    },
   },
   watch: {
-    userID: 'load'
+    userID: 'load',
   },
   mounted () {
     this.load()
@@ -168,7 +168,7 @@ export default {
     ...mapActions({
       alert: 'alerts/alert',
       setUserAvatar: 'user/setUserAvatar',
-      uploadUserInfo: 'user/uploadUserInfo'
+      uploadUserInfo: 'user/uploadUserInfo',
     }),
     load () {
       if (!this.userID) { return }
@@ -200,7 +200,7 @@ export default {
         const data = {
           name: this.fname,
           surname: this.flastname,
-          category: this.fspecialisation || null
+          category: this.fspecialisation || null,
         }
         this.uploadUserInfo(data)
         this.$emit('close')
@@ -221,8 +221,8 @@ export default {
         .catch((err) => {
           this.alert({ message: err })
         })
-    }
-  }
+    },
+  },
 }
 </script>
 

@@ -77,7 +77,7 @@ export default {
     images: { type: Array, default: undefined },
     fixed: { type: Boolean, default: false },
     rows: { type: Number, default: 3 },
-    to: { type: Object, default: undefined }
+    to: { type: Object, default: undefined },
   },
   data () {
     return {
@@ -85,7 +85,7 @@ export default {
       data: [],
       index: 0,
       isInitial: true,
-      uploadFieldName: 'file'
+      uploadFieldName: 'file',
     }
   },
   computed: {
@@ -130,14 +130,14 @@ export default {
         this.imagesArray &&
         this.imagesArray.length > this.currentImages.length
       )
-    }
+    },
   },
   watch: {
     currentCompany: 'load',
     business: 'load',
     images: 'load',
     employee: 'load',
-    dervice: 'load'
+    dervice: 'load',
   },
   mounted () {
     this.load()
@@ -160,7 +160,7 @@ export default {
         return
       }
       if (!this.currentCompany) { return }
-      const cond = [`business_id.eq.${this.currentCompany}`]
+      const cond = [ `business_id.eq.${this.currentCompany}` ]
       if (this.service) {
         cond.push(`services.cs.{${this.service}}`)
       }
@@ -201,8 +201,8 @@ export default {
         .post(process.env.VUE_APP_UPLOAD, formData, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-            businessid: this.businessId
-          }
+            businessid: this.businessId,
+          },
         })
         .then(() => {
           const url = 'gallery'
@@ -212,15 +212,15 @@ export default {
               business_id: this.businessId,
               j: {
                 file_name: x.file,
-                service: [this.service],
-                employee: [this.employee]
-              }
+                service: [ this.service ],
+                employee: [ this.employee ],
+              },
             }
           })
           Api()
             .post(url, payload)
             .then(() => {
-              vm.data = [...payload, ...vm.data]
+              vm.data = [ ...payload, ...vm.data ]
             })
         })
         .then(() => {
@@ -230,7 +230,7 @@ export default {
           console.log('FAILURE!!')
           vm.isInitial = true
         })
-    }
-  }
+    },
+  },
 }
 </script>

@@ -57,16 +57,16 @@
 import { mapGetters } from 'vuex'
 export default {
   data: () => ({
-    adds: ['Менеджера', 'Компанию'],
+    adds: [ 'Менеджера', 'Компанию' ],
     expand: false,
-    showMenu: true
+    showMenu: true,
   }),
   computed: {
-    ...mapGetters({ navigationMini: 'layout/navigationMini' })
+    ...mapGetters({ navigationMini: 'layout/navigationMini' }),
   },
   methods: {
-    onAction () {}
-  }
+    onAction () {},
+  },
 }
 </script>
 

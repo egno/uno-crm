@@ -26,10 +26,10 @@ import { imagePath } from '@/components/avatar/utils'
 
 export default {
   components: {
-    Avatar
+    Avatar,
   },
   props: {
-    employee: { type: Object, default: undefined }
+    employee: { type: Object, default: undefined },
   },
   computed: {
     avatarPath () {
@@ -43,9 +43,9 @@ export default {
         return
       }
       return this.employee.name + ' ' + this.employee.surname
-    }
+    },
   },
-  methods: {}
+  methods: {},
 }
 </script>
 

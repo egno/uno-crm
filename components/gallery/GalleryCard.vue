@@ -33,7 +33,7 @@ export default {
     employee: { type: String, default: undefined },
     service: { type: String, default: undefined },
     images: { type: Array, default: undefined },
-    to: { type: Object, default: undefined }
+    to: { type: Object, default: undefined },
   },
   data () {
     return {}
@@ -44,9 +44,9 @@ export default {
         selected: payload,
         images: this.images,
         title: this.title,
-        subtitle: this.subtitle
+        subtitle: this.subtitle,
       })
-    }
-  }
+    },
+  },
 }
 </script>

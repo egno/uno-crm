@@ -102,19 +102,19 @@ export default {
   name: 'HomeHeader',
   components: {
     HomeMenu,
-    ProfileMenu
+    ProfileMenu,
   },
   data () {
     return {
       firstSection: null,
-      isFirstSectionInView: true
+      isFirstSectionInView: true,
     }
   },
   computed: {
     ...mapGetters({
       loggedIn: 'user/loggedIn',
       myBusinessList: 'user/myBusinessList',
-      userRole: 'user/userRole'
+      userRole: 'user/userRole',
     }),
     isDesktop () {
       if (process.client) {
@@ -128,19 +128,19 @@ export default {
         return {
           j: {
             name: '',
-            category: ''
-          }
+            category: '',
+          },
         }
       }
       const company = this.myBusinessList.find(b => b.type === 'C')
       return company || this.myBusinessList[0]
-    }
+    },
   },
   watch: {
     $route: {
       handler: 'checkElement',
-      deep: true
-    }
+      deep: true,
+    },
   },
   mounted () {
     this.checkElement()
@@ -166,7 +166,7 @@ export default {
       if (this.badge.id) {
         this.$router.push({
           name: 'id-businessCard',
-          params: { id: this.badge.id }
+          params: { id: this.badge.id },
         })
       }
     },
@@ -180,8 +180,8 @@ export default {
         bounding.bottom > 100 &&
         bounding.bottom <=
           (window.innerHeight || document.documentElement.clientHeight)
-    }
-  }
+    },
+  },
 }
 </script>
 

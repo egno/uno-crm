@@ -1,6 +1,6 @@
 function alert (message, info) {
   const a = {
-    message
+    message,
   }
   if (info) {
     a.info = info

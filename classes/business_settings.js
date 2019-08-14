@@ -83,28 +83,28 @@ class Events extends ApiObject {
   set jsonObject (newVal) {
     this.balance_level = new Event({
       ...{ title: 'SMS-уведомление по остатку на счете', amount: null, phone: null },
-      ...(newVal && newVal.balance_level)
+      ...(newVal && newVal.balance_level),
     })
     this.new_visit_client = new Event({
       ...{
-        title: 'Уведомлять клиента о новой онлайн-записи'
+        title: 'Уведомлять клиента о новой онлайн-записи',
       },
-      ...(newVal && newVal.new_visit_client)
+      ...(newVal && newVal.new_visit_client),
     })
     this.new_visit_manager = new Event({
       ...{
         title: 'Уведомлять менеджера филиала о новой онлайн-записи',
-        phone: null
+        phone: null,
       },
-      ...(newVal && newVal.new_visit_manager)
+      ...(newVal && newVal.new_visit_manager),
     })
     this.cancel_visit = new Event({
       ...{ title: 'Уведомлять сотрудника об отмене онлайн-записи', phone: null },
-      ...(newVal && newVal.cancel_visit)
+      ...(newVal && newVal.cancel_visit),
     })
     this.time_visit = new Event({
       ...{ title: 'Напоминать клиенту о предстоящем визите' },
-      ...(newVal && newVal.time_visit)
+      ...(newVal && newVal.time_visit),
     })
   }
   get jsonObject () {
