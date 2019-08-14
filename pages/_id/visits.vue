@@ -362,94 +362,14 @@
             </div>
           </div>
           <div class="main-table__desktop-menu desktop">
-            <div class="employees-selection">
-              <v-menu
-                v-model="showDesktopMenu"
-                :close-on-content-click="false"
-                min-width="182"
-                max-width="200"
-                offset-x
-                attach=".main-table__desktop-menu .employees-selection"
-              >
-                <template v-slot:activator="{ on }">
-                  <div class="employee-menu-trigger" v-on="on" />
-                </template>
-                <div class="employees-selection__menu">
-                  <!--<div v-if="displayMode === 'day'" :class="['employees-selection__item', 'v-expansion-panel__header']" @click="toggleAll">
-                    Все мастера
-                  </div>-->
-                  <v-expansion-panel expand>
-                    <v-expansion-panel-content
-                      v-for="category in employeesCategories"
-                      :key="category"
-                      :hide-actions="true"
-                    >
-                      <template v-slot:header>
-                        <VLayout align-center justify-space-between>
-                          <div>
-                            {{ category }}
-                            {{ groupedEmployees[category].length }}
-                          </div>
-                          <Chip
-                            v-if="displayMode === 'day'"
-                            :id="category"
-                            :checked="
-                              groupedEmployees[category].length ===
-                                visibleEmployees.filter(
-                                  (e) => e.j.category === category
-                                ).length
-                            "
-                            label=""
-                            :value="category"
-                            @click.native.stop
-                            @change="onGroupsChange(category, $event)"
-                          />
-                        </VLayout>
-                      </template>
-
-                      <VLayout
-                        v-for="(emp, i) in groupedEmployees[category]"
-                        :key="emp.id"
-                        justify-space-between
-                        align-center
-                        class="employees-selection__item"
-                      >
-                        <VLayout row align-center>
-                          <Avatar
-                            class="employee__avatar"
-                            :name="emp.j.name"
-                            :src="emp.j.image"
-                            size="44px"
-                          />
-                          <div class="employees-selection__emp-name">
-                            {{ emp.j.name }}
-                          </div>
-                        </VLayout>
-
-                        <Chip
-                          v-if="displayMode === 'day'"
-                          :id="emp.j.name + i"
-                          :checked="
-                            visibleEmployees.some((e) => e.id === emp.id)
-                          "
-                          label=""
-                          :value="emp.id"
-                          @change="changeVisibleEmployees(emp, $event)"
-                        />
-                        <Chip
-                          v-else
-                          :id="emp.j.name + i"
-                          :checked="selectedEmployee.id === emp.id"
-                          label=""
-                          :value="emp.id"
-                          @change="changeVisibleEmployees(emp, $event)"
-                        />
-                      </VLayout>
-                    </v-expansion-panel-content>
-                  </v-expansion-panel>
-                </div>
-              </v-menu>
-            </div>
+            <EmployeesSelection
+              :selected-employee="selectedEmployee"
+              :visible-employees="visibleEmployees"
+              :show-category-checkbox="displayMode === 'day'"
+              @changeSelectedEmployee="selectedEmployee = $event"
+              @addVisibleEmployee="visibleEmployees.push($event)"
+              @removeVisibleEmployee="removeVisibleEmployee"
+            />
           </div>
           <template v-if="displayMode === 'day'">
             <div row class="main-table__times">
@@ -687,6 +607,7 @@ import Chip from '~/components/common/Chip.vue'
 import Avatar from '~/components/avatar/Avatar.vue'
 import CalendarDayColumn from '~/components/calendar/CalendarDayColumn.vue'
 import EmployeeCard from '~/components/employee/EmployeeCard.vue'
+import EmployeesSelection from '~/components/employee/EmployeesSelection.vue'
 import BreakEdit from '~/components/calendar/BreakEdit.vue'
 import Modal from '~/components/common/Modal'
 import VisitEdit from '~/components/calendar/VisitEdit.vue'
@@ -718,6 +639,7 @@ export default {
     Avatar,
     BreakEdit,
     EmployeeCard,
+    EmployeesSelection,
     MainButton,
     Modal,
     CalendarDayColumn,
@@ -767,26 +689,6 @@ export default {
       selectedBreak: 'common/selectedBreak',
       selectedVisit: 'common/selectedVisit'
     }),
-    groupedEmployees () {
-      const obj = {}
-
-      this.businessEmployees.forEach((emp) => {
-        if (!emp.j || !emp.j.category) {
-          return
-        }
-        const category = emp.j.category
-
-        if (!obj[category]) {
-          obj[category] = []
-        }
-
-        if (!obj[category].includes(emp)) {
-          obj[category].push(emp)
-        }
-      })
-
-      return obj
-    },
     selectedDOW () {
       if (!this.selectedWeek) {
         return
@@ -899,25 +801,6 @@ export default {
     }),
     addNotesToBreak (payload) {
       this.currentBreak.j.notes = payload
-    },
-    changeVisibleEmployees (employee, selected) {
-      if (this.displayMode === 'week') {
-        if (selected) {
-          this.selectedEmployee = employee
-        }
-        return
-      }
-      if (selected) {
-        if (!this.visibleEmployees.some(e => e.id === employee.id)) {
-          this.visibleEmployees.push(employee)
-        }
-      } else {
-        const i = this.visibleEmployees.findIndex(e => e.id === employee.id)
-
-        if (i > -1) {
-          this.visibleEmployees.splice(i, 1)
-        }
-      }
     },
     changeWeek (vector) {
       const dt = new Date(this.selectedDate)
@@ -1081,22 +964,6 @@ export default {
         .then(() => {
           this.getIrregularDays()
         })
-    },
-    onGroupsChange (category, selected) {
-      if (selected) {
-        if (!this.selectedCategories.includes(category)) {
-          this.selectedCategories.push(category)
-        }
-      } else {
-        const i = this.selectedCategories.indexOf(category)
-
-        if (i > -1) {
-          this.selectedCategories.splice(i, 1)
-        }
-      }
-      this.groupedEmployees[category].forEach(e =>
-        this.changeVisibleEmployees(e, selected)
-      )
     },
     onInputBreakEnd (payload) {
       const time = payload.substring(11, 16)
@@ -1525,7 +1392,7 @@ export default {
       top: 0;
       z-index: 3;
       background-color: #fff;
-      .employee-menu-trigger {
+      .employees-selection__trigger {
         height: 100%;
         margin-left: 66px;
       }
@@ -1668,50 +1535,6 @@ export default {
     border-right: 1px solid rgba(137, 149, 175, 0.1);
     border-bottom: 1px solid rgba(137, 149, 175, 0.1);
     box-shadow: 0 2px 8px rgba(137, 149, 175, 0.1);
-    &__menu {
-      width: 182px;
-      background-color: #fff;
-    }
-    &__item {
-      padding: 7px 8px 8px 16px;
-      border-bottom: 1px solid rgba(137, 149, 175, 0.1);
-      /* &:last-child {
-          border: none;
-        }*/
-    }
-    &__emp-name {
-      margin-left: 8px;
-    }
-    .v-menu__content {
-      overflow: hidden;
-    }
-    .v-expansion-panel__header {
-      min-height: 32px;
-      padding: 7px 8px 8px 16px;
-      border-bottom: 1px solid rgba(137, 149, 175, 0.1);
-      background-color: rgba(137, 149, 175, 0.1);
-    }
-    .v-expansion-panel__container {
-      border: none;
-    }
-    .v-expansion-panel__container--active .v-expansion-panel__header {
-      background-color: #fff;
-    }
-    .checkbox {
-      display: inline-flex;
-    }
-    .checkbox__label {
-      height: 16px;
-      margin: 0;
-      padding: 0 7px;
-      border-radius: 2px;
-      border: 1px solid rgba(137, 149, 175, 0.2);
-      background-color: #fff;
-    }
-    .checkbox__input:checked + .checkbox__label {
-      background: url('~assets/images/svg/selection.svg') center/10px 8px
-      no-repeat #5699ff;
-    }
   }
 
   .employee-menu-trigger {

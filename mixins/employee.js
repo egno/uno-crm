@@ -21,6 +21,13 @@ export const employeesCategorized = {
     }
   },
   methods: {
+    removeVisibleEmployee (employee) {
+      const i = this.visibleEmployees.findIndex(e => e.id === employee.id)
+
+      if (i > -1) {
+        this.visibleEmployees.splice(i, 1)
+      }
+    },
     selectAll () {
       if (!this.employeesCategories || !this.employeesCategories.length) {
         return
