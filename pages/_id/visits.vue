@@ -26,6 +26,7 @@
                   v-model="displayMode"
                   type="radio"
                   value="day"
+                  @input="selectAllEmployees"
                 >
                 <label for="day-mode">День</label>
                 <input
@@ -33,6 +34,7 @@
                   v-model="displayMode"
                   type="radio"
                   value="week"
+                  @input="visibleEmployees = [ selectedEmployee ]"
                 >
                 <label for="week-mode">Неделя</label>
               </div>
@@ -323,7 +325,7 @@
             { 'one-day': displayMode === 'day', week: displayMode === 'week' }
           ]"
         >
-          <div class="employees">
+          <div class="employees-mobile">
             <button
               type="button"
               class="employee-menu-trigger"
@@ -363,10 +365,9 @@
           </div>
           <div class="main-table__desktop-menu desktop">
             <EmployeesSelection
-              :selected-employee="selectedEmployee"
               :visible-employees="visibleEmployees"
               :show-category-checkbox="displayMode === 'day'"
-              @changeSelectedEmployee="selectedEmployee = $event"
+              @changeSelectedEmployee="changeVisibleEmployee"
               @addVisibleEmployee="visibleEmployees.push($event)"
               @removeVisibleEmployee="removeVisibleEmployee"
             />
@@ -800,6 +801,10 @@ export default {
     addNotesToBreak (payload) {
       this.currentBreak.j.notes = payload
     },
+    changeVisibleEmployee (e) {
+      this.selectedEmployee = e
+      this.visibleEmployees = [ e ]
+    },
     changeWeek (vector) {
       const dt = new Date(this.selectedDate)
 
@@ -900,15 +905,7 @@ export default {
           break
         }
       }
-
-      this.businessEmployees.forEach((employee) => {
-        if (!this.visibleEmployees.some(emp => emp.id === employee.id)) {
-          this.visibleEmployees.push(employee)
-          if (!this.selectedCategories.includes(employee.j.category)) {
-            this.selectedCategories.push(employee.j.category)
-          }
-        }
-      })
+      this.selectAllEmployees()
     },
     isDayOff (dateString, dayIndex) {
       const irregularDay = this.getIrregularDay(
@@ -1019,23 +1016,33 @@ export default {
           this.alert(makeAlert(err))
         })
     },
+    selectAllEmployees () {
+      this.businessEmployees.forEach((employee) => {
+        if (!this.visibleEmployees.some(emp => emp.id === employee.id)) {
+          this.visibleEmployees.push(employee)
+          if (!this.selectedCategories.includes(employee.j.category)) {
+            this.selectedCategories.push(employee.j.category)
+          }
+        }
+      })
+    },
     selectNextEmployee () {
       const index = this.businessEmployees.findIndex(
         e => e.id === this.selectedEmployee.id
       )
-
-      this.selectedEmployee = index < this.businessEmployees.length - 1
+      const employee = index < this.businessEmployees.length - 1
         ? this.businessEmployees[index + 1]
         : this.businessEmployees[0]
+      this.changeVisibleEmployee(employee)
     },
     selectPrevEmployee () {
       const index = this.businessEmployees.findIndex(
         e => e.id === this.selectedEmployee.id
       )
-
-      this.selectedEmployee = index === 0
+      const employee = index === 0
         ? this.businessEmployees[this.businessEmployees.length - 1]
         : this.businessEmployees[index - 1]
+      this.changeVisibleEmployee(employee)
     },
     sendData (data) {
       if (data && data.id) {
@@ -1451,7 +1458,7 @@ export default {
     }
   }
 
-  .employees {
+  .employees-mobile {
     position: sticky;
     width: 100%;
     top: 56px;

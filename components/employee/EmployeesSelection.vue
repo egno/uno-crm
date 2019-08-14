@@ -12,7 +12,7 @@
         <div class="employees-selection__trigger" v-on="on" />
       </template>
       <div class="employees-selection__menu">
-        <!--<div v-if="showCategoryCheckbox === 'day'" :class="['employees-selection__item', 'v-expansion-panel__header']" @click="toggleAll">
+        <!--<div v-if="showCategoryCheckbox" :class="['employees-selection__item', 'v-expansion-panel__header']" @click="toggleAll">
           Все мастера
         </div>-->
         <v-expansion-panel expand>
@@ -64,19 +64,10 @@
               </VLayout>
 
               <SmallCheckbox
-                v-if="showCategoryCheckbox"
                 :id="emp.j.name + i"
                 :checked="
                   visibleEmployees.some((e) => e.id === emp.id)
                 "
-                label=""
-                :value="emp.id"
-                @change="changeVisibleEmployees(emp, $event)"
-              />
-              <SmallCheckbox
-                v-else
-                :id="emp.j.name + i"
-                :checked="selectedEmployee.id === emp.id"
                 label=""
                 :value="emp.id"
                 @change="changeVisibleEmployees(emp, $event)"
@@ -101,12 +92,6 @@ export default {
     showCategoryCheckbox: {
       type: Boolean,
       default: false,
-    },
-    selectedEmployee: {
-      type: Object,
-      default () {
-        return {}
-      },
     },
     visibleEmployees: {
       type: Array,
