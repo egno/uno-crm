@@ -31,6 +31,15 @@ export default {
         path: '/myBusinessList',
         component: resolve(__dirname, 'pages/businessList.vue')
       })
+    },
+    scrollBehavior (to, from, savedPosition) {
+      if (to.hash) {
+        return { selector: to.hash }
+      } else if (savedPosition) {
+        return savedPosition
+      } else {
+        return { x: 0, y: 0 }
+      }
     }
   },
   /*
@@ -46,6 +55,10 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.png' }
+    ],
+    noscript: [{ innerHTML: '<img src="https://vk.com/rtrg?p=VK-RTRG-393005-7wBtY" style="position:fixed; left:-999px;" alt=""/>' }],
+    script: [
+      { src: '/vk.js' }
     ]
   },
   /*
@@ -61,7 +74,8 @@ export default {
   ** Plugins and directives and filters to load before mounting the App
   */
   plugins: [
-    '~/plugins/directives_filters.js'
+    '~/plugins/directives_filters.js',
+    { src: '~/plugins/ya_metrika.js', ssr: false }
   ],
   /*
   ** Nuxt.js dev-modules

@@ -166,6 +166,7 @@ import DeleteButton from '~/components/common/DeleteButton'
 import Users from '~/mixins/users'
 import PageLayout from '~/components/common/PageLayout.vue'
 import Modal from '~/components/common/Modal'
+import { makeAlert } from '~/api/utils'
 
 export default {
   components: {
@@ -260,7 +261,10 @@ export default {
   },
   beforeDestroy () {},
   methods: {
-    ...mapActions({ addClientsCounter: 'business/addClientsCounter' }),
+    ...mapActions({
+      addClientsCounter: 'business/addClientsCounter',
+      alert: 'alerts/alert'
+    }),
     userEdit (item) {
       this.$router.push({
         name: 'id-businessUser',
@@ -378,10 +382,15 @@ export default {
     },
     onSave (item) {
       const newItem = item instanceof User ? item : new User(item)
-      newItem.save().then(() => {
-        this.fetchData(true)
-        this.edit = false
-      })
+      newItem.save()
+        .then(() => {
+          this.fetchData(true)
+          this.edit = false
+        })
+        .catch((err) => {
+          this.alert(makeAlert(err))
+          return false
+        })
     }
   }
 }

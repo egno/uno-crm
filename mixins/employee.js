@@ -1,14 +1,15 @@
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export const employeesCategorized = {
   data () {
     return {
-      selectedCategories: []
+      selectedCategories: [],
+      selectedOnStart: false
     }
   },
   computed: {
-    ...mapState({
-      businessEmployees: state => state.business.businessEmployees
+    ...mapGetters({
+      businessEmployees: 'employee/employees'
     }),
     employeesCategories () {
       return [
@@ -25,6 +26,9 @@ export const employeesCategorized = {
         return
       }
       this.selectedCategories = this.employeesCategories.slice()
+      if (!this.selectedOnStart) {
+        this.selectedOnStart = true
+      }
     },
     toggleAll () {
       if (this.selectedCategories.length === this.employeesCategories.length) {

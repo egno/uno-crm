@@ -54,11 +54,11 @@
             v-if="props.item.j.filials"
             class="caption text-no-wrap grey--text text--darken-1"
           >
-            <RouterLink
+            <nuxt-link
               :to="{ name: 'id-filials', params: { id: props.item.id } }"
             >
               Филиалов: {{ props.item.j.filials }}
-            </RouterLink>
+            </nuxt-link>
           </div>
         </td>
         <td>

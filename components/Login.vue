@@ -54,9 +54,9 @@
           Вход
         </MainButton>
       </VForm>
-      <router-link :to="{ name: 'register' }" class="login-page__no-account">
+      <nuxt-link :to="{ name: 'register' }" class="login-page__no-account">
         Ещё нет аккаунта? Зарегистрировать
-      </router-link>
+      </nuxt-link>
     </div>
   </div>
 </template>

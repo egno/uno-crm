@@ -140,10 +140,10 @@ export default {
 <style lang="scss">
   @import 'lato-font/scss/_public-api.scss';
   $lato-font-path: '~lato-font/fonts';
-  @include lato-include-font('light');
-  @include lato-include-font('normal');
-  @include lato-include-font('bold');
-  @include lato-include-font('heavy');
+  @include lato-include-font('light'); // font-weight: 300
+  @include lato-include-font('normal'); // font-weight: 400;
+  @include lato-include-font('bold'); // font-weight: 600;
+  @include lato-include-font('heavy'); // font-weight: 800;
 
   @import '~assets/styles/common';
 
@@ -402,6 +402,7 @@ export default {
       top: 99px;
       right: 0px;
       margin-right: 13px;
+      z-index: 10;
       background: url('~assets/images/svg/plus-white.svg') no-repeat center/16px
       #ef4d37;
       span {
@@ -512,7 +513,6 @@ export default {
         margin-left: 12px;
         padding: 0 4px;
         color: rgba(137, 149, 175, 0.8) !important;
-        letter-spacing: 25%;
         animation: none !important;
         z-index: 1;
       }

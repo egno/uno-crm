@@ -13,9 +13,9 @@
   >
     <VToolbar flat :dark="!mini" height="55" class="pa-0">
       <div class="logo-wrap">
-        <router-link :to="{ name: 'index' }">
+        <nuxt-link :to="{ name: 'index' }">
           <div class="logo" />
-        </router-link>
+        </nuxt-link>
       </div>
       <div v-if="isManagerMenu" class="title-action">
         <v-btn icon :class="{ 'menu-button': mini }" @click.stop="mini = !mini">
@@ -110,14 +110,20 @@ export default {
           this.$route.name === 'adminUserList')
       )
     },
-    isCompanyLevel () {
-      return (
-        this.loggedIn &&
-        this.businessInfo &&
-        (this.businessInfo.type === 'C' ||
-          (this.businessInfo.type === null &&
-            this.businessInfo.parent === null))
-      )
+    isCompanyLevel: {
+      cache: false,
+      get () {
+        const loggedIn = this.loggedIn
+        const businessInfo = this.businessInfo
+        const res = (
+          loggedIn &&
+          businessInfo &&
+          (businessInfo.type === 'C' ||
+            (businessInfo.type === null &&
+              businessInfo.parent === null))
+        )
+        return res
+      }
     },
     isSalonLevel () {
       return (

@@ -2,7 +2,7 @@
   <!--for animation of header on mobiles
     :class="{ 'mobile-transparent' : $route.name === 'features' || $route.name === 'news' }"-->
   <v-toolbar app class="home-header" flat fixed :height="isDesktop ? 146 : 80">
-    <router-link :to="{ name: 'index' }" class="home-header__logo" />
+    <nuxt-link :to="{ name: 'index' }" class="home-header__logo" />
     <VToolbarItems>
       <div class="home-header__desktop-menu">
         <a
@@ -11,25 +11,25 @@
           href="/#product"
           :class="{ current: $route.hash && $route.hash === '#product' }"
         >ПРОДУКТ</a>
-        <router-link
+        <nuxt-link
           v-else
           :to="{ name: 'index', hash: '#product' }"
           :class="{ current: $route.hash && $route.hash === '#product' }"
         >
           ПРОДУКТ
-        </router-link>
-        <router-link
+        </nuxt-link>
+        <nuxt-link
           :to="{ name: 'features' }"
           :class="{ current: $route.name === 'features' }"
         >
           СЕРВИСЫ
-        </router-link>
-        <router-link
+        </nuxt-link>
+        <nuxt-link
           :to="{ name: 'news' }"
           :class="{ current: $route.name === 'news' }"
         >
           НОВОСТИ
-        </router-link>
+        </nuxt-link>
       </div>
       <HomeMenu />
       <div class="home-header__right">
@@ -57,6 +57,7 @@
         </v-btn>
         <v-btn
           v-else-if="!loggedIn"
+          id="reglink_header"
           flat
           :class="[
             'home-header__button _register',
@@ -67,6 +68,7 @@
                 $route.name === 'news'
             }
           ]"
+          @mousedown.native="$metrika.reachGoal('reglink_header')"
           @click="$router.push({ name: 'register' })"
         >
           <div class="home-header__icon _register" />

@@ -36,18 +36,24 @@
       </VLayout>
     </VLayout>
     <VCardActions>
-      <v-btn xs12 color="primary" class="button" @click="finished">
+      <MainButton
+        color="success"
+        class="button"
+        @click="finished"
+      >
         Сохранить
-      </v-btn>
+      </MainButton>
     </VCardActions>
   </VCard>
 </template>
 
 <script>
 import VueAvatar from './VueAvatar.vue'
+import MainButton from '~/components/common/MainButton.vue'
 
 export default {
   components: {
+    MainButton,
     VueAvatar
   },
   props: {
@@ -140,12 +146,6 @@ export default {
   .v-card__actions {
     padding: 0;
     justify-content: center;
-  }
-
-  & button {
-    width: 280px !important;
-    height: 56px !important;
-    border-radius: 4px !important;
   }
 
   #avatarEditorCanvas {

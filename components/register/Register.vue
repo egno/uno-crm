@@ -40,9 +40,9 @@
           />
           <div v-if="alreadyUsedPhone" class="error-message">
             На данный номер уже зарегистрирована компания.
-            <router-link :to="{ name: 'login' }">
+            <nuxt-link :to="{ name: 'login' }">
               Авторизоваться
-            </router-link>
+            </nuxt-link>
           </div>
         </div>
         <!--show disclaimer with animation v-show="companyName && userName && flogin"-->
@@ -67,17 +67,31 @@
         </v-layout>
         <v-layout v-show="!alreadyUsedPhone" justify-center>
           <MainButton
+            v-if="restoreMode"
             :class="{
-              button_disabled:
-                ($route.name !== 'restorePassword' && !offerAgree) ||
-                !flogin ||
-                !loginIsCorrect
+              button_disabled: !flogin || !loginIsCorrect
             }"
             class="button"
             type="button"
             @click="sendLogin"
           >
-            {{ restoreMode ? 'Восстановить' : 'Создать' }}
+            Восстановить
+          </MainButton>
+          <MainButton
+            v-else
+            id="send_regform"
+            :class="{
+              button_disabled:
+                !offerAgree ||
+                !flogin ||
+                !loginIsCorrect
+            }"
+            class="button"
+            type="button"
+            @mousedown.native="$metrika.reachGoal('send_regform')"
+            @click="sendLogin"
+          >
+            Создать
           </MainButton>
         </v-layout>
       </div>
@@ -144,12 +158,14 @@
         required
       />
       <v-btn
+        id="regbutton_enter"
         type="button"
         class="button"
         :class="{
           button_disabled:
             !fpassword || !fpasswordRepeat || fpassword !== fpasswordRepeat
         }"
+        @mousedown.native="$metrika.reachGoal( 'regbutton_enter')"
         @click="registerAndLogin"
       >
         Войти
@@ -158,9 +174,9 @@
 
     <div v-show="!alreadyUsedPhone">
       Уже есть аккаунт?
-      <router-link :to="{ name: 'login' }">
+      <nuxt-link :to="{ name: 'login' }">
         Войти
-      </router-link>
+      </nuxt-link>
     </div>
     <div v-if="keyCode">
       {{ badCode }}
