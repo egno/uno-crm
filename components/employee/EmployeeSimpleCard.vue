@@ -72,6 +72,7 @@ export default {
     display: flex;
     justify-content: flex-start;
     align-items: center;
+    padding-left: 18px;
     &__subtitle {
       font-size: 12px;
       line-height: 14px;
@@ -79,11 +80,12 @@ export default {
     }
     &__title {
       font-size: 14px;
-      line-height: 17px;
+      line-height: 16px;
       color: #07101C;
     }
     &__badge {
       padding-left: 10px;
+      text-align: left;
     }
   }
 </style>

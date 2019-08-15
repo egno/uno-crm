@@ -217,6 +217,14 @@ export default {
           },
         },
         {
+          title: 'График работ',
+          route: {
+            name: 'id-businessEmployees-schedule',
+            params: { id: this.businessId },
+          },
+          show: isFilialManager && this.businessIsFilial,
+        },
+        {
           title: 'Клиенты',
           count: this.clientsCount,
           route: {
@@ -340,6 +348,14 @@ export default {
             },
             default: true,
           },
+        },
+        {
+          title: 'График работ',
+          route: {
+            name: 'id-businessEmployees-schedule',
+            params: { id: this.businessId },
+          },
+          show: true,
         },
         {
           title: 'Клиенты',
