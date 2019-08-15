@@ -1,11 +1,11 @@
 <template>
   <div class="schedule-edit">
-    <div>
+    <div v-if="showHeader">
       <h2 class="schedule-edit__heading">
         Определите рабочее время
       </h2>
     </div>
-    <VLayout class="schedule-edit__tumbler">
+    <VLayout v-if="showTumbler" class="schedule-edit__tumbler">
       <VFlex xs12>
         <Tumbler
           v-model="forAllDays"
@@ -21,7 +21,7 @@
       justify-space-around
       column
       fill-height
-      class="schedule-edit__main"
+      :class="{ 'schedule-edit__main': true, 'with-margin': showTumbler || showHeader }"
     >
       <div v-for="(day, index) in days" :key="index" xs12 class="day-schedule">
         <div class="day-schedule__wrapper">
@@ -49,6 +49,16 @@ import Tumbler from '~/components/common/Tumbler.vue'
 export default {
   components: { DaySchedule, Tumbler },
   mixins: [ scheduleMixin ],
+  props: {
+    showHeader: {
+      type: Boolean,
+      default: true,
+    },
+    showTumbler: {
+      type: Boolean,
+      default: true,
+    },
+  },
   data () {
     return {
       forAllDays: false,
@@ -161,8 +171,10 @@ export default {
   }
 
   &__main {
-    margin-top: 31px;
     padding: 0 11px;
+    &.with-margin {
+      margin-top: 31px;
+    }
   }
 
   &__tumbler {
