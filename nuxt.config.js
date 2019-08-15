@@ -56,9 +56,13 @@ export default {
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.png' }
     ],
-    noscript: [{ innerHTML: '<img src="https://vk.com/rtrg?p=VK-RTRG-393005-7wBtY" style="position:fixed; left:-999px;" alt=""/>' }],
+    noscript: [
+      { innerHTML: '<img src="https://vk.com/rtrg?p=VK-RTRG-393005-7wBtY" style="position:fixed; left:-999px;" alt=""/>' },
+      { innerHTML: '<div><img src="https://mc.yandex.ru/watch/54209695" style="position:absolute; left:-9999px;" alt="" /></div>' }
+    ],
     script: [
-      { src: '/vk.js' }
+      { src: '/vk.js' },
+      { src: '/yametrika.js' }
     ]
   },
   /*
