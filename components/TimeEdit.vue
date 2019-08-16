@@ -1,6 +1,6 @@
 <template>
   <VTextField
-    v-model="val"
+    :value="time"
     mask="##:##"
     class="time-edit"
     :placeholder="placeholder"
@@ -12,6 +12,10 @@
 
 <script>
 export default {
+  model: {
+    prop: 'time',
+    event: 'correctInput',
+  },
   props: {
     time: {
       type: String,
@@ -35,20 +39,11 @@ export default {
       },
     }
   },
-  watch: {
-    time: 'loadVal',
-  },
-  mounted () {
-    this.loadVal()
-  },
   methods: {
-    loadVal () {
-      this.val = this.time
-    },
-    onEdit () {
-      const res = this.rules.time(this.val)
+    onEdit (newVal) {
+      const res = this.rules.time(newVal)
       if (res && typeof res === 'boolean') {
-        this.$emit('correctInput', this.val)
+        this.$emit('correctInput', newVal)
       }
     },
   },
