@@ -53,7 +53,7 @@ export default {
 <style lang="scss">
 .time-edit {
   margin-top: 0;
-  padding: 0;
+  padding: 0 2px;
   & .v-input__slot:before {
     display: none;
   }
@@ -63,6 +63,13 @@ export default {
 
   & .v-input__slot {
     margin-bottom: 0 !important;
+  }
+
+  input {
+    padding: 0;
+    &::placeholder {
+      font-size: 10px !important;
+    }
   }
 
   &.error--text input {

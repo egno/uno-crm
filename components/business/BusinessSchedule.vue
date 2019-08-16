@@ -4,25 +4,23 @@
       <div>Режим работы</div>
     </template>
     <template slot="content">
-      <VFlex v-for="(day, j) in days" :key="j" xs12 class="day-schedule">
+      <VFlex v-for="(day, j) in days" :key="j" xs12 class="">
         <div
           v-if="day.value && day.value.start && day.value.end"
-          class="day-schedule__wrapper"
+          class="business-schedule__wrapper"
         >
-          <div class="day-schedule__dayname">
+          <div class="business-schedule__dayname">
             {{ day.dayName }}
           </div>
-          <div
-            v-if="day.value.start || day.value.end"
-            class="day-schedule__times"
-          >
-            <span>
-              {{ day.value.start }}
-            </span>
-            <span> - </span>
-            <span>
-              {{ day.value.end }}
-            </span>
+          <div class="day-schedule">
+            <div
+              v-if="day.value.start || day.value.end"
+              class="day-schedule__times"
+            >
+              <input type="text" disabled :value="day.value.start"/>
+              <span> - </span>
+              <input type="text" disabled :value="day.value.end"/>
+            </div>
           </div>
         </div>
       </VFlex>

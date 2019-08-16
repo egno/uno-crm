@@ -1,26 +1,31 @@
 <template>
-  <div v-if="newDaySchedule" class="day-schedule__times">
-    <TimeEdit
-      :class="{
+  <div class="day-schedule">
+    <div v-if="newDaySchedule" class="day-schedule__times">
+      <TimeEdit
+        :class="{
         'error--text':
           errors.includes('intervalError') ||
           (newDaySchedule.end && !newDaySchedule.start)
       }"
-      :time="newDaySchedule.start"
-      placeholder="––:––"
-      @correctInput="onEdit('start', $event)"
-    />
-    <div>—</div>
-    <TimeEdit
-      :class="{
+        :time="newDaySchedule.start"
+        placeholder="––:––"
+        @correctInput="onEdit('start', $event)"
+      />
+      <div>—</div>
+      <TimeEdit
+        :class="{
         'error--text':
           errors.includes('intervalError') ||
           (newDaySchedule.start && !newDaySchedule.end)
       }"
-      :time="newDaySchedule.end"
-      placeholder="––:––"
-      @correctInput="onEdit('end', $event)"
-    />
+        :time="newDaySchedule.end"
+        placeholder="––:––"
+        @correctInput="onEdit('end', $event)"
+      />
+    </div>
+    <div class="day-schedule__clear">
+      <button type="button" class="day-schedule__clear-button" @click="onClearDay" />
+    </div>
   </div>
 </template>
 
@@ -54,6 +59,10 @@ export default {
     daySchedule: 'update',
   },
   methods: {
+    onClearDay () {
+      this.newDaySchedule = { start: '', end: '' }
+      this.$emit('editDay', this.newDaySchedule)
+    },
     onEdit (prop, value) {
       this.newDaySchedule[prop] = value
       this.errors = this.getDayScheduleErrors(this.newDaySchedule)
