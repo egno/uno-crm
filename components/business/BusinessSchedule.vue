@@ -17,9 +17,9 @@
               v-if="day.value.start || day.value.end"
               class="day-schedule__times"
             >
-              <input type="text" disabled :value="day.value.start"/>
+              <input type="text" disabled :value="day.value.start">
               <span> - </span>
-              <input type="text" disabled :value="day.value.end"/>
+              <input type="text" disabled :value="day.value.end">
             </div>
           </div>
         </div>

@@ -64,7 +64,7 @@ export default {
     }
   },
   methods: {
-    onEditDay (dayIndex, newDay) {
+    onEditDay (dayIndex, { newDaySchedule: newDay }) {
       if (!this.newWeekSchedule || !this.newWeekSchedule.data) {
         return
       }
