@@ -124,7 +124,7 @@
     margin-bottom: 0;
     font-weight: 400;
   }
-  input[type="checkbox"]:checked + label {
+  input[type="checkbox"]:checked + &__checkbox-label {
     @extend %filter-active
   }
   &__row {

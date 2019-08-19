@@ -487,9 +487,9 @@ export default {
       &:hover {
         @extend %filter-active;
       }
-    }
-    .v-btn--active {
-      @extend %filter-active;
+      &.v-btn--active {
+        @extend %filter-active;
+      }
     }
   }
   .v-btn-toggle--selected {

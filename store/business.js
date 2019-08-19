@@ -1,6 +1,7 @@
 import { sortBy } from 'lodash'
 import Api from '~/api/backend'
 import { makeAlert } from '~/api/utils'
+import Business from '~/classes/business'
 
 const state = () => ({
   businessInfo: {},
@@ -79,7 +80,11 @@ const mutations = {
     state.businessInfo.j.clients = counter
   },
   SET_BUSINESS_INFO (state, payload) {
-    state.businessInfo = payload
+    if (state.businessInfo instanceof Business) {
+      state.businessInfo.jsonObject = payload
+    } else {
+      state.businessInfo = new Business(payload)
+    }
   },
   SET_DAY_VISITS (state, payload) {
     state.dayVisits = payload
@@ -109,6 +114,10 @@ const actions = {
   },
   addClientsCounter ({ commit }, payload) {
     commit('ADD_CLIENTS_COUNTER', payload)
+  },
+  saveBusiness ({ commit, state }, data) {
+    commit('SET_BUSINESS_INFO', data)
+    return state.businessInfo.save()
   },
   setBusinessToParent ({ commit, dispatch }, businessId) {
     if (!(businessId && businessId.length === 36)) {

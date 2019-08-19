@@ -1,7 +1,7 @@
 <template>
   <v-dialog
     :value="visible"
-    content-class="right-attached-panel businesscard-form _clients"
+    content-class="right-attached-panel businesscard-form _user"
     transition="slide"
     @input="$emit('close')"
   >
@@ -359,7 +359,7 @@ export default {
 @import '~assets/styles/right-attached-panel.scss';
 @import '~assets/styles/dropdown-select.scss';
 
-.right-attached-panel._clients {
+.right-attached-panel._user {
   .businesscard-form__field {
     margin-top: 28px;
     padding-top: 20px;
