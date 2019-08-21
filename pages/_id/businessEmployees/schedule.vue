@@ -1,12 +1,42 @@
 <template>
   <div class="employees-schedule">
-    <div>
+    <v-layout justify-space-between align-center>
+      <v-layout align-center>
+        <main-button
+          class="fill-table"
+          @click="fillTable"
+        >
+          <span>Автозаполнение графика</span>
+        </main-button>
+        <div class="change-week">
+          <v-btn
+            class="change-week__button"
+            depressed
+            flat
+            small
+            @click.stop="changeWeek(-1)"
+          />
+          <v-btn
+            class="change-week__button right"
+            depressed
+            flat
+            small
+            @click.stop="changeWeek(1)"
+          />
+        </div>
+        <div v-if="selectedWeek && selectedWeek.length" class="week-days">
+          {{ selectedWeek[0].date.toLocaleString('ru-RU', { day: 'numeric', month: '2-digit'}) }}
+          &#8212;
+          {{ selectedWeek[6].date.toLocaleString('ru-RU', { day: 'numeric', month: '2-digit'}) }}
+        </div>
+      </v-layout>
       <main-button
-        class="button_attractive"
+        class="button_attractive save-table"
+        @click="saveWeekSchedule"
       >
         <span>Сохранить изменения</span>
       </main-button>
-    </div>
+    </v-layout>
     <table>
       <thead>
         <tr>
@@ -18,7 +48,7 @@
                 @addVisibleEmployee="addVisibleEmployee"
                 @removeVisibleEmployee="removeVisibleEmployee"
               />
-              <div>Все мастера</div>
+              <div class="table-header">Мастера</div>
             </v-layout>
           </td>
           <td class="employees-schedule__template-column">
@@ -32,7 +62,7 @@
               {{ day.date.toLocaleString('ru-RU', { weekday: 'short' }) }}
             </div>
           </td>
-          <td colspan="2" class="employees-schedule__summary">
+          <td colspan="2" class="employees-schedule__summary table-header">
             Итого
           </td>
         </tr>
@@ -62,19 +92,19 @@
               </button>
             </div>
           </td>
-          <td v-for="(day , di) in getEmpWeekSchedule(employee)" :key="di" :class="[ 'schedule-row__data-cell', { 'day-off': !day[0] } ]" @dblclick="enabled = di">
-            <div :class="{ white: day[0] }">
-              <input type="text" :value="day[0]" :disabled="enabled !== di" @focus="onFocus" @blur="onBlur" @change="changeDateSchedule(di, $event.target.value, true)">
-              <input type="text" :value="day[1]" :disabled="enabled !== di" @focus="onFocus" @blur="onBlur" @change="changeDateSchedule(di, $event.target.value, false)">
+          <td v-for="(day , di) in workingDays[employee.id]" :key="di" :class="[ 'schedule-row__data-cell', { 'day-off': !day || !day.start } ]" @dblclick="enabled = di">
+            <div :class="{ white: day && day.start }">
+              <input type="text" :value="day && day.start" :disabled="enabled !== di" @focus="onFocus" @blur="onBlur" @change="changeDateSchedule(di, $event.target.value, true)">
+              <input type="text" :value="day && day.end" :disabled="enabled !== di" @focus="onFocus" @blur="onBlur" @change="changeDateSchedule(di, $event.target.value, false)">
             </div>
           </td>
           <td class="schedule-row__data-cell">
-            <div>
+            <div class="important-text">
               {{ hoursCount(employee).hours }}ч {{ hoursCount(employee).minutes }}м
             </div>
           </td>
           <td class="schedule-row__data-cell last">
-            <div>{{ workShiftsCount(employee) }}</div>
+            <div class="important-text">{{ workDaysCount(employee) }}</div>
           </td>
         </tr>
       </tbody>
@@ -109,7 +139,7 @@
             name="create_template"
           />
 
-          <template v-if="isCreating">
+          <template v-if="isCreating || isEditing">
             <div class="right-attached-panel__field-block">
               <VTextField
                 v-model="templateTitle"
@@ -184,7 +214,7 @@
                   <v-menu>
                     <template v-slot:activator="{ on }">
                       <button type="button" v-on="on">
-                        Дата начала {{ selectedDayFormatted }}
+                        Дата начала {{ startDayFormatted }}
                       </button>
                     </template>
                     <v-date-picker
@@ -234,7 +264,25 @@
                   @click.native.stop="deleteEmpTemplate"
                 />
                 <div v-if="selectedEmployee.j.workTemplate.type === 'shift'">
-                  Дата начала шаблона
+                  <span>Дата начала шаблона</span>
+                  <span>{{ startDayFormatted }}</span>
+                  <v-btn icon fab flat ripple @click="openEditForm">
+                    <svg
+                      width="13"
+                      height="20"
+                      viewBox="0 0 13 20"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M9.40402 0L13 2.13162L11.3998 4.82815L7.80374 2.69653L9.40402 0ZM7.27032 3.59534L10.8663 5.72696L4.46522 16.5131L4.46514 16.5131L0 19.9415L0.869124 14.3814L0.869208 14.3815L7.27032 3.59534Z"
+                        fill="#8995AF"
+                        fill-opacity="0.35"
+                      />
+                    </svg>
+                  </v-btn>
                 </div>
               </template>
             </Accordion>
@@ -264,6 +312,7 @@
               <button
                 type="button"
                 class="right-attached-panel__save"
+                :disabled="selectedEmployee.workTemplate && selectedEmployee.workTemplate.type === 'shift' && ! templateStartDate"
                 @click="saveEmployee"
               >
                 Сохранить
@@ -351,7 +400,8 @@ import EmployeeSimpleCard from '~/components/employee/EmployeeSimpleCard.vue'
 import MainButton from '~/components/common/MainButton.vue'
 import Business from '~/classes/business'
 import Employee from '~/classes/employee'
-import { hyphensStringToDate } from '~/components/calendar/utils'
+import { formatDate, hyphensStringToDate } from '~/components/calendar/utils'
+import Api from '~/api/backend'
 
 export default {
   // eslint-disable-next-line standard/object-curly-even-spacing
@@ -363,6 +413,7 @@ export default {
       enabled: null,
       isCreating: false,
       isCommonTemplate: false,
+      isEditing: false,
       newBusiness: {},
       selectedDate: '',
       selectedEmployee: null,
@@ -388,6 +439,7 @@ export default {
         },
       ],
       weekTemplate: [],
+      workingDays: {},
       visibleEmployees: [],
       rules: {
         required: value => !!value || 'Обязательно для заполнения',
@@ -421,14 +473,14 @@ export default {
 
       return this.calendarMonth.find(week => week.some(includesDay))
     },
-    selectedDayFormatted () {
-      if (!this.selectedDate) { return '' }
+    startDayFormatted () {
+      if (!this.templateStartDate) { return '' }
       const options = {
         year: 'numeric',
         month: 'numeric',
         day: 'numeric',
       }
-      return hyphensStringToDate(this.selectedDate).toLocaleString(
+      return hyphensStringToDate(this.templateStartDate).toLocaleString(
         'ru',
         options
       )
@@ -447,6 +499,10 @@ export default {
       },
       deep: true,
     },
+    selectedWeek: {
+      handler: 'getWorkingDays',
+      deep: true,
+    },
   },
   beforeMount () {
     this.selectedDate = this.actualDate
@@ -457,6 +513,12 @@ export default {
       saveBusiness: 'business/saveBusiness',
       addEmployeeItem: 'employee/addEmployeeItem',
     }),
+    changeWeek (vector) {
+      const dt = new Date(this.selectedDate)
+
+      dt.setDate(dt.getDate() + 7 * vector)
+      this.selectedDate = formatDate(dt)
+    },
     addShiftDay () {
       this.shiftDays.push({
         start: '',
@@ -468,7 +530,7 @@ export default {
       this.visibleEmployees.sort(this.compareByName)
     },
     allowedDates (dateStr) {
-      return dateStr >= this.selectedDate
+      return dateStr > this.selectedDate
     },
     assignTemplate (template, isChecked) {
       this.selectedEmployee.j.workTemplate = template && isChecked
@@ -490,7 +552,7 @@ export default {
       this.newBusiness = {}
       this.templatesListEdit = false
     },
-    datesDiff (first, second) {
+    getDiffInDays (first, second) {
       return Math.floor((second - first) / (1000 * 60 * 60 * 24))
     },
     deleteCommonTemplate (temp) {
@@ -505,6 +567,11 @@ export default {
     deleteShiftDay (index) {
       this.shiftDays.splice(index, 1)
     },
+    fillTable () {
+      this.visibleEmployees.forEach((employee) => {
+        this.$set(this.workingDays, employee.id, this.getEmpWeekSchedule(employee))
+      })
+    },
     getEmpWeekSchedule (employee) {
       const empty = [ [], [], [], [], [], [], [] ]
 
@@ -516,17 +583,20 @@ export default {
         }
 
         const period = template.data.length
-        const startDate = template.startDate
+        const startDate = hyphensStringToDate(employee.j.workTemplate.startDate) // it's not a common info
 
         if (!startDate) {
           return empty
         }
-        const diff = this.datesDiff(startDate, this.selectedWeek[0].date) // или предыдущий день?
-        let currentDay = diff % period
+        // const diff = this.getDiffInDays(startDate, this.selectedWeek[0].date) // или предыдущий день?
+        const dow = this.selectedWeek.findIndex(d => d.dateKey === employee.j.workTemplate.startDate)
+        // let currentDay = diff % period
+        let currentDay = 0
         // eslint-disable-next-line prefer-const
-        let week = []
+        let week = empty
         // todo add previous week's sunday as a start point
-        for (let i = 0; i < 7; i++) {
+
+        for (let i = dow; i < 7; i++) {
           week[i] = template.data[currentDay]
           currentDay = currentDay < (period - 1) ? (currentDay + 1) : 0
         }
@@ -542,6 +612,26 @@ export default {
       }
 
       return this.businessInfo.scheduleTemplates.find(t => t.title === employee.j.workTemplate.title)
+    },
+    getWorkingDays () {
+      if (!this.selectedWeek) {
+        return
+      }
+
+      Api()
+        .get(
+          `/business_calendar?branch_id=eq.${this.businessInfo.id}&dt=gte.${this.selectedWeek[0].dateKey}&dt=lte.${this.selectedWeek[6].dateKey}`
+        )
+        .then(({ data }) => {
+          // todo check
+          this.workingDays = data.length
+            ? data.map(x => ({
+              date: x.dt,
+              schedule: x.j.schedule,
+              employeeId: x.business_id,
+            }))
+            : new Array(7).fill({ start: '', end: '' })
+        })
     },
     initVisibleEmployees () {
       this.businessEmployees.forEach((employee) => {
@@ -564,6 +654,15 @@ export default {
       }
 
       this.templateAssignForm = true
+    },
+    openEditForm () {
+      const template = this.getEmployeeTemplate(this.selectedEmployee)
+      this.templateTitle = template.title
+      this.templateType = template.type
+      if (template.type === 'shift') {
+        this.shiftDays = cloneDeep(template.data)
+      }
+      this.isEditing = true
     },
     onClearDay (index) {
       this.shiftDays[index] = { start: '', end: '' }
@@ -601,12 +700,15 @@ export default {
     },
     saveEmployee () {
       if (this.selectedEmployee.j.workTemplate) {
-        // at this moment workTemplate is already in store in business' templates
+        // at this moment workTemplate is already in store (in business' templates)
         // We should not save workTemplate.data in employee, but keep it in business,
         // so that after any change in a common template, it doesn't need to change
         // the corresponding data in employee
         this.selectedEmployee.j.workTemplate = cloneDeep(this.selectedEmployee.j.workTemplate)
         this.selectedEmployee.j.workTemplate.data = null
+        if (this.selectedEmployee.j.workTemplate.type === 'shift') {
+          this.selectedEmployee.j.workTemplate.startDate = this.templateStartDate
+        }
       }
 
       this.selectedEmployee.save()
@@ -621,6 +723,24 @@ export default {
         .then(() => {
           this.templatesListEdit = false
         })
+    },
+    saveWeekSchedule () {
+      const data = []
+
+      this.visibleEmployees.forEach((e) => {
+        this.selectedWeek.forEach((d, dayIndex) => {
+          const daySchedule = this.workingDays[e.id][dayIndex]
+          data.push({
+            business_id: e.id,
+            dt: d.dateKey.replace(/-/g, ''),
+            j: {
+              schedule: [ daySchedule.start, daySchedule.end ],
+            },
+          })
+        })
+      })
+
+      Api().post(`/business_calendar?branch_id=eq.${this.businessInfo.id}`, data)
     },
     scheduleEdit (newWeek) {
       this.weekTemplate = newWeek.data
@@ -658,8 +778,17 @@ export default {
     },
     hoursCount (employee) {
       let total = 0
-      this.getEmpWeekSchedule(employee).forEach((d) => {
-        total += this.getTimeDiff(d[0], d[1])
+      if (!this.workingDays[employee.id]) {
+        return {
+          hours: 0,
+          minutes: 0,
+        }
+      }
+      this.workingDays[employee.id].forEach((d) => {
+        if (!d) {
+          debugger
+        }
+        total += d.length ? this.getTimeDiff(d[0], d[1]) : 0
       })
       const toHours = 1000 * 60 * 60
       const hours = Math.floor(total / toHours)
@@ -678,8 +807,12 @@ export default {
 
       this.visibleEmployees = newVisibleEmployees
     },
-    workShiftsCount (employee) {
-      return this.getEmpWeekSchedule(employee).filter(d => d[0] && d[1]).length
+    workDaysCount (employee) {
+      if (!this.workingDays[employee.id]) {
+        return 0
+      }
+      const working = this.workingDays[employee.id].filter(d => (d.start && d.end))
+      return working ? working.length : 0
     },
   },
 }
@@ -693,12 +826,58 @@ export default {
   @mixin border-left {
     border-left: 1px solid  #d6dae3;
   }
+  %round-arrow-button {
+    min-width: 0;
+    width: 24px;
+    height: 24px;
+    margin: 0 5px;
+    border: 1px solid rgba(137, 149, 175, 0.1);
+    border-radius: 50%;
+    color: #8995af;
+    background: url('~assets/images/down.png') center no-repeat;
+    transform: rotate(90deg);
+  }
+
   .employees-schedule {
     background-color: #fff;
+    .fill-table {
+      width: 341px;
+      height: 35px;
+      background: #5699FF;
+      font-family: Roboto Slab, serif;
+      font-size: 14px;
+      text-align: center;
+      color: #FFFFFF;
+    }
+    .change-week {
+      display: flex;
+      align-items: center;
+      margin-left: 15px;
+    }
+    .change-week__button {
+      @extend %round-arrow-button;
+      color: #8995af !important;
+      &:hover {
+        background-color: rgba(137, 149, 175, 0.1);
+      }
+      &.right {
+        transform: rotate(-90deg);
+      }
+    }
+    .week-days {
+      margin-left: 15px;
+      font-family: Roboto Slab, serif;
+      font-size: 18px;
+    }
+    .save-table {
+      max-height: 35px;
+      font-size: 14px !important;
+    }
     table {
       max-width: 1084px;
       border-collapse: collapse;
       text-align: center;
+      border-top: 1px solid #d6dae3;
     }
     tr {
       border-bottom: 1px solid #d6dae3;
@@ -706,9 +885,14 @@ export default {
     &__employees {
       width: 190px;
     }
+    .table-header {
+      font-weight: 600;
+      font-size: 16px;
+    }
     &__template-column {
       width: 150px;
-      line-height: 24px;
+      font-weight: 600;
+      font-size: 16px;
       @include border-left();
       border-right: 1px solid  #d6dae3;
     }
@@ -743,6 +927,9 @@ export default {
         background: transparent;
       }
     }*/
+    .important-text {
+      font-weight: 600;
+    }
     &__warning {
       font-size: 12px;
       color: #8995AF;
