@@ -131,9 +131,7 @@ export default {
     /*
     ** You can extend webpack config here
     */
-    extend (config) {
-    // eslint-disable-next-line dot-notation
-      config.resolve.alias[ 'vue' ] = 'vue/dist/vue.common'
+    extend (config, ctx) {
     },
   },
 }

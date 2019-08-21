@@ -234,6 +234,18 @@ class Business extends ApiObject {
     return this.j && this.j.gallery
   }
 
+  set scheduleTemplates (newVal) {
+    if (newVal) {
+      this.j.scheduleTemplates = newVal
+    } else {
+      delete this.j.scheduleTemplates
+    }
+  }
+
+  get scheduleTemplates () {
+    return this.j && this.j.scheduleTemplates
+  }
+
   // API methods
 
   load (id) {

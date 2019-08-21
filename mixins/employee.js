@@ -21,11 +21,15 @@ export const employeesCategorized = {
     },
   },
   methods: {
+    compareByName (a, b) {
+      return a.j.name.toLowerCase() < b.j.name.toLowerCase() ? -1 : 1
+    },
     removeVisibleEmployee (employee) {
       const i = this.visibleEmployees.findIndex(e => e.id === employee.id)
 
       if (i > -1) {
         this.visibleEmployees.splice(i, 1)
+        this.visibleEmployees.sort(this.compareByName)
       }
     },
     selectAll () {

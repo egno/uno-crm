@@ -117,7 +117,9 @@ const actions = {
   },
   saveBusiness ({ commit, state }, data) {
     commit('SET_BUSINESS_INFO', data)
-    return state.businessInfo.save()
+    return state.businessInfo
+      .save()
+      .catch(err => commit('alerts/ADD_ALERT', makeAlert(err), { root: true }))
   },
   setBusinessToParent ({ commit, dispatch }, businessId) {
     if (!(businessId && businessId.length === 36)) {

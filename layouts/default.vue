@@ -518,7 +518,7 @@ export default {
       }
       &.v-label--active {
         font-size: 12px;
-        transform: scale(1) translateY(-19px);
+        transform: scale(1) translateY(-18px);
       }
     }
     input {

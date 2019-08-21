@@ -81,7 +81,7 @@
 </template>
 
 <script>
-import SmallCheckbox from '../common/SmallCheckbox'
+import SmallCheckbox from '~/components/common/SmallCheckbox'
 import { employeesCategorized } from '~/mixins/employee'
 import Avatar from '~/components/avatar/Avatar.vue'
 

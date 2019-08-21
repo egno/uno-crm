@@ -38,6 +38,8 @@ const mutations = {
     const idx = state.employees.findIndex(x => x.id === payload.id)
     if (idx === -1) {
       state.employees.push(payload)
+    } else {
+      state.employees.splice(idx, 1, payload)
     }
   },
 }
