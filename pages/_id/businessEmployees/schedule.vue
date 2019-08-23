@@ -6,7 +6,7 @@
           class="fill-table"
           @click="fillTable"
         >
-          <span>Автозаполнение графика</span>
+          <span>Заполнить график по шаблонам</span>
         </main-button>
         <div class="change-week">
           <v-btn
@@ -30,12 +30,6 @@
           {{ selectedWeek[6].date.toLocaleString('ru-RU', { day: 'numeric', month: '2-digit'}) }}
         </div>
       </v-layout>
-      <main-button
-        class="button_attractive save-table"
-        @click="saveWeekSchedule"
-      >
-        <span>Сохранить изменения</span>
-      </main-button>
     </v-layout>
     <table>
       <thead>
@@ -48,7 +42,9 @@
                 @addVisibleEmployee="addVisibleEmployee"
                 @removeVisibleEmployee="removeVisibleEmployee"
               />
-              <div class="table-header">Мастера</div>
+              <div class="table-header">
+                Мастера
+              </div>
             </v-layout>
           </td>
           <td class="employees-schedule__template-column">
@@ -72,6 +68,7 @@
           v-for="(employee, employeeIndex) in visibleEmployees"
           :key="employeeIndex"
           class="schedule-row"
+          :class="{ 'has-errors': dayScheduleErrors.length }"
         >
           <td class="schedule-row__employee">
             <EmployeeSimpleCard :employee="employee" />
@@ -92,10 +89,32 @@
               </button>
             </div>
           </td>
-          <td v-for="(day , di) in workingDays[employee.id]" :key="di" :class="[ 'schedule-row__data-cell', { 'day-off': !day || !day.start } ]" @dblclick="enabled = di">
-            <div :class="{ white: day && day.start }">
-              <input type="text" :value="day && day.start" :disabled="enabled !== di" @focus="onFocus" @blur="onBlur" @change="changeDateSchedule(di, $event.target.value, true)">
-              <input type="text" :value="day && day.end" :disabled="enabled !== di" @focus="onFocus" @blur="onBlur" @change="changeDateSchedule(di, $event.target.value, false)">
+          <td
+            v-for="(day , di) in workingDays[employee.id]"
+            :key="day.date + day.employeeId"
+            :class="[ 'schedule-row__data-cell', { 'editing': enabled === day.date + day.employeeId, 'day-off': !day || !day.start } ]"
+            @click="onClick(day.date, day.employeeId, $event.target)"
+          >
+            <div :class="{ white: day && (day.start || day.end) }">
+              <TimeEdit
+                :ref="day.date + day.employeeId"
+                :time="day && day.start"
+                :disabled="enabled !== day.date + day.employeeId"
+                :class="{ 'error--text' : lastEdited === day.date + day.employeeId && (dayScheduleErrors.includes('intervalError') || (day.end && !day.start)) }"
+                placeholder="--:--"
+                @focus="onFocus"
+                @blur="onBlur"
+                @correctInput="changeDateSchedule(employee.id, di, $event, true)"
+              />
+              <TimeEdit
+                :time="day && day.end"
+                :disabled="enabled !== day.date + day.employeeId"
+                :class="{ 'error--text' : lastEdited === day.date + day.employeeId && (dayScheduleErrors.includes('intervalError') || (day.start && !day.end)) }"
+                placeholder="--:--"
+                @focus="onFocus"
+                @blur="onBlur"
+                @correctInput="changeDateSchedule(employee.id, di, $event, false)"
+              />
             </div>
           </td>
           <td class="schedule-row__data-cell">
@@ -104,16 +123,45 @@
             </div>
           </td>
           <td class="schedule-row__data-cell last">
-            <div class="important-text">{{ workDaysCount(employee) }}</div>
+            <div class="important-text">
+              {{ empWorkDaysCount(employee) }}
+            </div>
           </td>
         </tr>
       </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="2" class="table-header">
+            Всего сотрудников в смену
+          </td>
+          <td v-for="(day, dayIndex) in selectedWeek" :key="dayIndex" class="">
+            {{ loadPerDays[day.dateKey] }}
+          </td>
+          <td colspan="2" />
+        </tr>
+      </tfoot>
     </table>
     <div>
       <button v-if="commonTemplates.length" type="button" @click="showTemplatesListEdit">
         Редактировать список шаблонов
       </button>
     </div>
+
+    <v-bottom-nav
+      :value="isChanged() && !dayScheduleErrors.length"
+      height="80"
+      absolute
+      color="transparent"
+    >
+      <span>Вы внесли изменения в график работы.</span>
+      <main-button
+        class="button save-table"
+        :class="{ button_disabled: !isChanged() || dayScheduleErrors.length }"
+        @click="saveTable"
+      >
+        <span>СОХРАНИТЬ</span>
+      </main-button>
+    </v-bottom-nav>
 
     <v-dialog
       :value="templateAssignForm"
@@ -129,7 +177,7 @@
         />
         <div class="right-attached-panel__content">
           <div class="right-attached-panel__header">
-            Шаблоны графика работы
+            Назначение шаблона сотруднику
           </div>
           <Chip
             id="create_template"
@@ -196,8 +244,8 @@
                         </div>
                         <div class="business-schedule__content">
                           <DaySchedule
-                            :business-schedule="day"
-                            @editDay="onEditDay(index, $event)"
+                            :day-schedule="day"
+                            @editDay="onEditShiftDay(index, $event)"
                           />
                           <button type="button" @click="deleteShiftDay(index)">
                             убрать
@@ -232,7 +280,7 @@
               <button
                 type="button"
                 class="right-attached-panel__save"
-                :class="{ _disabled: shiftScheduleHasErrors }"
+                :class="{ _disabled: !templateTitle || !templateType || shiftScheduleHasErrors }"
                 @click="saveTemplate"
               >
                 Сохранить
@@ -240,7 +288,7 @@
               <button
                 type="button"
                 class="right-attached-panel__cancel"
-                @click="onClose"
+                @click="closeAssignForm"
               >
                 Отмена
               </button>
@@ -257,66 +305,47 @@
                 <div>Активный шаблон сотрудника</div>
               </template>
               <template slot="content">
-                <div>{{ selectedEmployee.j.workTemplate.title }}</div>
-                <DeleteButton
-                  :is-dark="true"
-                  delete-text="Удалить шаблон"
-                  @click.native.stop="deleteEmpTemplate"
-                />
-                <div v-if="selectedEmployee.j.workTemplate.type === 'shift'">
-                  <span>Дата начала шаблона</span>
-                  <span>{{ startDayFormatted }}</span>
-                  <v-btn icon fab flat ripple @click="openEditForm">
-                    <svg
-                      width="13"
-                      height="20"
-                      viewBox="0 0 13 20"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M9.40402 0L13 2.13162L11.3998 4.82815L7.80374 2.69653L9.40402 0ZM7.27032 3.59534L10.8663 5.72696L4.46522 16.5131L4.46514 16.5131L0 19.9415L0.869124 14.3814L0.869208 14.3815L7.27032 3.59534Z"
-                        fill="#8995AF"
-                        fill-opacity="0.35"
-                      />
-                    </svg>
-                  </v-btn>
-                </div>
+                <TemplateCard
+                  :editable="true"
+                  :selectable="true"
+                  :checked="true"
+                  :template="selectedEmpTemplate"
+                  @edit="openEditForm"
+                  @delete="deleteEmpTemplate"
+                >
+                  <div>
+                    <div>Дата начала шаблона</div>
+                    <div>{{ startDayFormatted }}</div>
+                  </div>
+                  <div />
+                </TemplateCard>
               </template>
             </Accordion>
             <Accordion v-if="commonTemplates.length" :expanded="true" class="available-templates">
               <template slot="heading">
-                <div>Список доступных шаблонов</div>
+                <div>Список шаблонов</div>
               </template>
               <template slot="content">
-                <div
+                <TemplateCard
                   v-for="(template, i) in commonTemplates"
                   :key="i"
-                >
-                  <!-- todo replace with radiobuttons -->
-                  <SmallCheckbox
-                    :id="template.title"
-                    :checked="isAssigned(template)"
-                    name="template.title"
-                    :value="template.title"
-                    @change="assignTemplate(template, $event)"
-                  >
-                    {{ template.title }}
-                  </SmallCheckbox>
-                </div>
+                  :checked="isAssigned(template)"
+                  :editable="false"
+                  :selectable="true"
+                  :template="template"
+                  @change="assignTemplate(template, $event)"
+                />
               </template>
             </Accordion>
             <div class="right-attached-panel__buttons">
-              <button
+              <main-button
                 type="button"
                 class="right-attached-panel__save"
-                :disabled="selectedEmployee.workTemplate && selectedEmployee.workTemplate.type === 'shift' && ! templateStartDate"
+                :class="{ button_disabled: selectedEmployee.workTemplate && selectedEmployee.workTemplate.type === 'shift' && ! templateStartDate }"
                 @click="saveEmployee"
               >
                 Сохранить
-              </button>
+              </main-button>
               <button
                 type="button"
                 class="right-attached-panel__cancel"
@@ -348,19 +377,17 @@
           </div>
 
           <div v-if="newBusiness && newBusiness.j" class="templates-list">
-            <div
-              v-for="(template, i) in newBusiness.j.scheduleTemplates"
-              :key="i"
-            >
-              <div>{{ template.title }}</div>
-              <DeleteButton
-                :is-dark="true"
-                delete-text="Удалить шаблон"
-                @click.native.stop="deleteCommonTemplate"
+            <div class="templates-list__content">
+              <TemplateCard
+                v-for="(template, i) in newBusiness.j.scheduleTemplates"
+                :key="i"
+                :editable="true"
+                :selectable="false"
+                :template="template"
+                @delete="deleteCommonTemplate(template)"
               />
             </div>
           </div>
-
           <div class="right-attached-panel__buttons">
             <button
               type="button"
@@ -386,9 +413,10 @@
 <script>
 /* eslint-disable vue/no-unused-components */
 import { mapActions, mapGetters, mapState } from 'vuex'
-import { cloneDeep } from 'lodash'
+import { cloneDeep, isEqual } from 'lodash'
 import SmallCheckbox from '~/components/common/SmallCheckbox'
 import { employeesCategorized } from '~/mixins/employee'
+import { dayScheduleMixin } from '~/mixins/dayScheduleMixin'
 // import Modal from '~/components/common/Modal'
 import Accordion from '~/components/common/Accordion'
 import BusinessScheduleEdit from '~/components/business/BusinessScheduleEdit.vue'
@@ -398,6 +426,8 @@ import DeleteButton from '~/components/common/DeleteButton.vue'
 import EmployeesSelection from '~/components/employee/EmployeesSelection.vue'
 import EmployeeSimpleCard from '~/components/employee/EmployeeSimpleCard.vue'
 import MainButton from '~/components/common/MainButton.vue'
+import TemplateCard from '~/components/employee/TemplateCard.vue'
+import TimeEdit from '~/components/TimeEdit.vue'
 import Business from '~/classes/business'
 import Employee from '~/classes/employee'
 import { formatDate, hyphensStringToDate } from '~/components/calendar/utils'
@@ -405,16 +435,21 @@ import Api from '~/api/backend'
 
 export default {
   // eslint-disable-next-line standard/object-curly-even-spacing
-  components: { Accordion, BusinessScheduleEdit, Chip, DaySchedule, DeleteButton, EmployeesSelection, EmployeeSimpleCard, MainButton, SmallCheckbox },
-  mixins: [ employeesCategorized ],
+  components: { Accordion, BusinessScheduleEdit, Chip, DaySchedule, DeleteButton, EmployeesSelection, EmployeeSimpleCard, MainButton, SmallCheckbox, TemplateCard, TimeEdit },
+  mixins: [ dayScheduleMixin, employeesCategorized ],
   data () {
     return {
+      dayScheduleErrors: [],
       isStillEditing: false,
       enabled: null,
       isCreating: false,
       isCommonTemplate: false,
       isEditing: false,
+      lastEdited: '',
+      lastParams: '',
+      loadPerDays: {},
       newBusiness: {},
+      oldWorkingDays: {},
       selectedDate: '',
       selectedEmployee: null,
       selectedOnStart: false,
@@ -466,6 +501,9 @@ export default {
       }
       return this.selectedEmployee.j.workTemplate
     },
+    selectedEmpTemplate () {
+      return this.getEmployeeTemplate(this.selectedEmployee)
+    },
     selectedWeek () {
       if (!this.selectedDate) { return [] }
 
@@ -477,8 +515,9 @@ export default {
       if (!this.templateStartDate) { return '' }
       const options = {
         year: 'numeric',
-        month: 'numeric',
+        month: 'long',
         day: 'numeric',
+        weekday: 'short',
       }
       return hyphensStringToDate(this.templateStartDate).toLocaleString(
         'ru',
@@ -507,6 +546,8 @@ export default {
   beforeMount () {
     this.selectedDate = this.actualDate
     this.templateStartDate = this.actualDate
+    this.getWorkingDays()
+    this.initVisibleEmployees()
   },
   methods: {
     ...mapActions({
@@ -540,6 +581,7 @@ export default {
     closeAssignForm () {
       this.templateAssignForm = false
       this.isCreating = false
+      this.isEditing = false
       this.templateStartDate = this.actualDate
       this.templateTitle = ''
       this.templateType = ''
@@ -547,6 +589,7 @@ export default {
         start: '',
         end: '',
       } ]
+      this.shiftScheduleHasErrors = false
     },
     closeTemplatesList () {
       this.newBusiness = {}
@@ -570,6 +613,15 @@ export default {
     fillTable () {
       this.visibleEmployees.forEach((employee) => {
         this.$set(this.workingDays, employee.id, this.getEmpWeekSchedule(employee))
+      })
+    },
+    fillWithEmpty () {
+      this.businessEmployees.forEach((emp) => {
+        if (!this.workingDays[emp.id]) {
+          this.$set(this.workingDays, emp.id, new Array(7).fill({ start: '', end: '' }))
+        } else {
+          this.workingDays[emp.id] = new Array(7).fill({ start: '', end: '' })
+        }
       })
     },
     getEmpWeekSchedule (employee) {
@@ -618,19 +670,55 @@ export default {
         return
       }
 
+      const params = `parent_business_id=eq.${this.businessInfo.id}&dt=gte.${this.selectedWeek[0].dateKey}&dt=lte.${this.selectedWeek[6].dateKey}&order=business_id,dt`
+      if (this.lastParams === params) {
+        return
+      }
+
+      this.lastParams = params
       Api()
         .get(
-          `/business_calendar?branch_id=eq.${this.businessInfo.id}&dt=gte.${this.selectedWeek[0].dateKey}&dt=lte.${this.selectedWeek[6].dateKey}`
+          `/business_calendar?${params}`
         )
         .then(({ data }) => {
-          // todo check
-          this.workingDays = data.length
-            ? data.map(x => ({
-              date: x.dt,
-              schedule: x.j.schedule,
-              employeeId: x.business_id,
-            }))
-            : new Array(7).fill({ start: '', end: '' })
+          if (!data.length) {
+            this.fillWithEmpty()
+            return
+          }
+          const res = data.map((x) => {
+            return x.j.schedule
+              ? {
+                date: x.dt,
+                start: x.j.schedule[0],
+                end: x.j.schedule[1],
+                employeeId: x.business_id,
+              }
+              : {
+                date: x.dt,
+                start: '',
+                end: '',
+                employeeId: x.business_id,
+              }
+          })
+
+          this.selectedWeek.forEach((d) => {
+            const count = res.filter(x => x.date === d.dateKey && x.start && x.end).length
+            if (!this.loadPerDays[d.dateKey]) {
+              this.$set(this.loadPerDays, d.dateKey, count)
+            } else {
+              this.loadPerDays[d.dateKey] = count
+            }
+          })
+
+          this.businessEmployees.forEach((emp) => {
+            if (!this.workingDays[emp.id]) {
+              this.$set(this.workingDays, emp.id, [])
+            } else {
+              this.workingDays[emp.id] = []
+            }
+          })
+          res.forEach(el => this.workingDays[el.employeeId].push(el))
+          this.oldWorkingDays = cloneDeep(this.workingDays)
         })
     },
     initVisibleEmployees () {
@@ -647,16 +735,19 @@ export default {
     isAssigned (template) {
       return this.selectedEmployee.j.workTemplate && this.selectedEmployee.j.workTemplate.title === template.title
     },
+    isChanged () {
+      return !isEqual(this.oldWorkingDays, this.workingDays)
+    },
     openAssignForm (employee) {
       this.selectedEmployee = new Employee(cloneDeep(employee))
-      if (!this.selectedEmployee.j.schedule.data) {
-        this.selectedEmployee.j.schedule.data = []
+      if (!this.selectedEmployee.j.workTemplate.data) {
+        this.selectedEmployee.j.workTemplate.data = []
       }
 
       this.templateAssignForm = true
     },
     openEditForm () {
-      const template = this.getEmployeeTemplate(this.selectedEmployee)
+      const template = this.selectedEmpTemplate
       this.templateTitle = template.title
       this.templateType = template.type
       if (template.type === 'shift') {
@@ -667,8 +758,22 @@ export default {
     onClearDay (index) {
       this.shiftDays[index] = { start: '', end: '' }
     },
-    onClose () {},
-    onEditDay (dayIndex, { newDaySchedule, errors }) {
+    onClick (date, employeeId, target) {
+      if (this.dayScheduleErrors.length && this.lastEdited !== date + employeeId) {
+        return
+      }
+      this.enabled = date + employeeId
+      this.lastEdited = date + employeeId
+      const input = this.$refs[date + employeeId][0].$el.querySelector('input')
+      if (target.nodeName === 'INPUT') {
+        target.disabled = false
+        target.focus()
+      } else {
+        input.disabled = false
+        input.focus()
+      }
+    },
+    onEditShiftDay (dayIndex, { newDaySchedule, errors }) {
       if (!this.shiftDays || !this.shiftDays.length) {
         return
       }
@@ -724,7 +829,7 @@ export default {
           this.templatesListEdit = false
         })
     },
-    saveWeekSchedule () {
+    saveTable () {
       const data = []
 
       this.visibleEmployees.forEach((e) => {
@@ -740,7 +845,11 @@ export default {
         })
       })
 
-      Api().post(`/business_calendar?branch_id=eq.${this.businessInfo.id}`, data)
+      Api()
+        .post(`/business_calendar?branch_id=eq.${this.businessInfo.id}`, data)
+        .then(() => {
+          this.oldWorkingDays = cloneDeep(this.workingDays)
+        })
     },
     scheduleEdit (newWeek) {
       this.weekTemplate = newWeek.data
@@ -749,12 +858,9 @@ export default {
       this.newBusiness = new Business(cloneDeep(this.businessInfo))
       this.templatesListEdit = true
     },
-    changeDateSchedule (i, data, isStart) {
-      this.$emit('changeDateSchedule', {
-        i,
-        data,
-        isStart,
-      })
+    changeDateSchedule (employeeId, i, data, isStart) {
+      this.workingDays[employeeId][i][isStart ? 'start' : 'end'] = data
+      this.dayScheduleErrors = this.getDayScheduleErrors(this.workingDays[employeeId][i])
     },
     getTimeDiff (start = '00:00', end = '00:00') {
       const startTime = `${start}:00`
@@ -786,7 +892,7 @@ export default {
       }
       this.workingDays[employee.id].forEach((d) => {
         if (!d) {
-          debugger
+          return
         }
         total += d.length ? this.getTimeDiff(d[0], d[1]) : 0
       })
@@ -807,11 +913,14 @@ export default {
 
       this.visibleEmployees = newVisibleEmployees
     },
-    workDaysCount (employee) {
+    empWorkDaysCount (employee) {
       if (!this.workingDays[employee.id]) {
         return 0
       }
-      const working = this.workingDays[employee.id].filter(d => (d.start && d.end))
+      return this.workDaysCount(this.workingDays[employee.id])
+    },
+    workDaysCount (days) {
+      const working = days.filter(d => (d.start && d.end))
       return working ? working.length : 0
     },
   },
@@ -869,10 +978,22 @@ export default {
       font-family: Roboto Slab, serif;
       font-size: 18px;
     }
-    .save-table {
-      max-height: 35px;
-      font-size: 14px !important;
+    .v-bottom-nav {
+      justify-content: flex-end;
+      align-items: center;
+      padding: 12px 42px;
+      & > * {
+        flex-grow: 0;
+      }
+      span {
+        font-size: 16px;
+        font-weight: 600;
+      }
+      .save-table {
+        margin-left: 42px;
+      }
     }
+
     table {
       max-width: 1084px;
       border-collapse: collapse;
@@ -881,6 +1002,7 @@ export default {
     }
     tr {
       border-bottom: 1px solid #d6dae3;
+      border-right: 1px solid #d6dae3;
     }
     &__employees {
       width: 190px;
@@ -949,16 +1071,24 @@ export default {
     &__data-cell {
       min-width: 72px;
       @include border-left();
-      input {
-        width: 100%;
-        text-align: center;
-      }
+
       &.day-off {
         background-color: rgba(137, 149, 175, 0.1);
-        pointer-events: none;
+        &:hover {
+          background: url('~assets/images/svg/plus.svg') center no-repeat rgba(137, 149, 175, 0.1);
+        }
+        input::placeholder {
+          color: transparent !important;
+        }
       }
-      &.last {
-        border-right: 1px solid #d6dae3;
+      &.editing {
+        background: #fff;
+        &:hover {
+          background: #fff;
+        }
+        input::placeholder {
+          color: #8995AF !important;
+        }
       }
     }
     &__template {
@@ -969,6 +1099,26 @@ export default {
       font-size: 14px;
       color: #5699FF;
       outline: none;
+    }
+    .time-edit {
+      input {
+        width: 100%;
+        text-align: center;
+        background-color: transparent;
+        font-weight: 600;
+        &::placeholder {
+          font-weight: 600 !important;
+          font-size: 16px;
+        }
+      }
+      &.v-input--is-disabled input {
+        color: #07101C;
+      }
+    }
+    &.has-errors {
+      .day-off:hover {
+        background: rgba(137, 149, 175, 0.1);
+      }
     }
   }
   ._templates {

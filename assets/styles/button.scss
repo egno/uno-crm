@@ -13,16 +13,11 @@
   transition: background-color 0.4s 0s;
   cursor: pointer;
   font: bold 18px Roboto Slab, Times New Roman, Times, serif;
+  letter-spacing: 0.05em;
   @media only screen and (min-width : 1300px) {
     &:hover {
       background-color: #07101C;;
     }
-  }
-
-  &_disabled {
-    background-color: rgba(137, 149, 175, 0.2) !important;
-    color: rgba(255, 255, 255, 0.5);
-    pointer-events: none;
   }
 
   &_attractive {
@@ -39,5 +34,11 @@
         background-color: #EC2E2E;
       }
     }
+  }
+
+  &_disabled {
+    background-color: rgba(137, 149, 175, 0.2);
+    color: rgba(255, 255, 255, 0.5);
+    pointer-events: none;
   }
 }

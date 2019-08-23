@@ -5,8 +5,11 @@
     class="time-edit"
     :placeholder="placeholder"
     return-masked-value
+    :disabled="disabled"
     :rules="[rules.time]"
     @input="onEdit"
+    @focus="$emit('focus')"
+    @blur="$emit('blur')"
   />
 </template>
 
@@ -20,6 +23,10 @@ export default {
     time: {
       type: String,
       default: '',
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
     placeholder: { type: String, default: '00:00' },
   },
@@ -63,6 +70,7 @@ export default {
 
   & .v-input__slot {
     margin-bottom: 0 !important;
+    border: 1px solid transparent;
   }
 
   input {

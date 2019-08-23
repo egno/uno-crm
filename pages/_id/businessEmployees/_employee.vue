@@ -351,6 +351,7 @@ export default {
           .filter(s => !!s)
         : []
 
+      /*
       if (!this.workDaysCount) {
         this.employee.j.schedule = this.employee.j.schedule || {
           data: [],
@@ -358,6 +359,8 @@ export default {
         }
         this.employee.j.schedule.data = this.businessInfo.j.schedule.data
       }
+      */
+      this.employee.j.schedule = {}
 
       this.employee.save().then((res) => {
         // Because Employee services'info like titles is rendered from businessServices,

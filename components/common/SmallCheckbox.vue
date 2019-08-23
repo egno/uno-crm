@@ -56,7 +56,7 @@ export default {
       background: #fff;
     }
 
-    &__input:checked + label{
+    &__input:checked + .default-checkbox__label {
       color: #07101c;
       &>.default-checkbox__checkbox {
         border-color: #5699FF;
