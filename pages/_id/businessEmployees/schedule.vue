@@ -546,8 +546,8 @@ export default {
   beforeMount () {
     this.selectedDate = this.actualDate
     this.templateStartDate = this.actualDate
-    this.getWorkingDays()
     this.initVisibleEmployees()
+    this.getWorkingDays()
   },
   methods: {
     ...mapActions({
@@ -710,19 +710,15 @@ export default {
             }
           })
 
-          this.businessEmployees.forEach((emp) => {
-            if (!this.workingDays[emp.id]) {
-              this.$set(this.workingDays, emp.id, [])
-            } else {
-              this.workingDays[emp.id] = []
-            }
-          })
           res.forEach(el => this.workingDays[el.employeeId].push(el))
           this.oldWorkingDays = cloneDeep(this.workingDays)
         })
     },
     initVisibleEmployees () {
       this.businessEmployees.forEach((employee) => {
+        if (!this.workingDays[employee.id]) {
+          this.$set(this.workingDays, employee.id, [])
+        }
         if (!this.visibleEmployees.some(emp => emp.id === employee.id)) {
           this.visibleEmployees.push(employee)
           if (!this.selectedCategories.includes(employee.j.category)) {
@@ -890,11 +886,12 @@ export default {
           minutes: 0,
         }
       }
+
       this.workingDays[employee.id].forEach((d) => {
         if (!d) {
           return
         }
-        total += d.length ? this.getTimeDiff(d[0], d[1]) : 0
+        total += d.start && d.end ? this.getTimeDiff(d.start, d.end) : 0
       })
       const toHours = 1000 * 60 * 60
       const hours = Math.floor(total / toHours)
