@@ -1,38 +1,55 @@
 <template>
   <div class="employees-schedule">
-    <v-layout justify-space-between align-center>
-      <v-layout align-center>
-        <main-button
-          class="fill-table"
-          @click="fillTable"
-        >
-          <span>Заполнить график по шаблонам</span>
-        </main-button>
-        <div class="change-week">
-          <v-btn
-            class="change-week__button"
-            depressed
-            flat
-            small
-            @click.stop="changeWeek(-1)"
-          />
-          <v-btn
-            class="change-week__button right"
-            depressed
-            flat
-            small
-            @click.stop="changeWeek(1)"
-          />
-        </div>
-        <div v-if="selectedWeek && selectedWeek.length" class="week-days">
-          {{ selectedWeek[0].date.toLocaleString('ru-RU', { day: 'numeric', month: '2-digit'}) }}
-          &#8212;
-          {{ selectedWeek[6].date.toLocaleString('ru-RU', { day: 'numeric', month: '2-digit'}) }}
-        </div>
-      </v-layout>
-    </v-layout>
     <table>
       <thead>
+        <tr>
+          <td colspan="2">
+            <v-layout>
+              <main-button
+                class="fill-table"
+                @click="fillTable"
+              >
+                <span>Заполнить график по шаблонам</span>
+              </main-button>
+              <button v-if="commonTemplates.length" type="button" class="templates-list-edit" @click="showTemplatesListEdit" />
+            </v-layout>
+          </td>
+          <td colspan="4">
+            <v-layout>
+              <div class="change-week">
+                <v-btn
+                  class="change-week__button"
+                  depressed
+                  flat
+                  small
+                  @click.stop="changeWeek(-1)"
+                />
+                <v-btn
+                  class="change-week__button right"
+                  depressed
+                  flat
+                  small
+                  @click.stop="changeWeek(1)"
+                />
+              </div>
+              <div v-if="selectedWeek && selectedWeek.length" class="week-days">
+                {{ selectedWeek[0].date.toLocaleString('ru-RU', { day: 'numeric', month: '2-digit'}) }}
+                &#8212;
+                {{ selectedWeek[6].date.toLocaleString('ru-RU', { day: 'numeric', month: '2-digit'}) }}
+              </div>
+            </v-layout>
+          </td>
+          <td colspan="3">
+            <button type="button">
+              Загрузить сохранение
+            </button>
+          </td>
+          <td colspan="2" class="employees-schedule__summary">
+            <button type="button" @click="fillWithEmpty">
+              Очистить
+            </button>
+          </td>
+        </tr>
         <tr>
           <td class="employees-schedule__employees">
             <v-layout align-center justify-space-around>
@@ -141,27 +158,25 @@
         </tr>
       </tfoot>
     </table>
-    <div>
-      <button v-if="commonTemplates.length" type="button" @click="showTemplatesListEdit">
-        Редактировать список шаблонов
-      </button>
-    </div>
 
-    <v-bottom-nav
-      :value="isChanged() && !dayScheduleErrors.length"
-      height="80"
-      absolute
-      color="transparent"
-    >
-      <span>Вы внесли изменения в график работы.</span>
-      <main-button
-        class="button save-table"
-        :class="{ button_disabled: !isChanged() || dayScheduleErrors.length }"
-        @click="saveTable"
+    <v-expand-transition>
+      <v-bottom-nav
+        v-show="isChanged() && !dayScheduleErrors.length"
+        :value="isChanged() && !dayScheduleErrors.length"
+        height="80"
+        absolute
+        color="transparent"
       >
-        <span>СОХРАНИТЬ</span>
-      </main-button>
-    </v-bottom-nav>
+        <span>Вы внесли изменения в график работы.</span>
+        <main-button
+          class="button save-table"
+          :class="{ button_disabled: !isChanged() || dayScheduleErrors.length }"
+          @click="saveTable"
+        >
+          <span>СОХРАНИТЬ</span>
+        </main-button>
+      </v-bottom-nav>
+    </v-expand-transition>
 
     <v-dialog
       :value="templateAssignForm"
@@ -449,7 +464,7 @@ export default {
       lastParams: '',
       loadPerDays: {},
       newBusiness: {},
-      oldWorkingDays: {},
+      oldWorkingDays: null,
       selectedDate: '',
       selectedEmployee: null,
       selectedOnStart: false,
@@ -710,7 +725,21 @@ export default {
             }
           })
 
-          res.forEach(el => this.workingDays[el.employeeId].push(el))
+          this.businessEmployees.forEach((employee) => {
+            if (!this.workingDays[employee.id]) {
+              this.$set(this.workingDays, employee.id, [])
+            }
+          })
+
+          res.forEach((el) => {
+            if (!el.start) {
+              el.start = ''
+            }
+            if (!el.end) {
+              el.end = ''
+            }
+            this.workingDays[el.employeeId].push(el)
+          })
           this.oldWorkingDays = cloneDeep(this.workingDays)
         })
     },
@@ -732,12 +761,15 @@ export default {
       return this.selectedEmployee.j.workTemplate && this.selectedEmployee.j.workTemplate.title === template.title
     },
     isChanged () {
-      return !isEqual(this.oldWorkingDays, this.workingDays)
+      return this.oldWorkingDays && !isEqual(this.oldWorkingDays, this.workingDays)
     },
     openAssignForm (employee) {
       this.selectedEmployee = new Employee(cloneDeep(employee))
       if (!this.selectedEmployee.j.workTemplate.data) {
         this.selectedEmployee.j.workTemplate.data = []
+      }
+      if (this.selectedEmployee.j.workTemplate.startDate) {
+        this.templateStartDate = this.selectedEmployee.j.workTemplate.startDate
       }
 
       this.templateAssignForm = true
@@ -947,8 +979,8 @@ export default {
   .employees-schedule {
     background-color: #fff;
     .fill-table {
-      width: 341px;
-      height: 35px;
+      width: 285px;
+      height: 40px;
       background: #5699FF;
       font-family: Roboto Slab, serif;
       font-size: 14px;
@@ -1031,21 +1063,6 @@ export default {
       @include border-left();
       border-right: 1px solid  #d6dae3;
     }
-    /*&__accordion {
-      min-width: 284px;
-      .accordion__header {
-        display: flex;
-        justify-content: space-between;
-        padding-right: 70px;
-      }
-      .business-schedule__main {
-        padding: 0;
-      }
-      input {
-        padding-bottom: 0;
-        background: transparent;
-      }
-    }*/
     .important-text {
       font-weight: 600;
     }
@@ -1061,6 +1078,12 @@ export default {
       margin: 18px 0;
       font-size: 14px;
       color: #8995AF;
+    }
+    .templates-list-edit {
+      width: 56px;
+      height: 40px;
+      border-left: 1px solid rgba(137, 149, 175, 0.35);
+      background: url('~assets/images/svg/pencil.svg') center no-repeat  rgba(137, 149, 175, 0.5);
     }
   }
   .schedule-row {

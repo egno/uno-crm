@@ -75,7 +75,7 @@ export default {
       }
     },
   },
-  created () {
+  beforeMount () {
     this.loadBusiness()
     this.loadApiTime()
     this.setActions()
