@@ -647,7 +647,7 @@ export default {
       if (employee.j.workTemplate && employee.j.workTemplate.type) {
         const template = this.getEmployeeTemplate(employee)
         if (template.type === 'week') {
-          return template.data
+          return this.selectedWeek.map((d, index) => ({ date: d.dateKey, employeeId: employee.id, start: template.data[index].start, end: template.data[index].end }))
         }
 
         const period = template.data.length
