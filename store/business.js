@@ -4,7 +4,9 @@ import { makeAlert } from '~/api/utils'
 import Business from '~/classes/business'
 
 const state = () => ({
-  businessInfo: {},
+  businessInfo: {
+    id: '',
+  },
   businessIndividualCategories: [],
   businessCategories: [
     'Клиника косметологии',

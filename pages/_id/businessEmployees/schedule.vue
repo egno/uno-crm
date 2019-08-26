@@ -40,12 +40,12 @@
             </v-layout>
           </td>
           <td colspan="3">
-            <button type="button">
+            <button type="button" class="employees-schedule__reset" @click="resetChanges">
               Загрузить сохранение
             </button>
           </td>
           <td colspan="2" class="employees-schedule__summary">
-            <button type="button" @click="fillWithEmpty">
+            <button type="button" class="employees-schedule__empty" @click="fillWithEmpty">
               Очистить
             </button>
           </td>
@@ -328,11 +328,14 @@
                   @edit="openEditForm"
                   @delete="deleteEmpTemplate"
                 >
-                  <div>
-                    <div>Дата начала шаблона</div>
-                    <div>{{ startDayFormatted }}</div>
+                  <div class="current-template__start">
+                    <div class="current-template__text">
+                      Дата начала шаблона
+                    </div>
+                    <div class="current-template__start-date">
+                      {{ startDayFormatted }}
+                    </div>
                   </div>
-                  <div />
                 </TemplateCard>
               </template>
             </Accordion>
@@ -442,7 +445,7 @@ import TemplateCard from '~/components/employee/TemplateCard.vue'
 import TimeEdit from '~/components/TimeEdit.vue'
 import Business from '~/classes/business'
 import Employee from '~/classes/employee'
-import { formatDate, hyphensStringToDate } from '~/components/calendar/utils'
+import { formatDate, getWeeks, hyphensStringToDate } from '~/components/calendar/utils'
 import Api from '~/api/backend'
 
 export default {
@@ -495,7 +498,6 @@ export default {
   computed: {
     ...mapGetters({
       actualDate: 'common/actualDate',
-      calendarMonth: 'common/calendarMonth',
     }),
     ...mapState({
       businessInfo: state => state.business.businessInfo,
@@ -520,7 +522,10 @@ export default {
 
       const includesDay = day => day.dateKey === this.selectedDate
 
-      return this.calendarMonth.find(week => week.some(includesDay))
+      return this.selectedMonth.find(week => week.some(includesDay))
+    },
+    selectedMonth () {
+      return getWeeks(+this.selectedDate.slice(0, 4), +this.selectedDate.slice(5, 7) - 1)
     },
     startDayFormatted () {
       if (!this.templateStartDate) { return '' }
@@ -537,6 +542,9 @@ export default {
     },
   },
   watch: {
+    'businessInfo.id': {
+      handler: 'getWorkingDays',
+    },
     businessEmployees: {
       handler (newVal) {
         if (this.selectedOnStart) {
@@ -644,7 +652,7 @@ export default {
       if (employee.j.workTemplate && employee.j.workTemplate.type) {
         const template = this.getEmployeeTemplate(employee)
         if (template.type === 'week') {
-          return template.data
+          return this.selectedWeek.map((d, index) => ({ date: d.dateKey, employeeId: employee.id, start: template.data[index].start, end: template.data[index].end }))
         }
 
         const period = template.data.length
@@ -699,7 +707,7 @@ export default {
       return this.businessInfo.scheduleTemplates.find(t => t.title === employee.j.workTemplate.title)
     },
     getWorkingDays () {
-      if (!this.selectedWeek) {
+      if (!this.selectedWeek || !this.businessInfo.id) {
         return
       }
 
@@ -737,6 +745,8 @@ export default {
           this.businessEmployees.forEach((employee) => {
             if (!this.workingDays[employee.id]) {
               this.$set(this.workingDays, employee.id, [])
+            } else {
+              this.workingDays[employee.id] = []
             }
           })
 
@@ -838,6 +848,9 @@ export default {
       }
       this.shiftDays[dayIndex] = newDaySchedule
       this.shiftScheduleHasErrors = !!errors.length
+    },
+    resetChanges () {
+      this.workingDays = cloneDeep(this.oldWorkingDays)
     },
     saveTemplate () {
       const newTemplate = {
@@ -1064,6 +1077,36 @@ export default {
       border-bottom: 1px solid #d6dae3;
       border-right: 1px solid #d6dae3;
     }
+    &__reset {
+      font-family: Roboto Slab, serif;
+      color: #5699FF;
+      outline: none;
+      &:before {
+        display: inline-block;
+        vertical-align: middle;
+        width: 16px;
+        height: 16px;
+        margin-right: 5px;
+        background: url('~assets/images/svg/arrow_down.svg') center no-repeat;
+        content: '';
+      }
+    }
+    &__empty {
+      width: 100%;
+      height: 40px;
+      font-family: Roboto Slab, serif;
+      color: #fff;
+      background: #07101C;
+      &:before {
+        display: inline-block;
+        vertical-align: sub;
+        width: 16px;
+        height: 16px;
+        margin-right: 5px;
+        background: url('~assets/images/svg/close.svg') center no-repeat;
+        content: '';
+      }
+    }
     &__employees {
       width: 190px;
     }
@@ -1179,6 +1222,16 @@ export default {
     .accordion.current-template .accordion__header:after,
     .accordion.available-templates .accordion__header:after {
       display: none;
+    }
+    .current-template {
+      &__start {
+        border-top: 1px solid rgba(137, 149, 175, 0.1);
+        padding: 10px 16px;
+        font-size: 12px;
+      }
+      &__text {
+        font-weight: 600;
+      }
     }
     .checkbox {
       margin-top: 30px;
