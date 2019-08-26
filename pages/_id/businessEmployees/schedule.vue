@@ -40,12 +40,12 @@
             </v-layout>
           </td>
           <td colspan="3">
-            <button type="button">
+            <button type="button" class="employees-schedule__reset" @click="resetChanges">
               Загрузить сохранение
             </button>
           </td>
           <td colspan="2" class="employees-schedule__summary">
-            <button type="button" @click="fillWithEmpty">
+            <button type="button" class="employees-schedule__empty" @click="fillWithEmpty">
               Очистить
             </button>
           </td>
@@ -839,6 +839,9 @@ export default {
       this.shiftDays[dayIndex] = newDaySchedule
       this.shiftScheduleHasErrors = !!errors.length
     },
+    resetChanges () {
+      this.workingDays = cloneDeep(this.oldWorkingDays)
+    },
     saveTemplate () {
       const newTemplate = {
         title: this.templateTitle,
@@ -1063,6 +1066,36 @@ export default {
     tr {
       border-bottom: 1px solid #d6dae3;
       border-right: 1px solid #d6dae3;
+    }
+    &__reset {
+      font-family: Roboto Slab, serif;
+      color: #5699FF;
+      outline: none;
+      &:before {
+        display: inline-block;
+        vertical-align: middle;
+        width: 16px;
+        height: 16px;
+        margin-right: 5px;
+        background: url('~assets/images/svg/arrow_down.svg') center no-repeat;
+        content: '';
+      }
+    }
+    &__empty {
+      width: 100%;
+      height: 40px;
+      font-family: Roboto Slab, serif;
+      color: #fff;
+      background: #07101C;
+      &:before {
+        display: inline-block;
+        vertical-align: sub;
+        width: 16px;
+        height: 16px;
+        margin-right: 5px;
+        background: url('~assets/images/svg/close.svg') center no-repeat;
+        content: '';
+      }
     }
     &__employees {
       width: 190px;
