@@ -148,13 +148,13 @@
       </tbody>
       <tfoot>
         <tr>
-          <td colspan="2" class="table-header">
+          <td colspan="2" class="employees-schedule__footer table-header">
             Всего сотрудников в смену
           </td>
-          <td v-for="(day, dayIndex) in selectedWeek" :key="dayIndex" class="">
-            {{ loadPerDays[day.dateKey] }}
+          <td v-for="(day, dayIndex) in selectedWeek" :key="dayIndex" class="schedule-row__data-cell">
+            {{ loadPerDay(day.dateKey) }}
           </td>
-          <td colspan="2" />
+          <td colspan="2" class="schedule-row__data-cell" />
         </tr>
       </tfoot>
     </table>
@@ -426,10 +426,8 @@
 </template>
 
 <script>
-/* eslint-disable vue/no-unused-components */
 import { mapActions, mapGetters, mapState } from 'vuex'
 import { cloneDeep, isEqual } from 'lodash'
-import SmallCheckbox from '~/components/common/SmallCheckbox'
 import { employeesCategorized } from '~/mixins/employee'
 import { dayScheduleMixin } from '~/mixins/dayScheduleMixin'
 // import Modal from '~/components/common/Modal'
@@ -437,7 +435,6 @@ import Accordion from '~/components/common/Accordion'
 import BusinessScheduleEdit from '~/components/business/BusinessScheduleEdit.vue'
 import Chip from '~/components/common/Chip.vue'
 import DaySchedule from '~/components/business/DaySchedule.vue'
-import DeleteButton from '~/components/common/DeleteButton.vue'
 import EmployeesSelection from '~/components/employee/EmployeesSelection.vue'
 import EmployeeSimpleCard from '~/components/employee/EmployeeSimpleCard.vue'
 import MainButton from '~/components/common/MainButton.vue'
@@ -450,7 +447,7 @@ import Api from '~/api/backend'
 
 export default {
   // eslint-disable-next-line standard/object-curly-even-spacing
-  components: { Accordion, BusinessScheduleEdit, Chip, DaySchedule, DeleteButton, EmployeesSelection, EmployeeSimpleCard, MainButton, SmallCheckbox, TemplateCard, TimeEdit },
+  components: { Accordion, BusinessScheduleEdit, Chip, DaySchedule, EmployeesSelection, EmployeeSimpleCard, MainButton, TemplateCard, TimeEdit },
   mixins: [ dayScheduleMixin, employeesCategorized ],
   data () {
     return {
@@ -462,7 +459,6 @@ export default {
       isEditing: false,
       lastEdited: '',
       lastParams: '',
-      loadPerDays: {},
       newBusiness: {},
       oldWorkingDays: null,
       selectedDate: '',
@@ -633,9 +629,9 @@ export default {
     fillWithEmpty () {
       this.businessEmployees.forEach((emp) => {
         if (!this.workingDays[emp.id]) {
-          this.$set(this.workingDays, emp.id, new Array(7).fill({ start: '', end: '' }))
+          this.$set(this.workingDays, emp.id, this.selectedWeek.map(d => ({ date: d.dateKey, employeeId: emp.id, start: '', end: '' })))
         } else {
-          this.workingDays[emp.id] = new Array(7).fill({ start: '', end: '' })
+          this.workingDays[emp.id] = this.selectedWeek.map(d => ({ date: d.dateKey, employeeId: emp.id, start: '', end: '' }))
         }
       })
     },
@@ -716,15 +712,6 @@ export default {
               }
           })
 
-          this.selectedWeek.forEach((d) => {
-            const count = res.filter(x => x.date === d.dateKey && x.start && x.end).length
-            if (!this.loadPerDays[d.dateKey]) {
-              this.$set(this.loadPerDays, d.dateKey, count)
-            } else {
-              this.loadPerDays[d.dateKey] = count
-            }
-          })
-
           this.businessEmployees.forEach((employee) => {
             if (!this.workingDays[employee.id]) {
               this.$set(this.workingDays, employee.id, [])
@@ -762,6 +749,28 @@ export default {
     },
     isChanged () {
       return this.oldWorkingDays && !isEqual(this.oldWorkingDays, this.workingDays)
+    },
+    loadPerDay (day) {
+      // eslint-disable-next-line prefer-const
+      let res = {}
+      let start = []
+
+      if (!Object.keys(this.workingDays).length) {
+        return 0
+      }
+      for (const empId in this.workingDays) {
+        if (!this.workingDays[empId].length) {
+          return
+        }
+        start = start.concat(this.workingDays[empId])
+      }
+
+      this.selectedWeek.forEach((d) => {
+        const hyphenDate = d.dateKey
+        res[hyphenDate] = start.filter(x => x.date === hyphenDate && x.start && x.end).length
+      })
+
+      return res[day]
     },
     openAssignForm (employee) {
       this.selectedEmployee = new Employee(cloneDeep(employee))
@@ -1078,6 +1087,9 @@ export default {
       margin: 18px 0;
       font-size: 14px;
       color: #8995AF;
+    }
+    &__footer {
+      height: 40px;
     }
     .templates-list-edit {
       width: 56px;
