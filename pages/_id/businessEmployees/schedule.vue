@@ -296,7 +296,7 @@
                 type="button"
                 class="right-attached-panel__save"
                 :class="{ _disabled: !templateTitle || !templateType || shiftScheduleHasErrors }"
-                @click="saveTemplate"
+                @click="isEditing? saveEmployee() : saveTemplate()"
               >
                 Сохранить
               </button>
@@ -623,7 +623,9 @@ export default {
     },
     fillTable () {
       this.visibleEmployees.forEach((employee) => {
-        this.$set(this.workingDays, employee.id, this.getEmpWeekSchedule(employee))
+        if (employee.j.workTemplate && employee.j.workTemplate.type) {
+          this.$set(this.workingDays, employee.id, this.getEmpWeekSchedule(employee))
+        }
       })
     },
     fillWithEmpty () {
@@ -636,7 +638,7 @@ export default {
       })
     },
     getEmpWeekSchedule (employee) {
-      const empty = [ [], [], [], [], [], [], [] ]
+      const empty = this.selectedWeek.map(d => ({ date: d.dateKey, employeeId: employee.id, start: '', end: '' }))
 
       // todo merge with irregular days
       if (employee.j.workTemplate && employee.j.workTemplate.type) {
@@ -646,22 +648,42 @@ export default {
         }
 
         const period = template.data.length
-        const startDate = hyphensStringToDate(employee.j.workTemplate.startDate) // it's not a common info
+        const startDate = hyphensStringToDate(employee.j.workTemplate.startDate) // startDate is not a common info
+        const thisMonday = this.selectedWeek[0].date
+        // eslint-disable-next-line prefer-const
+        let week = empty
 
         if (!startDate) {
           return empty
         }
-        // const diff = this.getDiffInDays(startDate, this.selectedWeek[0].date) // или предыдущий день?
-        const dow = this.selectedWeek.findIndex(d => d.dateKey === employee.j.workTemplate.startDate)
-        // let currentDay = diff % period
-        let currentDay = 0
-        // eslint-disable-next-line prefer-const
-        let week = empty
-        // todo add previous week's sunday as a start point
 
-        for (let i = dow; i < 7; i++) {
-          week[i] = template.data[currentDay]
-          currentDay = currentDay < (period - 1) ? (currentDay + 1) : 0
+        if (startDate < thisMonday) {
+          const diff = this.getDiffInDays(startDate, thisMonday) // или предыдущий день?
+          // const dow = this.selectedWeek.findIndex(d => d.dateKey === employee.j.workTemplate.startDate)
+          let currentDay = diff % period
+          // let currentDay = 0
+          // eslint-disable-next-line prefer-const
+
+          // todo add previous week's sunday as a start point
+
+          for (let i = currentDay; i < 7; i++) {
+            week[i] = Object.assign(week[i], template.data[currentDay])
+            currentDay = currentDay < (period - 1) ? (currentDay + 1) : 0
+          }
+        } else {
+          let i = 0
+
+          while (i < 7) {
+            if (this.selectedWeek[i].date < startDate) {
+              week[i] = Object.assign(week[i], { start: '', end: '' })
+              i++
+            } else {
+              for (let j = 0; (j < period) && i < 7; j++) {
+                week[i] = Object.assign(week[i], template.data[j])
+                i++
+              }
+            }
+          }
         }
 
         return week
