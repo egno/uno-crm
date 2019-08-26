@@ -445,7 +445,7 @@ import TemplateCard from '~/components/employee/TemplateCard.vue'
 import TimeEdit from '~/components/TimeEdit.vue'
 import Business from '~/classes/business'
 import Employee from '~/classes/employee'
-import { formatDate, hyphensStringToDate } from '~/components/calendar/utils'
+import { formatDate, getWeeks, hyphensStringToDate } from '~/components/calendar/utils'
 import Api from '~/api/backend'
 
 export default {
@@ -498,7 +498,6 @@ export default {
   computed: {
     ...mapGetters({
       actualDate: 'common/actualDate',
-      calendarMonth: 'common/calendarMonth',
     }),
     ...mapState({
       businessInfo: state => state.business.businessInfo,
@@ -523,7 +522,10 @@ export default {
 
       const includesDay = day => day.dateKey === this.selectedDate
 
-      return this.calendarMonth.find(week => week.some(includesDay))
+      return this.selectedMonth.find(week => week.some(includesDay))
+    },
+    selectedMonth () {
+      return getWeeks(+this.selectedDate.slice(0, 4), +this.selectedDate.slice(5, 7) - 1)
     },
     startDayFormatted () {
       if (!this.templateStartDate) { return '' }
@@ -540,6 +542,9 @@ export default {
     },
   },
   watch: {
+    'businessInfo.id': {
+      handler: 'getWorkingDays',
+    },
     businessEmployees: {
       handler (newVal) {
         if (this.selectedOnStart) {
@@ -702,7 +707,7 @@ export default {
       return this.businessInfo.scheduleTemplates.find(t => t.title === employee.j.workTemplate.title)
     },
     getWorkingDays () {
-      if (!this.selectedWeek) {
+      if (!this.selectedWeek || !this.businessInfo.id) {
         return
       }
 
@@ -740,6 +745,8 @@ export default {
           this.businessEmployees.forEach((employee) => {
             if (!this.workingDays[employee.id]) {
               this.$set(this.workingDays, employee.id, [])
+            } else {
+              this.workingDays[employee.id] = []
             }
           })
 
