@@ -1,16 +1,16 @@
 <template>
-  <div class="schedule-edit">
-    <div>
-      <h2 class="schedule-edit__heading">
+  <div class="business-schedule">
+    <div v-if="showHeader">
+      <h2 class="business-schedule__heading">
         Определите рабочее время
       </h2>
     </div>
-    <VLayout class="schedule-edit__tumbler">
+    <VLayout v-if="showTumbler" class="business-schedule__tumbler">
       <VFlex xs12>
         <Tumbler
           v-model="forAllDays"
           label="Для всех дней недели"
-          class="day-schedule__for-all"
+          class="business-schedule__for-all"
           @change="onToggleForAll"
         />
       </VFlex>
@@ -21,19 +21,18 @@
       justify-space-around
       column
       fill-height
-      class="schedule-edit__main"
+      :class="{ 'business-schedule__main': true, 'with-margin': showTumbler || showHeader }"
     >
-      <div v-for="(day, index) in days" :key="index" xs12 class="day-schedule">
-        <div class="day-schedule__wrapper">
-          <div class="day-schedule__dayname">
+      <div v-for="(day, index) in days" :key="index" xs12 class="">
+        <div class="business-schedule__wrapper">
+          <div class="business-schedule__dayname">
             {{ day.dayName }}
           </div>
-          <div class="schedule-edit__content">
+          <div class="business-schedule__content">
             <DaySchedule
               :day-schedule="day.value"
               @editDay="onEditDay(index, $event)"
             />
-            <div class="schedule-edit__clear" @click="onClearDay(index)" />
           </div>
         </div>
       </div>
@@ -48,18 +47,24 @@ import Tumbler from '~/components/common/Tumbler.vue'
 
 export default {
   components: { DaySchedule, Tumbler },
-  mixins: [scheduleMixin],
+  mixins: [ scheduleMixin ],
+  props: {
+    showHeader: {
+      type: Boolean,
+      default: true,
+    },
+    showTumbler: {
+      type: Boolean,
+      default: true,
+    },
+  },
   data () {
     return {
-      forAllDays: false
+      forAllDays: false,
     }
   },
   methods: {
-    onClearDay (index) {
-      this.newWeekSchedule.data[index] = { start: '', end: '' }
-      this.$emit('editWeek', this.newWeekSchedule)
-    },
-    onEditDay (dayIndex, newDay) {
+    onEditDay (dayIndex, { newDaySchedule: newDay }) {
       if (!this.newWeekSchedule || !this.newWeekSchedule.data) {
         return
       }
@@ -142,12 +147,14 @@ export default {
       }
 
       return false
-    }
-  }
+    },
+  },
 }
 </script>
 <style lang="scss">
-.schedule-edit {
+@import '~assets/styles/common.scss';
+
+.business-schedule {
   &__heading {
     margin: 23px 0 0;
     padding: 0;
@@ -161,40 +168,40 @@ export default {
   }
 
   &__main {
-    margin-top: 31px;
     padding: 0 11px;
+    &.with-margin {
+      margin-top: 31px;
+    }
   }
 
   &__tumbler {
     padding: 0 11px;
   }
 
-  &__content {
-    display: flex;
+  &__for-all {
+    width: 240px;
+    padding-top: 32px;
+  }
+
+  &__wrapper {
+    @extend %vertical-align;
     justify-content: space-between;
-    align-items: center;
+    padding: 7px 0;
   }
 
-  &__clear {
-    width: 16px;
-    height: 16px;
-    margin-top: -1px;
-    margin-left: 7px;
-    cursor: pointer;
-    background: url('~assets/images/svg/cross.svg') center/10px no-repeat;
-  }
-
-  &__description {
-    margin-top: 17px;
-    padding-top: 6px;
-    border-top: 1px solid rgba(137, 149, 175, 0.1);
-    font-family: Lato;
+  &__dayname {
+    font-family: Lato, sans-serif;
     font-style: normal;
-    font-weight: normal;
-    font-size: 12px;
+    font-weight: 600;
+    font-size: 14px;
     line-height: normal;
+    color: #07101C;
     text-align: center;
-    color: #8995af;
+    text-transform: capitalize;
+  }
+
+  &__content {
+
   }
 }
 </style>

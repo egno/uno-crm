@@ -36,28 +36,28 @@ export default {
       type: Object,
       default () {
         return {}
-      }
+      },
     },
     values: {
       type: Object,
       default () {
         return {}
-      }
-    }
+      },
+    },
   },
   data () {
     return {
       paramsInfo: {
         login: {
-          title: 'Логин'
+          title: 'Логин',
         },
         password: {
-          title: 'Пароль'
+          title: 'Пароль',
         },
         key: {
-          title: 'Ключ API'
-        }
-      }
+          title: 'Ключ API',
+        },
+      },
     }
   },
   computed: {
@@ -71,8 +71,8 @@ export default {
           return { ...{ code: x.name }, ...this.paramsInfo[x.name] }
         })
       )
-    }
-  }
+    },
+  },
 }
 </script>
 

@@ -54,57 +54,57 @@ import MainButton from '~/components/common/MainButton.vue'
 export default {
   components: {
     MainButton,
-    VueAvatar
+    VueAvatar,
   },
   props: {
     avatar: {
       type: String,
-      default: ''
+      default: '',
     },
     background: {
       type: String,
-      default: ''
+      default: '',
     },
     finishText: {
       type: String,
-      default: 'Save'
+      default: 'Save',
     },
     hasRotation: {
       type: Boolean,
-      default: false
+      default: false,
     },
     hasScale: {
       type: Boolean,
-      default: true
+      default: true,
     },
     image: {
       type: String,
-      default: ''
+      default: '',
     },
     border: {
       type: Number,
-      default: 25
+      default: 25,
     },
     borderRadius: {
       type: Number,
-      default: 0
+      default: 0,
     },
     width: {
       type: Number,
-      default: 200
+      default: 200,
     },
     height: {
       type: Number,
-      default: 200
+      default: 200,
     },
     color: {
       type: Array,
-      default: () => [0, 0, 0, 0.5]
-    }
+      default: () => [ 0, 0, 0, 0.5 ],
+    },
   },
   data () {
     return {
-      scale: 0
+      scale: 0,
     }
   },
   methods: {
@@ -116,8 +116,8 @@ export default {
     },
     finished () {
       return this.$emit('finished', this.$refs.vueavatar.getImageScaled())
-    }
-  }
+    },
+  },
 }
 </script>
 

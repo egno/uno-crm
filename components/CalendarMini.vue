@@ -38,17 +38,17 @@ import Api from '~/api/backend'
 export default {
   props: {
     date: { type: String, default: '' },
-    format: { type: String, default: 'YYYY-MM-DD' }
+    format: { type: String, default: 'YYYY-MM-DD' },
   },
   data () {
     return {
-      visits: []
+      visits: [],
     }
   },
   computed: {
     dates () {
       return periodDates(2019, 0)
-    }
+    },
   },
   mounted () {
     this.fetchData()
@@ -64,7 +64,7 @@ export default {
     },
     visitCount (dt) {
       return this.visits.filter(v => v.ts_begin.slice(0, 10) === dt).length
-    }
-  }
+    },
+  },
 }
 </script>

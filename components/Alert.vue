@@ -9,12 +9,12 @@
 <script>
 export default {
   props: {
-    message: { type: String, default: () => '' }
+    message: { type: String, default: () => '' },
   },
   data () {
     return {
-      alert: true
+      alert: true,
     }
-  }
+  },
 }
 </script>

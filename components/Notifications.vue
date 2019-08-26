@@ -9,11 +9,11 @@
 <script>
 export default {
   props: {
-    source: { type: String, default: () => '' }
+    source: { type: String, default: () => '' },
   },
   data: () => ({
-    count: 0
-  })
+    count: 0,
+  }),
 }
 </script>
 <style lang="scss">

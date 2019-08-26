@@ -11,15 +11,15 @@ export default {
   props: {
     phone: {
       type: String,
-      default: ''
-    }
+      default: '',
+    },
   },
   methods: {
     phoneLink (value) {
       if (!value) { return '' }
       return `tel:+${value}`
-    }
-  }
+    },
+  },
 }
 </script>
 

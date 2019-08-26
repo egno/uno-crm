@@ -23,7 +23,7 @@ export default {
     Alerts,
     Navigation,
     TopBar,
-    UserProfileModal
+    UserProfileModal,
   },
   computed: {
     ...mapGetters({
@@ -38,7 +38,7 @@ export default {
       myBusinessList: 'user/myBusinessList',
       navBarVisible: 'common/navBarVisible',
       messageWindow: 'common/messageWindow',
-      profileDrawer: 'common/profileDrawer'
+      profileDrawer: 'common/profileDrawer',
     }),
     isMenuVisible () {
       if (!this.$route || !this.$route.name) {
@@ -61,21 +61,21 @@ export default {
         return
       }
       return this.actions.filter(x => x.default)[0]
-    }
+    },
   },
   watch: {
     '$route.params': {
       handler: 'loadBusiness',
-      deep: true
+      deep: true,
     },
     actualDate: 'loadVisits',
     loggedIn (newVal) {
       if (newVal) {
         this.loadMyBusinessList()
       }
-    }
+    },
   },
-  created () {
+  beforeMount () {
     this.loadBusiness()
     this.loadApiTime()
     this.setActions()
@@ -101,7 +101,7 @@ export default {
       setActions: 'common/setActions',
       setActualDate: 'common/setActualDate',
       setBusiness: 'business/setBusiness',
-      navBar: 'layout/navBar'
+      navBar: 'layout/navBar',
     }),
     goHome () {
       this.$router.push({ name: 'index' })
@@ -119,7 +119,7 @@ export default {
       const month = this.actualDate.replace(/\d{2}$/, '01')
       this.loadDayVisits({
         business: this.businessId,
-        month
+        month,
       })
     },
     onAction (payload) {
@@ -132,8 +132,8 @@ export default {
         vm.refreshToken()
         vm.tokenTimer()
       }, 1000 * 60 * 45)
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -518,7 +518,7 @@ export default {
       }
       &.v-label--active {
         font-size: 12px;
-        transform: scale(1) translateY(-19px);
+        transform: scale(1) translateY(-18px);
       }
     }
     input {

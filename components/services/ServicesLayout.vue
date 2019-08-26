@@ -33,7 +33,7 @@
 <script>
 import MainButton from '~/components/common/MainButton.vue'
 export default {
-  components: { MainButton }
+  components: { MainButton },
 }
 </script>
 

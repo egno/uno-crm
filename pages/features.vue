@@ -173,8 +173,8 @@ import Layout from '~/components/home/Layout.vue'
 
 export default {
   components: {
-    Layout
-  }
+    Layout,
+  },
 }
 </script>
 

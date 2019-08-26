@@ -59,10 +59,10 @@ import Users from '~/mixins/users'
 
 export default {
   components: { AddMenu, NavPoweredItem, VCalendar },
-  mixins: [Users, filials],
+  mixins: [ Users, filials ],
   data () {
     return {
-      parentFilialsCount: null
+      parentFilialsCount: null,
     }
   },
   computed: {
@@ -78,7 +78,7 @@ export default {
       navigationMini: 'layout/navigationMini',
       token: 'common/token',
       navigationVisible: 'layout/navigationVisible',
-      businessIsFilial: 'business/businessIsFilial'
+      businessIsFilial: 'business/businessIsFilial',
     }),
     date () {
       const dt = new Date()
@@ -113,8 +113,8 @@ export default {
     isCompanyLevel: {
       cache: false,
       get () {
-        const loggedIn = this.loggedIn
-        const businessInfo = this.businessInfo
+        const { loggedIn } = this
+        const { businessInfo } = this
         const res = (
           loggedIn &&
           businessInfo &&
@@ -123,7 +123,7 @@ export default {
               businessInfo.parent === null))
         )
         return res
-      }
+      },
     },
     isSalonLevel () {
       return (
@@ -146,24 +146,24 @@ export default {
           title: 'Журнал записи',
           route: {
             name: 'id-visits',
-            params: { id: this.businessId, date: this.date }
+            params: { id: this.businessId, date: this.date },
           },
           show: isEmployee && this.isSalonLevel,
           action: {
             label: 'Создать запись',
             action: 'newVisit',
-            default: true
-          }
+            default: true,
+          },
         },
         {
           title: 'Филиалы',
           count: this.businessFilialCount,
           route: {
             name: 'id-filials',
-            params: { id: this.businessId }
+            params: { id: this.businessId },
           },
-          show: isEmployee && this.isCompanyLevel
-        }
+          show: isEmployee && this.isCompanyLevel,
+        },
       ]
       const filialManagerMenu = [
         {
@@ -171,39 +171,39 @@ export default {
           count: this.businessFilialCount,
           route: {
             name: 'id-filials',
-            params: { id: this.businessId }
+            params: { id: this.businessId },
           },
-          show: isFilialManager && this.isCompanyLevel
+          show: isFilialManager && this.isCompanyLevel,
         },
         {
           title: 'Информация',
           count: undefined,
           route: {
             name: 'id-businessCard',
-            params: { id: this.businessId }
+            params: { id: this.businessId },
           },
-          show: isFilialManager && this.businessIsFilial
+          show: isFilialManager && this.businessIsFilial,
         },
         {
           title: 'Услуги',
           count: this.businessServiceCount,
           route: {
             name: 'id-services',
-            params: { id: this.businessId }
+            params: { id: this.businessId },
           },
           show: isFilialManager && this.businessIsFilial,
           action: {
             label: 'Добавить услугу',
             action: 'newService',
-            default: true
-          }
+            default: true,
+          },
         },
         {
           title: 'Сотрудники',
           count: this.employeesCount,
           route: {
             name: 'id-businessEmployees',
-            params: { id: this.businessId }
+            params: { id: this.businessId },
           },
           show: isFilialManager && this.businessIsFilial,
           action: {
@@ -211,17 +211,25 @@ export default {
             action: 'newEmployee',
             to: {
               name: 'id-businessEmployees-employee',
-              params: { id: this.businessId, employee: 'new' }
+              params: { id: this.businessId, employee: 'new' },
             },
-            default: true
-          }
+            default: true,
+          },
+        },
+        {
+          title: 'График работ',
+          route: {
+            name: 'id-businessEmployees-schedule',
+            params: { id: this.businessId },
+          },
+          show: isFilialManager && this.businessIsFilial,
         },
         {
           title: 'Клиенты',
           count: this.clientsCount,
           route: {
             name: 'id-businessClients',
-            params: { id: this.businessId }
+            params: { id: this.businessId },
           },
           show: isFilialManager && this.businessIsFilial,
           action: {
@@ -229,24 +237,24 @@ export default {
             action: 'newClient',
             to: {
               name: 'id-businessClient',
-              params: { id: this.businessId, client: 'new' }
+              params: { id: this.businessId, client: 'new' },
             },
-            default: true
-          }
+            default: true,
+          },
         },
         {
           title: 'Журнал записи',
           route: {
             name: 'id-visits',
-            params: { id: this.businessId, date: this.date }
+            params: { id: this.businessId, date: this.date },
           },
           show: isFilialManager && this.businessIsFilial,
           action: {
             label: 'Создать запись',
             action: 'newVisit',
-            default: true
-          }
-        }
+            default: true,
+          },
+        },
       ]
       const companyLevelAdminMenu = [
         {
@@ -254,50 +262,50 @@ export default {
           count: undefined,
           route: {
             name: 'id-businessCard',
-            params: { id: this.businessId }
+            params: { id: this.businessId },
           },
-          show: true
+          show: true,
         },
         {
           title: 'Филиалы',
           count: this.businessFilialCount,
           route: {
             name: 'id-filials',
-            params: { id: this.businessId }
+            params: { id: this.businessId },
           },
           show: true,
           action: {
             label: 'Добавить филиал',
             action: 'newFilial',
-            default: true
-          }
+            default: true,
+          },
         },
         {
           title: 'Настройки',
           count: undefined,
           route: {
             name: 'id-businessSettings',
-            params: { id: this.businessId }
+            params: { id: this.businessId },
           },
-          show: true
+          show: true,
         },
         {
           title: 'Пользователи',
           route: {
             name: 'id-businessUsers',
-            params: { id: this.businessId }
+            params: { id: this.businessId },
           },
-          show: true
+          show: true,
         },
         {
           title: 'Онлайн запись',
           count: undefined,
           route: {
             name: 'id-widgetSettings',
-            params: { id: this.businessId }
+            params: { id: this.businessId },
           },
-          show: true
-        }
+          show: true,
+        },
       ]
       const salonLevelAdminMenu = [
         {
@@ -305,30 +313,30 @@ export default {
           count: undefined,
           route: {
             name: 'id-businessCard',
-            params: { id: this.businessId }
+            params: { id: this.businessId },
           },
-          show: true
+          show: true,
         },
         {
           title: 'Услуги',
           count: this.businessServiceCount,
           route: {
             name: 'id-services',
-            params: { id: this.businessId }
+            params: { id: this.businessId },
           },
           show: true,
           action: {
             label: 'Добавить услугу',
             action: 'newService',
-            default: true
-          }
+            default: true,
+          },
         },
         {
           title: 'Сотрудники',
           count: this.employeesCount,
           route: {
             name: 'id-businessEmployees',
-            params: { id: this.businessId }
+            params: { id: this.businessId },
           },
           show: true,
           action: {
@@ -336,17 +344,25 @@ export default {
             action: 'newEmployee',
             to: {
               name: 'id-businessEmployees-employee',
-              params: { id: this.businessId, employee: 'new' }
+              params: { id: this.businessId, employee: 'new' },
             },
-            default: true
-          }
+            default: true,
+          },
+        },
+        {
+          title: 'График работ',
+          route: {
+            name: 'id-businessEmployees-schedule',
+            params: { id: this.businessId },
+          },
+          show: true,
         },
         {
           title: 'Клиенты',
           count: this.clientsCount,
           route: {
             name: 'id-businessClients',
-            params: { id: this.businessId }
+            params: { id: this.businessId },
           },
           show: true,
           action: {
@@ -354,24 +370,24 @@ export default {
             action: 'newClient',
             to: {
               name: 'id-businessClient',
-              params: { id: this.businessId, client: 'new' }
+              params: { id: this.businessId, client: 'new' },
             },
-            default: true
-          }
+            default: true,
+          },
         },
         {
           title: 'Журнал записи',
           route: {
             name: 'id-visits',
-            params: { id: this.businessId, date: this.date }
+            params: { id: this.businessId, date: this.date },
           },
           show: true,
           action: {
             label: 'Создать запись',
             action: 'newVisit',
-            default: true
-          }
-        }
+            default: true,
+          },
+        },
       ]
       const companyAdminMenu = this.isCompanyLevel ? companyLevelAdminMenu : salonLevelAdminMenu
       const unoManagerMenu = [
@@ -379,20 +395,20 @@ export default {
           title: 'Мои компании',
           icon: 'business',
           route: { name: 'myBusinessList' },
-          show: this.isManagerMenu
+          show: this.isManagerMenu,
         },
         {
           title: 'Все компании',
           icon: 'business',
           route: { name: 'businessList' },
-          show: this.isManagerMenu
+          show: this.isManagerMenu,
         },
         {
           title: 'Менеджеры',
           icon: 'business',
           route: { name: 'adminUserList' },
-          show: this.isManagerMenu && this.userRole === 'admin'
-        }
+          show: this.isManagerMenu && this.userRole === 'admin',
+        },
       ]
       let menu = []
 
@@ -417,7 +433,7 @@ export default {
       },
       set (val) {
         this.setNavigationMini(val)
-      }
+      },
     },
     services () {
       return (
@@ -433,8 +449,8 @@ export default {
       },
       set (val) {
         this.setNavigationVisible(val)
-      }
-    }
+      },
+    },
   },
   watch: {
     currentToken: 'onNewToken',
@@ -442,8 +458,8 @@ export default {
     userLoadingState: 'checkUserInfo',
     businessInfo: {
       handler: 'getFilialsCount',
-      deep: true
-    }
+      deep: true,
+    },
   },
   mounted () {
     this.checkUserInfo()
@@ -458,7 +474,7 @@ export default {
       setAppTitle: 'common/setAppTitle',
       setBusiness: 'business/setBusiness',
       setNavigationMini: 'layout/setNavigationMini',
-      logout: 'user/logout'
+      logout: 'user/logout',
     }),
     onNewToken () {
       this.loadUserInfo()
@@ -493,8 +509,8 @@ export default {
     },
     onInput (event) {
       this.navBar(event)
-    }
-  }
+    },
+  },
 }
 </script>
 

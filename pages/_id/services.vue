@@ -140,18 +140,18 @@ export default {
     ServicesLayout,
     ServiceCard,
     EditService,
-    Modal
+    Modal,
   },
   filters: {
     formatMaster (n) {
       return conjugateEmployee(n)
-    }
+    },
   },
   mixins: [ servicesMixin ],
   data () {
     return {
       formActions: [
-        { label: 'Добавить услугу', action: 'newService', default: false }
+        { label: 'Добавить услугу', action: 'newService', default: false },
       ],
       branchInfo: { j: {} },
       edit: false,
@@ -166,10 +166,10 @@ export default {
       errorMessage: '',
       saveModalTemplate: {
         header: 'Данные были изменены.',
-        text: `Выйти без сохранения?`,
+        text: 'Выйти без сохранения?',
         leftButton: 'ОТМЕНА',
-        rightButton: 'ДА'
-      }
+        rightButton: 'ДА',
+      },
     }
   },
   computed: {
@@ -178,7 +178,7 @@ export default {
       serviceGroups: 'service/serviceGroups',
       businessServiceCategories: 'business/businessServiceCategories',
       searchString: 'common/searchString',
-      businessId: 'business/businessId'
+      businessId: 'business/businessId',
     }),
     id () {
       return this.$route.params.id
@@ -200,18 +200,18 @@ export default {
       ) {
         return {
           header: 'Удалить услугу?',
-          text: `Это приведет к удалению услуги. Мастера больше не будут оказывать данную услугу.`,
+          text: 'Это приведет к удалению услуги. Мастера больше не будут оказывать данную услугу.',
           leftButton: 'ОТМЕНА',
-          rightButton: 'УДАЛИТЬ'
+          rightButton: 'УДАЛИТЬ',
         }
       }
       return {
         header: 'Удалить услугу?',
         text: `Это приведет к удалению услуги <b>${this.deletingService.name}</b>. <b>${this.deletingService.j.employees.length}</b> мастеров больше не будут оказывать данную услугу.`,
         leftButton: 'ОТМЕНА',
-        rightButton: 'УДАЛИТЬ'
+        rightButton: 'УДАЛИТЬ',
       }
-    }
+    },
   },
   watch: {
     businessServiceCategories: 'selectAll',
@@ -219,7 +219,7 @@ export default {
       this.selectedGroups = this.businessServices
         .filter(s => s.name.toLowerCase().includes(val))
         .map(s => s.j.group)
-    }
+    },
   },
   mounted () {
     this.setActions(this.formActions)
@@ -232,7 +232,7 @@ export default {
   methods: {
     ...mapActions({
       setActions: 'common/setActions',
-      loadBusinessServices: 'business/loadBusinessServices'
+      loadBusinessServices: 'business/loadBusinessServices',
     }),
     closeWithoutSaving () {
       this.showCreate = false
@@ -244,12 +244,12 @@ export default {
       this.errorMessage = ''
 
       Api()
-        .post(`business_service`, {
+        .post('business_service', {
           business_id: this.id,
           name: newService.name,
           j: {
-            ...newService
-          }
+            ...newService,
+          },
         })
         .then(res => responseGetId(res))
         .then(() => {
@@ -264,8 +264,7 @@ export default {
             e.response.data.message ===
               'duplicate key value violates unique constraint "business_service_un"'
           ) {
-            this.errorMessage =
-              'Услуга с таким названием уже существует. Пожалуйста, выберите другое название'
+            this.errorMessage = 'Услуга с таким названием уже существует. Пожалуйста, выберите другое название'
           }
         })
     },
@@ -291,8 +290,8 @@ export default {
           name: newService.name,
           access: true,
           j: {
-            ...newService
-          }
+            ...newService,
+          },
         })
         .then(() => {
           this.showEdit = false
@@ -307,8 +306,7 @@ export default {
             e.response.data.message ===
               'duplicate key value violates unique constraint "business_service_un"'
           ) {
-            this.errorMessage =
-              'Услуга с таким названием уже существует. Пожалуйста, выберите другое название'
+            this.errorMessage = 'Услуга с таким названием уже существует. Пожалуйста, выберите другое название'
           }
         })
     },
@@ -365,7 +363,7 @@ export default {
       } else {
         this.selectedGroups.push(group)
       }
-    }
-  }
+    },
+  },
 }
 </script>

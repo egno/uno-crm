@@ -8,13 +8,13 @@ export default {
   components: { GalleryLayout, Card },
   data () {
     return {
-      imagesData: []
+      imagesData: [],
     }
   },
   computed: {
     ...mapGetters({
       businessId: 'business/businessId',
-      employees: 'employee/employees'
+      employees: 'employee/employees',
     }),
     personalId () {
       return this.$route.params && this.$route.params.personalId
@@ -27,10 +27,10 @@ export default {
     },
     isMobile () {
       return isMobile()
-    }
+    },
   },
   watch: {
-    businessId: 'load'
+    businessId: 'load',
   },
   mounted () {
     this.load()
@@ -61,6 +61,6 @@ export default {
           .filter(x => x.employees.some(e => e === personalId))
           .filter(x => x.services && x.services.some(e => !!e))
       )
-    }
-  }
+    },
+  },
 }

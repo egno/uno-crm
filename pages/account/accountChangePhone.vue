@@ -177,22 +177,21 @@ export default {
           const pattern = /^\d{10}$/
           return pattern.test(value) || 'Некорректный номер телефона.'
         },
-        oldMatches: value =>
-          !this.oldPhone ||
+        oldMatches: value => !this.oldPhone ||
           value.trim().slice(-10) !== this.oldPhone.slice(-10) ||
-          'Новый номер телефона совпадает с уже имеющимся.'
+          'Новый номер телефона совпадает с уже имеющимся.',
       },
       status: '',
-      timeToRepeat: undefined
+      timeToRepeat: undefined,
     }
   },
   computed: {
     ...mapGetters({ userID: 'user/userID', userInfo: 'user/userInfo' }),
     codeRules () {
-      return [this.rules.required, this.rules.code]
+      return [ this.rules.required, this.rules.code ]
     },
     phoneRules () {
-      return [this.rules.required, this.rules.phone, this.rules.oldMatches]
+      return [ this.rules.required, this.rules.phone, this.rules.oldMatches ]
     },
     oldPhone () {
       return (
@@ -210,15 +209,15 @@ export default {
     timeDisplay () {
       if (!this.timeToRepeat) { return }
       return `${this.timeToRepeat} мин`
-    }
+    },
   },
   watch: {
-    response: 'processResponse'
+    response: 'processResponse',
   },
   methods: {
     ...mapActions({
       loadUserInfo: 'user/loadUserInfo',
-      openMessageWindow: 'layout/openMessageWindow'
+      openMessageWindow: 'layout/openMessageWindow',
     }),
     clear () {
       this.status = undefined
@@ -252,7 +251,7 @@ export default {
       if (!this.success) { return }
       const data = {
         login: this.phone.trim(),
-        code: this.code
+        code: this.code,
       }
       Api()
         .post('rpc/check_phone', data)
@@ -270,7 +269,7 @@ export default {
       setTimeout(() => {
         this.setTime(minutes - 1)
       }, 60 * 1000)
-    }
-  }
+    },
+  },
 }
 </script>

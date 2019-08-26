@@ -14,7 +14,7 @@ export function newClient () {
     birth_date: undefined,
     discount: undefined,
     sex: undefined,
-    notes: undefined
+    notes: undefined,
   }
 }
 
@@ -34,7 +34,7 @@ export function clientToAPI (client) {
     id,
     business_id,
     user_id,
-    j: c
+    j: c,
   }
 }
 
@@ -44,6 +44,6 @@ export function clientFromAPI (data) {
     id: data.id,
     business_id: data.business_id,
     user_id: data.user_id,
-    ...o
+    ...o,
   }
 }

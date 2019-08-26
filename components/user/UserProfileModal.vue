@@ -26,22 +26,22 @@ import UserProfile from '~/components/user/UserProfile.vue'
 export default {
   components: { UserProfile },
   props: {
-    show: { type: Boolean, default: false }
+    show: { type: Boolean, default: false },
   },
   data () {
     return {
-      drawer: false
+      drawer: false,
     }
   },
   watch: {
-    show: 'setDrawer'
+    show: 'setDrawer',
   },
   methods: {
     ...mapActions({ closeProfileDrawer: 'common/closeProfileDrawer' }),
     setDrawer (val) {
       this.drawer = !!val
-    }
-  }
+    },
+  },
 }
 </script>
 

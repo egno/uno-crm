@@ -212,38 +212,38 @@ import { makeAlert } from '~/api/utils'
 export default {
   components: {
     SearchSelect,
-    Counter
+    Counter,
   },
   model: {
     prop: 'visible',
-    event: 'close'
+    event: 'close',
   },
   props: {
     visible: {
       type: Boolean,
       default: false,
-      required: true
+      required: true,
     },
     branchId: {
       type: String,
       default: '',
-      required: true
+      required: true,
     },
     create: {
       type: Boolean,
       default: false,
-      required: true
+      required: true,
     },
     service: {
       type: Object,
       default () {
         return {}
-      }
+      },
     },
     errorMessage: {
       type: String,
-      default: ''
-    }
+      default: '',
+    },
   },
   data () {
     return {
@@ -259,23 +259,23 @@ export default {
       rules: {
         required: value => !!value || 'Это поле обязательно для заполнения',
         maxLength: length => value =>
-          (value && (value.length <= length || 'Слишком длинный текст')) || true
+          (value && (value.length <= length || 'Слишком длинный текст')) || true,
       },
       employeeFullName (e) {
         return `${e.j.name}${e.j.surname ? ' ' + e.j.surname : ''}`
       },
-      error: ''
+      error: '',
     }
   },
   computed: {
     ...mapState({
       businessServices: state => state.business.businessServices,
-      serviceList: state => state.service.serviceList
+      serviceList: state => state.service.serviceList,
     }),
     ...mapGetters({
       serviceGroups: 'service/serviceGroups',
       employees: 'employee/employees',
-      businessInfo: 'business/businessInfo'
+      businessInfo: 'business/businessInfo',
     }),
     saveDisabled () {
       return !this.name || !this.group || !this.duration || !this.price
@@ -285,15 +285,15 @@ export default {
       const company = this.companyServices.map(s => s.name)
       const branch = this.businessServices.map(s => s.name)
 
-      return [...new Set(base.concat(company))].filter(
+      return [ ...new Set(base.concat(company)) ].filter(
         name => !branch.includes(name)
       )
-    }
+    },
   },
   watch: {
     service: 'init',
     visible: 'init',
-    businessInfo: 'getCompanyServices'
+    businessInfo: 'getCompanyServices',
   },
   created () {
     this.debouncedGetServices = debounce(this.getServices, 350)
@@ -329,7 +329,7 @@ export default {
         sex = [],
         price,
         duration,
-        description
+        description,
       } = this.service.j
       let employees = this.service.j.employees
 
@@ -371,7 +371,7 @@ export default {
         price,
         duration,
         description,
-        employees
+        employees,
       } = this.service.j
 
       this.name = this.service.name
@@ -413,7 +413,7 @@ export default {
     onClose () {
       this.$emit('close', {
         hasDiff: this.hasDiff(),
-        service: this.prepareNewService()
+        service: this.prepareNewService(),
       })
     },
     onInputName (val) {
@@ -454,12 +454,12 @@ export default {
         price,
         duration,
         description,
-        selectedEmployees
+        selectedEmployees,
       } = this.$data
       const employees = selectedEmployees && selectedEmployees.map(e => e.id)
 
       if (!sex.length) {
-        sex = ['male', 'female', 'child']
+        sex = [ 'male', 'female', 'child' ]
       }
 
       return {
@@ -469,10 +469,10 @@ export default {
         price,
         duration,
         description,
-        employees
+        employees,
       }
-    }
-  }
+    },
+  },
 }
 </script>
 

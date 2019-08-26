@@ -35,19 +35,19 @@ export default {
           'F37F6B',
           'DF8CB2',
           'B88AB2',
-          '8589DF'
+          '8589DF',
         ]
-      }
-    }
+      },
+    },
   },
   data () {
     return {
-      active: ''
+      active: '',
     }
   },
   mounted () {
     this.active = this.color
-  }
+  },
 }
 </script>
 

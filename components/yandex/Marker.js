@@ -3,19 +3,19 @@ import { compareValues, emitter } from '~/components/yandex/utils'
 export default {
   data: () => ({
     ymapEventBus: emitter,
-    unwatchArr: []
+    unwatchArr: [],
   }),
   props: {
     coords: {
       type: Array,
-      required: true
+      required: true,
     },
     hintContent: String,
     icon: Object,
     balloon: Object,
     markerType: {
       type: String,
-      required: true
+      required: true,
     },
     markerFill: Object,
     markerStroke: Object,
@@ -24,16 +24,16 @@ export default {
       validator (val) {
         return !isNaN(val)
       },
-      default: 1000
+      default: 1000,
     },
     callbacks: Object,
     balloonTemplate: String,
     markerId: {
-      type: [String, Number],
-      required: true
+      type: [ String, Number ],
+      required: true,
     },
     properties: Object,
-    options: Object
+    options: Object,
   },
   render () {},
   mounted () {
@@ -47,5 +47,5 @@ export default {
   },
   beforeDestroy () {
     this.unwatchArr.forEach(f => f())
-  }
+  },
 }

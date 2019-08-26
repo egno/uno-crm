@@ -22,7 +22,7 @@ export default {
   props: {
     currentStep: { type: Number, default: 0 },
     length: { type: Number, default: 0 },
-    header: { type: String, required: true }
+    header: { type: String, required: true },
   },
   methods: {
     onInc () {
@@ -34,8 +34,8 @@ export default {
       if (this.currentStep > 0) {
         this.$emit('changeStep', this.currentStep - 1)
       }
-    }
-  }
+    },
+  },
 }
 </script>
 <style lang="scss">

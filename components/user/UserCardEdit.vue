@@ -1,7 +1,7 @@
 <template>
   <v-dialog
     :value="visible"
-    content-class="right-attached-panel businesscard-form _clients"
+    content-class="right-attached-panel businesscard-form _user"
     transition="slide"
     @input="$emit('close')"
   >
@@ -118,33 +118,33 @@ export default {
   components: { MainButton, PhoneEdit },
   model: {
     prop: 'visible',
-    event: 'close'
+    event: 'close',
   },
   props: {
     visible: {
       type: Boolean,
       default: false,
-      required: true
+      required: true,
     },
     client: {
       type: Object,
       default () {
         return new User()
-      }
+      },
     },
     create: {
       type: Boolean,
       default: false,
-      required: true
+      required: true,
     },
     filial: {
       type: String,
-      default: ''
+      default: '',
     },
     companyId: {
       type: String,
-      default: ''
-    }
+      default: '',
+    },
   },
   data () {
     return {
@@ -172,16 +172,16 @@ export default {
           (value && (value.length <= length || 'Слишком длинный текст')) ||
           true,
         discount: val =>
-          !val || ((val > 0 && val <= 100) || 'Неверное количество процентов')
+          !val || ((val > 0 && val <= 100) || 'Неверное количество процентов'),
       },
       samePhone: '',
-      user: undefined
+      user: undefined,
     }
   },
   computed: {
     ...mapGetters({
       businessId: 'business/businessId',
-      businessFilialCount: 'business/businessFilialCount'
+      businessFilialCount: 'business/businessFilialCount',
     }),
     checkRole () {
       return (
@@ -194,11 +194,11 @@ export default {
     },
     businessRoles () {
       return roles && roles.filter(x => x === roles[0] || this.businessFilialCount)
-    }
+    },
   },
   watch: {
     foundedUser: 'fillUser',
-    businessId: 'getFilials'
+    businessId: 'getFilials',
   },
   mounted () {
     this.getFilials()
@@ -236,7 +236,7 @@ export default {
       } else {
         this.fullName = [
           this.foundedUser.name,
-          this.foundedUser.surname ? this.foundedUser.surname + '.' : undefined
+          this.foundedUser.surname ? this.foundedUser.surname + '.' : undefined,
         ]
           .filter(x => !!x)
           .join(' ')
@@ -322,9 +322,9 @@ export default {
             name,
             surname,
             notes: this.notes,
-            role: this.role === 'Сотрудник Салона' ? 'busman' : ''
+            role: this.role === 'Сотрудник Салона' ? 'busman' : '',
           },
-          phone: this.phone
+          phone: this.phone,
         }
         this.$emit('onSave', userInfo)
       }, 100)
@@ -348,8 +348,8 @@ export default {
       } else {
         this.client.fullName = client
       }
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -359,7 +359,7 @@ export default {
 @import '~assets/styles/right-attached-panel.scss';
 @import '~assets/styles/dropdown-select.scss';
 
-.right-attached-panel._clients {
+.right-attached-panel._user {
   .businesscard-form__field {
     margin-top: 28px;
     padding-top: 20px;

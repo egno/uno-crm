@@ -5,7 +5,7 @@ import Api from '~/api/backend'
 const roles = [
   'Администратор компании',
   'Менеджер филиала',
-  'Сотрудник Салона'
+  'Сотрудник Салона',
 ]
 
 class User extends ApiObject {
@@ -34,7 +34,7 @@ class User extends ApiObject {
       company_id: this.company_id,
       j: this.j,
       business: this.business,
-      phone: this.phone
+      phone: this.phone,
     }
   }
 
@@ -52,7 +52,7 @@ class User extends ApiObject {
   }
 
   get fullName () {
-    return [this.name, this.surname].join(' ')
+    return [ this.name, this.surname ].join(' ')
   }
 
   get role () {
@@ -107,5 +107,5 @@ class User extends ApiObject {
 
 export {
   User,
-  roles
+  roles,
 }

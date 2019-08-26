@@ -38,12 +38,12 @@ export default {
       type: Object,
       default () {
         return { j: {} }
-      }
-    }
+      },
+    },
   },
   data () {
     return {
-      data: undefined
+      data: undefined,
     }
   },
   watch: {
@@ -51,10 +51,10 @@ export default {
       if (newVal) {
         this.data = newVal
       }
-    }
+    },
   },
   mounted () {
     this.data = this.manager
-  }
+  },
 }
 </script>

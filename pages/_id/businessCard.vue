@@ -83,26 +83,26 @@ import { filials } from '~/components/business/mixins'
 export default {
   components: {
     BusinessCard,
-    BusinessCardEdit
+    BusinessCardEdit,
   },
-  mixins: [filials],
+  mixins: [ filials ],
   data () {
     return {
       editMode: false,
       infoTab: true,
-      newBusinessInfo: {}
+      newBusinessInfo: {},
     }
   },
   computed: {
     ...mapGetters({
-      businessInfo: 'business/businessInfo'
+      businessInfo: 'business/businessInfo',
     }),
     id () {
       return this.$route.params.id
-    }
+    },
   },
   watch: {
-    id: 'checkId'
+    id: 'checkId',
   },
   mounted () {
     this.checkId()
@@ -114,8 +114,8 @@ export default {
       if (this.id === 'new') {
         this.editMode = true
       }
-    }
-  }
+    },
+  },
 }
 </script>
 

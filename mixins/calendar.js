@@ -8,14 +8,14 @@ export default {
     return {
       activeSlide: 0,
       isLoading: false,
-      visits: []
+      visits: [],
     }
   },
   computed: {
     ...mapGetters({
       actualDate: 'common/actualDate',
       businessId: 'business/businessId',
-      calendarMonth: 'common/calendarMonth'
+      calendarMonth: 'common/calendarMonth',
     }),
     dateMonthHeader () {
       const d = new Date(this.selectedDate)
@@ -34,14 +34,14 @@ export default {
     },
     workYear () {
       return +this.selectedDate.slice(0, 4)
-    }
+    },
   },
   mounted () {
     this.setDates()
   },
   methods: {
     ...mapMutations({
-      SET_CALENDAR_MONTH: 'common/SET_CALENDAR_MONTH'
+      SET_CALENDAR_MONTH: 'common/SET_CALENDAR_MONTH',
     }),
     ...mapActions({ setActualDate: 'common/setActualDate' }),
     addMonth (i) {
@@ -55,8 +55,7 @@ export default {
       }
 
       const filtered = this.visits.filter(
-        v =>
-          v.ts_begin.slice(0, 10) === dt &&
+        v => v.ts_begin.slice(0, 10) === dt &&
           (employee
             ? v.business_id === employee.id
             : v.business_id === this.businessId)
@@ -98,9 +97,7 @@ export default {
       const includesDay = day => day.dateKey === this.selectedDate
 
       // todo make a separate method for changing active slide
-      this.activeSlide = this.calendarMonth.findIndex(week =>
-        week.some(includesDay)
-      )
+      this.activeSlide = this.calendarMonth.findIndex(week => week.some(includesDay))
 
       return this.calendarMonth[this.activeSlide]
     },
@@ -143,11 +140,9 @@ export default {
       this.SET_CALENDAR_MONTH(getWeeks(this.workYear, this.workMonth))
       if (this.period === 'week') {
         this.SET_CALENDAR_MONTH(
-          this.calendarMonth.filter(w =>
-            w.some(d => d.dateKey === this.selectedDate)
-          )
+          this.calendarMonth.filter(w => w.some(d => d.dateKey === this.selectedDate))
         )
       }
-    }
-  }
+    },
+  },
 }

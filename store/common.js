@@ -28,7 +28,7 @@ export const state = () => ({
   searchString: '',
   selectedBreak: undefined,
   selectedVisit: undefined,
-  token: ''
+  token: '',
 })
 
 export const getters = {
@@ -56,7 +56,7 @@ export const getters = {
   token: (state) => {
     return state.token
     // window.localStorage.accessToken;
-  }
+  },
 }
 
 export const mutations = {
@@ -123,7 +123,7 @@ export const mutations = {
     } else {
       localStorage.removeItem('accessToken')
     }
-  }
+  },
 }
 
 export const actions = {
@@ -161,7 +161,7 @@ export const actions = {
       if (getters.businessId) {
         dispatch('loadCalendar', {
           business: getters.businessId,
-          dates: [from, formatDate(d1)]
+          dates: [ from, formatDate(d1) ],
         })
       } else {
         commit('LOAD_CALENDAR', [])
@@ -260,5 +260,5 @@ export const actions = {
         console.log('err', err)
         commit('alerts/ADD_ALERT', makeAlert(err), { root: true })
       })
-  }
+  },
 }

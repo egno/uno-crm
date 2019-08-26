@@ -125,7 +125,7 @@ export default {
   data () {
     return {
       showDetails: false,
-      color: ''
+      color: '',
     }
   },
   computed: {
@@ -137,15 +137,15 @@ export default {
         this.color
         // eslint-disable-next-line no-useless-escape
       }'}<\/script><script src='https://widget.uno.salon/js/widget.js' charset='UTF-8'> <\/script>`
-    }
+    },
   },
   methods: {
     ...mapActions({ openMessageWindow: 'common/openMessageWindow' }),
     copyScript () {
       this.$refs['script-text'].select()
       document.execCommand('copy')
-    }
-  }
+    },
+  },
 }
 </script>
 

@@ -1,10 +1,10 @@
 const state = () => ({
   alerts: [],
-  alertMaxCount: 1
+  alertMaxCount: 1,
 })
 
 const getters = {
-  alerts: state => state.alerts
+  alerts: state => state.alerts,
 }
 
 const mutations = {
@@ -21,7 +21,7 @@ const mutations = {
     if (!payload) {
       state.alerts = []
     }
-  }
+  },
 }
 
 const actions = {
@@ -30,12 +30,12 @@ const actions = {
   },
   delAlert ({ commit }, payload) {
     commit('DEL_ALERT', payload)
-  }
+  },
 }
 
 export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 }

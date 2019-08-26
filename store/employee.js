@@ -4,14 +4,14 @@ import { makeAlert } from '~/api/utils'
 const state = () => ({
   employees: [],
   employeeCategories: [],
-  employeePositions: []
+  employeePositions: [],
 })
 
 const getters = {
   employees: state => state.employees,
   employeeCount: state => state.employees.length,
   employeeCategories: state => state.employeeCategories,
-  employeePositions: state => state.employeePositions
+  employeePositions: state => state.employeePositions,
   // allEmployeesServices: state =>
   //   state.employees &&
   //   state.employees
@@ -38,8 +38,10 @@ const mutations = {
     const idx = state.employees.findIndex(x => x.id === payload.id)
     if (idx === -1) {
       state.employees.push(payload)
+    } else {
+      state.employees.splice(idx, 1, payload)
     }
-  }
+  },
 }
 
 const actions = {
@@ -80,12 +82,12 @@ const actions = {
   },
   addEmployeeItem ({ commit, state }, payload) {
     commit('ADD_EMPLOYEE_ITEM', payload)
-  }
+  },
 }
 
 export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 }

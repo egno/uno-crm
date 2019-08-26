@@ -28,10 +28,10 @@ export default {
   components: { ImageCard, ImageLoader },
   props: {
     images: { type: Array, default: undefined },
-    editMode: { type: Boolean, default: false }
+    editMode: { type: Boolean, default: false },
   },
   computed: {
-    ...mapGetters({ businessId: 'business/businessId' })
+    ...mapGetters({ businessId: 'business/businessId' }),
   },
   methods: {
     imagePath (imageId) {
@@ -46,10 +46,10 @@ export default {
     },
     showSlider (index) {
       this.$emit('showSlider', {
-        selected: index
+        selected: index,
       })
-    }
-  }
+    },
+  },
 }
 </script>
 

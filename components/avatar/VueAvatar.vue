@@ -33,40 +33,40 @@ export default {
   props: {
     image: {
       type: String,
-      default: ''
+      default: '',
     },
     background: {
       type: String,
-      default: ''
+      default: '',
     },
     border: {
       type: Number,
-      default: 25
+      default: 25,
     },
     borderRadius: {
       type: Number,
-      default: 0
+      default: 0,
     },
     width: {
       type: Number,
-      default: 200
+      default: 200,
     },
     height: {
       type: Number,
-      default: 200
+      default: 200,
     },
     color: {
       type: Array,
-      default: () => [0, 0, 0, 0.5]
+      default: () => [ 0, 0, 0, 0.5 ],
     },
     scale: {
       type: Number,
-      default: 1
+      default: 1,
     },
     rotation: {
       type: Number,
-      default: 0
-    }
+      default: 0,
+    },
   },
   data () {
     return {
@@ -84,9 +84,9 @@ export default {
         image: {
           x: 0,
           y: 0,
-          resource: null
-        }
-      }
+          resource: null,
+        },
+      },
     }
   },
   computed: {
@@ -101,7 +101,7 @@ export default {
     },
     rotationRadian () {
       return (this.rotation * Math.PI) / 180
-    }
+    },
   },
   watch: {
     state: {
@@ -110,7 +110,7 @@ export default {
           this.redraw()
         }
       },
-      deep: true
+      deep: true,
     },
     scale () {
       if (this.imageLoaded) {
@@ -126,7 +126,7 @@ export default {
     },
     borderRadius () {
       this.redraw()
-    }
+    },
   },
   mounted () {
     const self = this
@@ -191,7 +191,7 @@ export default {
       }
     },
     svgToImage (rawSVG) {
-      const svg = new Blob([rawSVG], { type: 'image/svg+xml;charset=utf-8' })
+      const svg = new Blob([ rawSVG ], { type: 'image/svg+xml;charset=utf-8' })
       const domURL = self.URL || self.webkitURL || self
       const url = domURL.createObjectURL(svg)
       const img = new Image()
@@ -247,8 +247,8 @@ export default {
         border: this.border,
         canvas: {
           width: this.width + this.border * 2,
-          height: this.height + this.border * 2
-        }
+          height: this.height + this.border * 2,
+        },
       }
     },
     onDrop (e) {
@@ -322,7 +322,7 @@ export default {
       const newState = {
         mx: mousePositionX,
         my: mousePositionY,
-        image: imageState
+        image: imageState,
       }
 
       if (this.state.mx && this.state.my) {
@@ -387,7 +387,7 @@ export default {
 
       return {
         height: newHeight,
-        width: newWidth
+        width: newWidth,
       }
     },
     isDataURL (str) {
@@ -447,7 +447,7 @@ export default {
       const radian = -this.rotationRadian
       const rx = x * Math.cos(radian) - y * Math.sin(radian)
       const ry = x * Math.sin(radian) + y * Math.cos(radian)
-      return [rx, ry]
+      return [ rx, ry ]
     },
     calculatePosition (image, border) {
       image = image || this.state.image
@@ -458,14 +458,14 @@ export default {
       const heightDiff = (height - dimensions.height) / 2
       let x = image.x * this.scale // - widthDiff;
       let y = image.y * this.scale // - heightDiff;
-      ;[x, y] = this.transformDataWithRotation(x, y)
+      ;[ x, y ] = this.transformDataWithRotation(x, y)
       x += border - widthDiff
       y += border - heightDiff
       return {
         x,
         y,
         height,
-        width
+        width,
       }
     },
     redraw () {
@@ -522,7 +522,7 @@ export default {
         x: dim.border,
         y: dim.border,
         width: dim.width,
-        height: dim.height
+        height: dim.height,
       }
       const imageRect = this.calculatePosition(this.state.image, dim.border)
 
@@ -530,7 +530,7 @@ export default {
         x: (frameRect.x - imageRect.x) / imageRect.width,
         y: (frameRect.y - imageRect.y) / imageRect.height,
         width: frameRect.width / imageRect.width,
-        height: frameRect.height / imageRect.height
+        height: frameRect.height / imageRect.height,
       }
     },
     clicked () {
@@ -554,8 +554,8 @@ export default {
       this.changed = true
       reader.onload = e => this.loadImage(e.target.result)
       reader.readAsDataURL(files[0])
-    }
-  }
+    },
+  },
 }
 </script>
 

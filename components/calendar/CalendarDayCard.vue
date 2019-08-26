@@ -27,14 +27,14 @@ export default {
       type: Object,
       default () {
         return {}
-      }
+      },
     },
     visits: {
       type: Array,
       default () {
         return []
-      }
-    }
+      },
+    },
   },
   data () {
     return {}
@@ -45,7 +45,7 @@ export default {
     },
     timeFmt (ts) {
       return getRESTTime(ts)
-    }
-  }
+    },
+  },
 }
 </script>

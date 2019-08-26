@@ -54,11 +54,11 @@ export default {
       headers: [
         { text: 'Время', value: 'ts' },
         { text: 'От', value: 'j->from->>contact' },
-        { text: 'Текст', value: 'j->>message', sortable: false }
+        { text: 'Текст', value: 'j->>message', sortable: false },
       ],
       data: [],
       pagination: { rowsPerPage: 10 },
-      progressQuery: false
+      progressQuery: false,
     }
   },
   computed: {
@@ -67,17 +67,17 @@ export default {
         return null
       }
       return `or=(j->>email.ilike.*${this.searchString}*,j->>name.ilike.*${this.searchString}*,j->>inn.ilike.${this.searchString}*,j->>address.ilike.*${this.searchString}*)`
-    }
+    },
   },
   watch: {
     pagination: {
       handler () {
         this.fetchData()
       },
-      deep: true
+      deep: true,
     },
     table: 'fetchData',
-    searchString: 'fetchData'
+    searchString: 'fetchData',
   },
   mounted () {
     this.fetchData()
@@ -88,8 +88,10 @@ export default {
     fetchData () {
       this.progressQuery = true
       this.data = []
-      const { sortBy, descending, page, rowsPerPage } = this.pagination
-      const params = [this.querySearchString]
+      const {
+        sortBy, descending, page, rowsPerPage,
+      } = this.pagination
+      const params = [ this.querySearchString ]
       if (sortBy && sortBy.length) {
         params.push(
           `order=${sortBy}${descending ? '.desc.nullsfirst' : '.asc.nullslast'}`
@@ -124,7 +126,7 @@ export default {
       if (!dt) { return }
       const d = new Date(valueDate(dt))
       return `${formatDate(d)} ${formatTime(d)}`
-    }
-  }
+    },
+  },
 }
 </script>

@@ -34,8 +34,8 @@ export default {
       type: Object,
       default () {
         return {}
-      }
-    }
+      },
+    },
   },
   computed: {
     providerAvatar () {
@@ -46,7 +46,7 @@ export default {
     },
     site () {
       return this.provider && this.provider.j && this.provider.j.site
-    }
-  }
+    },
+  },
 }
 </script>

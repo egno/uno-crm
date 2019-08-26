@@ -15,12 +15,12 @@
 export default {
   model: {
     prop: 'checked',
-    event: 'change'
+    event: 'change',
   },
   props: {
     label: { type: String, default: '' },
-    checked: { type: Boolean, default: false }
-  }
+    checked: { type: Boolean, default: false },
+  },
 }
 </script>
 <style lang="scss" scoped>

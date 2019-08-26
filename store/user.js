@@ -12,7 +12,7 @@ anon - незарегистрированный.
 export const state = () => ({
   userInfo: {},
   userLoadingState: 'not started' /* also: 'started', 'finished' */,
-  myBusinessList: []
+  myBusinessList: [],
 })
 
 export const getters = {
@@ -62,7 +62,7 @@ export const getters = {
       (business && business.type === 'P')
     )
   },
-  myBusinessList: state => state.myBusinessList
+  myBusinessList: state => state.myBusinessList,
 }
 
 export const mutations = {
@@ -79,7 +79,7 @@ export const mutations = {
   },
   SET_MY_BUSINESS_LIST (state, payload) {
     state.myBusinessList = payload
-  }
+  },
 }
 
 export const actions = {
@@ -158,5 +158,5 @@ export const actions = {
         commit('SET_USERINFO', res.data)
         commit('SET_LOADING', 'finished')
       })
-  }
+  },
 }

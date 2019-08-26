@@ -20,14 +20,14 @@ import ImageCard from '~/components/gallery/ImageCard.vue'
 
 export default {
   components: { ImageCard },
-  mixins: [Gallery],
+  mixins: [ Gallery ],
   computed: {
     companyImages () {
       return (
         this.imagesData && this.imagesData.filter(x => x.j && x.j.business)
       )
-    }
-  }
+    },
+  },
 }
 </script>
 

@@ -33,12 +33,12 @@ export default {
     subtitle: { type: String, default: '' },
     height: { type: String, default: undefined },
     image: { type: Object, default: undefined },
-    hoverEffect: { type: Boolean, default: false }
+    hoverEffect: { type: Boolean, default: false },
   },
   data () {
     return {
       placeholder:
-        'https://i1.wp.com/makeupandbeautyhome.com/wp-content/uploads/2013/10/Kiwi-and-Cream-Dry-Skin-Facial.jpg'
+        'https://i1.wp.com/makeupandbeautyhome.com/wp-content/uploads/2013/10/Kiwi-and-Cream-Dry-Skin-Facial.jpg',
     }
   },
   computed: {
@@ -55,7 +55,7 @@ export default {
         this.image &&
         `${process.env.VUE_APP_IMAGES}${this.businessId}/${this.image.id}`
       )
-    }
+    },
   },
   methods: {
     showSlider (images) {
@@ -63,10 +63,10 @@ export default {
         selected: this.selected,
         images,
         title: this.title,
-        subtitle: this.subtitle
+        subtitle: this.subtitle,
       })
-    }
-  }
+    },
+  },
 }
 </script>
 

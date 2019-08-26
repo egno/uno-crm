@@ -55,7 +55,7 @@ export default {
   filters: {
     formatMaster (n) {
       return conjugateEmployee(n)
-    }
+    },
   },
   props: {
     editMode: { type: Boolean, default: false },
@@ -63,11 +63,11 @@ export default {
       type: Object,
       default: () => {
         return {}
-      }
+      },
     },
     isSelected: { type: Boolean, default: false },
     hoverable: { type: Boolean, default: true },
-    responsive: { type: Boolean, default: false }
+    responsive: { type: Boolean, default: false },
   },
   computed: {
     ...mapGetters({ serviceGroups: 'service/serviceGroups' }),
@@ -80,8 +80,8 @@ export default {
       )
 
       return group && group.j && group.j.image
-    }
-  }
+    },
+  },
 }
 </script>
 

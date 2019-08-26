@@ -49,12 +49,12 @@ import Api from '~/api/backend'
 export default {
   components: {
     VueAvatarEditor,
-    Avatar
+    Avatar,
   },
   data () {
     return {
       avatarEdit: false,
-      data: { data: {} }
+      data: { data: {} },
     }
   },
   computed: {
@@ -66,7 +66,7 @@ export default {
     },
     email () {
       return this.data.data.email
-    }
+    },
   },
   mounted () {
     this.fetchData()
@@ -88,7 +88,7 @@ export default {
       for (let i = 0; i < blobBin.length; i++) {
         array.push(blobBin.charCodeAt(i))
       }
-      const file = new Blob([new Uint8Array(array)], { type: 'image/png' })
+      const file = new Blob([ new Uint8Array(array) ], { type: 'image/png' })
       const formData = new FormData()
       const newFileName = `${this.uuidv4()}.png`
       formData.append('file', file, newFileName)
@@ -96,8 +96,8 @@ export default {
       axios
         .post(process.env.VUE_APP_UPLOAD, formData, {
           headers: {
-            'Content-Type': 'multipart/form-data'
-          }
+            'Content-Type': 'multipart/form-data',
+          },
         })
         .then(function () {
           vm.data.data.avatar = newFileName
@@ -120,7 +120,7 @@ export default {
         const v = c === 'x' ? r : (r & 0x3) | 0x8
         return v.toString(16)
       })
-    }
-  }
+    },
+  },
 }
 </script>

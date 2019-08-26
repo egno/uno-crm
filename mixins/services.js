@@ -3,7 +3,7 @@ import { mapState } from 'vuex'
 export const servicesMixin = {
   computed: {
     ...mapState({
-      businessServices: state => state.business.businessServices
+      businessServices: state => state.business.businessServices,
     }),
     groupedBranchServices () {
       const obj = {}
@@ -24,6 +24,6 @@ export const servicesMixin = {
       })
 
       return obj
-    }
-  }
+    },
+  },
 }

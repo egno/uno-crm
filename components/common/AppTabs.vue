@@ -14,8 +14,8 @@
 <script>
 export default {
   props: {
-    value: { type: Number, default: 0 }
-  }
+    value: { type: Number, default: 0 },
+  },
 }
 </script>
 

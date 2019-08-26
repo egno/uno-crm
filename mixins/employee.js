@@ -4,23 +4,34 @@ export const employeesCategorized = {
   data () {
     return {
       selectedCategories: [],
-      selectedOnStart: false
+      selectedOnStart: false,
     }
   },
   computed: {
     ...mapGetters({
-      businessEmployees: 'employee/employees'
+      businessEmployees: 'employee/employees',
     }),
     employeesCategories () {
       return [
         ...new Set(
           this.businessEmployees &&
             this.businessEmployees.map(x => x.j && x.j.category)
-        )
+        ),
       ].sort((a, b) => (a < b ? -1 : 1))
-    }
+    },
   },
   methods: {
+    compareByName (a, b) {
+      return a.j.name.toLowerCase() < b.j.name.toLowerCase() ? -1 : 1
+    },
+    removeVisibleEmployee (employee) {
+      const i = this.visibleEmployees.findIndex(e => e.id === employee.id)
+
+      if (i > -1) {
+        this.visibleEmployees.splice(i, 1)
+        this.visibleEmployees.sort(this.compareByName)
+      }
+    },
     selectAll () {
       if (!this.employeesCategories || !this.employeesCategories.length) {
         return
@@ -45,6 +56,6 @@ export const employeesCategorized = {
       } else {
         this.selectedCategories.push(category)
       }
-    }
-  }
+    },
+  },
 }

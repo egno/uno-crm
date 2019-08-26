@@ -1,31 +1,12 @@
 @import 'common';
 
 .day-schedule {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
   &>div {
     text-align: center;
-  }
-
-  &__wrapper {
-    @extend %vertical-align;
-    justify-content: space-between;
-    padding: 7px 0;
-  }
-
-  &__dayname {
-    font-family: Lato, sans-serif;
-    font-style: normal;
-    font-weight: 900;
-    font-size: 14px;
-    line-height: normal;
-    color: #07101C;
-    text-align: center;
-    text-transform: capitalize;
-  }
-
-  &__for-all {
-    width: 240px;
-    padding-top: 32px;
   }
 
   &__times {
@@ -33,7 +14,7 @@
     justify-content: space-between;
     align-items: center;
     flex-grow: 0;
-    padding: 3px 6px 3px 7px;
+    padding: 3px 0 2px;
     font-family: Lato,  sans-serif;
     font-style: normal;
     font-weight: normal;
@@ -47,7 +28,6 @@
       width: 38px;
       text-align: center;
       font-weight: 400;
-      padding: 0;
     }
 
     .error--text .v-input__control > .v-input__slot:before  {
@@ -63,6 +43,20 @@
   }
 
   .v-input__slot {
-    border: none;
+    border: none !important;
+  }
+
+  &__clear {
+    display: flex;
+    align-items: center;
+    width: 16px;
+    margin-left: 7px;
+  }
+
+  &__clear-button {
+    width: 100%;
+    height: 16px;
+    background: url('~assets/images/svg/cross.svg') center/10px no-repeat;
+    outline: none;
   }
 }

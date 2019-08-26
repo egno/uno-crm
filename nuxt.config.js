@@ -17,19 +17,19 @@ export default {
       routes.push({
         name: 'id-businessClient',
         path: '/:id/businessClients/:client',
-        component: resolve(__dirname, 'pages/_id/businessClients.vue')
+        component: resolve(__dirname, 'pages/_id/businessClients.vue'),
       }, {
         name: 'id-businessUser',
         path: '/:id/businessUsers/:user',
-        component: resolve(__dirname, 'pages/_id/businessUsers.vue')
+        component: resolve(__dirname, 'pages/_id/businessUsers.vue'),
       }, {
         name: 'restorePassword',
         path: '/restore',
-        component: resolve(__dirname, 'pages/register.vue')
+        component: resolve(__dirname, 'pages/register.vue'),
       }, {
         name: 'myBusinessList',
         path: '/myBusinessList',
-        component: resolve(__dirname, 'pages/businessList.vue')
+        component: resolve(__dirname, 'pages/businessList.vue'),
       })
     },
     scrollBehavior (to, from, savedPosition) {
@@ -40,7 +40,7 @@ export default {
       } else {
         return { x: 0, y: 0 }
       }
-    }
+    },
   },
   /*
   ** Headers of the page
@@ -51,19 +51,19 @@ export default {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
+      { hid: 'description', name: 'description', content: process.env.npm_package_description || '' },
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.png' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.png' },
     ],
     noscript: [
       { innerHTML: '<img src="https://vk.com/rtrg?p=VK-RTRG-393005-7wBtY" style="position:fixed; left:-999px;" alt=""/>' },
-      { innerHTML: '<div><img src="https://mc.yandex.ru/watch/54209695" style="position:absolute; left:-9999px;" alt="" /></div>' }
+      { innerHTML: '<div><img src="https://mc.yandex.ru/watch/54209695" style="position:absolute; left:-9999px;" alt="" /></div>' },
     ],
     script: [
       { src: '/vk.js' },
-      { src: '/yametrika.js' }
-    ]
+      { src: '/yametrika.js' },
+    ],
   },
   /*
   ** Customize the progress-bar color
@@ -79,7 +79,7 @@ export default {
   */
   plugins: [
     '~/plugins/directives_filters.js',
-    { src: '~/plugins/ya_metrika.js', ssr: false }
+    { src: '~/plugins/ya_metrika.js', ssr: false },
   ],
   /*
   ** Nuxt.js dev-modules
@@ -87,14 +87,14 @@ export default {
   devModules: [
     // Doc: https://github.com/nuxt-community/eslint-module
     '@nuxtjs/eslint-module',
-    '@nuxtjs/vuetify'
+    '@nuxtjs/vuetify',
   ],
   /*
   ** Nuxt.js modules
   */
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
   ],
   /*
   ** Axios module configuration
@@ -107,11 +107,11 @@ export default {
   ** https://github.com/nuxt-community/vuetify-module
   */
   vuetify: {
-    customVariables: ['~/assets/variables.scss'],
+    customVariables: [ '~/assets/variables.scss' ],
     iconfont: 'mdi',
     lang: {
       locales: { ru },
-      current: 'ru'
+      current: 'ru',
     },
     theme: {
       primary: '#5699FF',
@@ -121,8 +121,8 @@ export default {
       warning: '#b69768',
       error: '#EF4D37',
       success: '#85CA86',
-      gold: '#b69768'
-    }
+      gold: '#b69768',
+    },
   },
   /*
   ** Build configuration
@@ -132,6 +132,6 @@ export default {
     ** You can extend webpack config here
     */
     extend (config, ctx) {
-    }
-  }
+    },
+  },
 }

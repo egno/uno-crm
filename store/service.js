@@ -3,11 +3,11 @@ import { makeAlert } from '~/api/utils'
 
 const state = () => ({
   serviceGroups: [],
-  serviceList: []
+  serviceList: [],
 })
 
 const getters = {
-  serviceGroups: state => state.serviceGroups
+  serviceGroups: state => state.serviceGroups,
 }
 
 const mutations = {
@@ -16,7 +16,7 @@ const mutations = {
   },
   LOAD_SERVICE_LIST (state, payload) {
     state.serviceList = payload
-  }
+  },
 }
 
 const actions = {
@@ -39,12 +39,12 @@ const actions = {
         commit('LOAD_SERVICE_LIST', res)
       })
       .catch(err => commit('alerts/ADD_ALERT', makeAlert(err), { root: true }))
-  }
+  },
 }
 
 export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 }

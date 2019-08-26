@@ -10,8 +10,8 @@ export default (noToken = false) => {
       Accept: 'application/json',
       'Content-Type': 'application/json',
       Prefer: 'count=exact',
-      'X-Request-ID': requestId
-    }
+      'X-Request-ID': requestId,
+    },
   }
   if (process.client && localStorage.getItem('accessToken') && !noToken) {
     options.headers.Authorization = `Bearer ${localStorage.getItem(

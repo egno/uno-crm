@@ -105,22 +105,20 @@ export default {
           const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
           return pattern.test(value) || 'Некорректный e-mail.'
         },
-        oldMatches: value =>
-          !this.oldEmail ||
+        oldMatches: value => !this.oldEmail ||
           value.trim().toUpperCase() !== this.oldEmail.toUpperCase() ||
           'Введенные адрес e-mail уже используется вами.',
-        repeatMatches: value =>
-          value.trim().toUpperCase() === this.email.trim().toUpperCase() ||
-          'Введенные адреса e-mail не совпадают.'
+        repeatMatches: value => value.trim().toUpperCase() === this.email.trim().toUpperCase() ||
+          'Введенные адреса e-mail не совпадают.',
       },
       status: '',
-      timeToRepeat: undefined
+      timeToRepeat: undefined,
     }
   },
   computed: {
     ...mapGetters({ userID: 'user/userID', userInfo: 'user/userInfo' }),
     emailRules () {
-      return [this.rules.required, this.rules.email, this.rules.oldMatches]
+      return [ this.rules.required, this.rules.email, this.rules.oldMatches ]
     },
     oldEmail () {
       return (
@@ -128,7 +126,7 @@ export default {
       )
     },
     repeatEmailRules () {
-      return [this.rules.required, this.rules.email, this.rules.repeatMatches]
+      return [ this.rules.required, this.rules.email, this.rules.repeatMatches ]
     },
     success () {
       return (
@@ -141,10 +139,10 @@ export default {
     timeDisplay () {
       if (!this.timeToRepeat) { return }
       return `${this.timeToRepeat} мин`
-    }
+    },
   },
   watch: {
-    response: 'processResponse'
+    response: 'processResponse',
   },
   methods: {
     clear () {
@@ -162,7 +160,7 @@ export default {
       if (!this.success) { return }
       const data = {
         login: this.email.trim(),
-        code: null
+        code: null,
       }
       Api()
         .post('rpc/check_email', data)
@@ -180,7 +178,7 @@ export default {
       setTimeout(() => {
         this.setTime(minutes - 1)
       }, 60 * 1000)
-    }
-  }
+    },
+  },
 }
 </script>

@@ -68,7 +68,7 @@ export default {
       images: [],
       sliderImages: undefined,
       sliderTitle: '',
-      selectedImage: 0
+      selectedImage: 0,
     }
   },
   computed: {
@@ -83,11 +83,11 @@ export default {
     },
     sliderSubTitle () {
       return this.data && this.data.j && this.data.j.name
-    }
+    },
   },
   watch: {
     id: 'load',
-    business: 'loadBusiness'
+    business: 'loadBusiness',
   },
   mounted () {
     this.load()
@@ -120,14 +120,13 @@ export default {
           this.images &&
           this.images.filter(x => x.services.some(s => s === service))
         )
-      } else {
-        return (
-          this.images &&
+      }
+      return (
+        this.images &&
           this.images.filter(
             x => !x.services.some(s => this.services.some(ss => ss === s))
           )
-        )
-      }
+      )
     },
     onSliderClose () {
       this.sliderImages = undefined
@@ -138,7 +137,7 @@ export default {
       this.sliderImages = payload.images
       this.selectedImage = payload.selected
       this.sliderTitle = payload.title
-    }
-  }
+    },
+  },
 }
 </script>

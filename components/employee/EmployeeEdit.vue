@@ -85,8 +85,8 @@ export default {
       type: Object,
       default () {
         return {}
-      }
-    }
+      },
+    },
   },
   data () {
     return {
@@ -94,23 +94,23 @@ export default {
       rules: {
         required: value => !!value || 'Это поле обязательно для заполнения',
         maxLength: length => value =>
-          (value && (value.length <= length || 'Слишком длинный текст')) || true
+          (value && (value.length <= length || 'Слишком длинный текст')) || true,
       },
-      avatarEdit: false
+      avatarEdit: false,
     }
   },
   computed: {
     ...mapGetters({
       employeePositions: 'employee/employeePositions',
-      employeeCategories: 'employee/employeeCategories'
-    })
+      employeeCategories: 'employee/employeeCategories',
+    }),
   },
   methods: {
     onSaveAvatarClick (canvasImg) {
       this.avatarEdit = false
       this.$emit('avatarChange', canvasImg)
-    }
-  }
+    },
+  },
 }
 </script>
 

@@ -21,14 +21,14 @@
 export default {
   model: {
     prop: 'checked',
-    event: 'change'
+    event: 'change',
   },
   props: {
     checked: { type: Boolean, default: false },
     id: { type: String, required: true },
     name: { type: String, default: '' },
-    value: { type: String, default: '' }
-  }
+    value: { type: String, default: '' },
+  },
 }
 </script>
 <style lang="scss">
@@ -56,7 +56,7 @@ export default {
       background: #fff;
     }
 
-    &__input:checked + label{
+    &__input:checked + .default-checkbox__label {
       color: #07101c;
       &>.default-checkbox__checkbox {
         border-color: #5699FF;

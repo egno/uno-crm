@@ -37,17 +37,17 @@ export default {
   props: {
     visible: {
       type: Boolean,
-      default: true
+      default: true,
     },
     isDark: {
       type: Boolean,
-      default: false
+      default: false,
     },
     deleteText: {
       type: String,
-      default: 'Удалить'
-    }
-  }
+      default: 'Удалить',
+    },
+  },
 }
 </script>
 <style lang="scss">

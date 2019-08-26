@@ -100,7 +100,8 @@ class Employee extends ApiObject {
     this.parent = (newVal && newVal.parent) || null
     this.j = (newVal && newVal.j) || {}
 
-    this.schedule = this.j.schedule || {}
+    // this.schedule = this.j.schedule || {}
+    this.workTemplate = this.j.workTemplate || {}
     if (!newVal || !newVal.j || !newVal.j.phones) {
       this.phones = []
     }
@@ -227,12 +228,24 @@ class Employee extends ApiObject {
     return this.j && this.j.services
   }
 
-  set schedule (newVal) {
+  /* set schedule (newVal) {
     this.j.schedule = newVal
   }
 
   get schedule () {
     return this.j.schedule
+  } */
+
+  set workTemplate (newVal) {
+    if (newVal) {
+      this.j.workTemplate = newVal
+    } else {
+      delete this.j.workTemplate
+    }
+  }
+
+  get workTemplate () {
+    return this.j && this.j.workTemplate
   }
 
   // API methods

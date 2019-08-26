@@ -56,43 +56,43 @@ function deepFind (obj, path) {
 export default {
   model: {
     prop: 'searchingValue',
-    event: 'input'
+    event: 'input',
   },
   props: {
     searchingValue: {
       type: String,
-      default: ''
+      default: '',
     },
     searchingProp: {
       type: String,
-      default: ''
+      default: '',
     },
     options: {
       type: Array,
       default () {
         return []
-      }
+      },
     },
     required: {
       type: Boolean,
-      default: false
+      default: false,
     },
     label: {
       type: String,
-      default: ''
+      default: '',
     },
     maxLength: {
       type: Number,
-      default: 200
+      default: 200,
     },
     attach: {
       type: String,
-      default: ''
+      default: '',
     },
     error: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data () {
     return {
@@ -101,9 +101,9 @@ export default {
       rules: {
         required: value => !!value || 'Это поле обязательно для заполнения',
         maxLength: length => value =>
-          (value && (value.length <= length || 'Слишком длинный текст')) || true
+          (value && (value.length <= length || 'Слишком длинный текст')) || true,
       },
-      selected: null
+      selected: null,
     }
   },
   computed: {
@@ -121,7 +121,7 @@ export default {
       return this.options.filter(option =>
         option.toLowerCase().includes(searchString)
       )
-    }
+    },
   },
   methods: {
     closeDropdown () {
@@ -149,8 +149,8 @@ export default {
     select (option) {
       this.closeDropdown()
       this.$emit('select', option)
-    }
-  }
+    },
+  },
 }
 </script>
 

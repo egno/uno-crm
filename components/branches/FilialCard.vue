@@ -40,45 +40,45 @@ import { conjugateEmployee } from '~/components/utils'
 
 export default {
   components: {
-    DeleteButton
+    DeleteButton,
   },
   filters: {
     formatMaster (n) {
       return conjugateEmployee(n)
-    }
+    },
   },
   props: {
     branch: {
       type: Object,
       default: () => {
         return {}
-      }
+      },
     },
     pinned: {
       type: Boolean,
-      default: false
+      default: false,
     },
     isEditable: {
       type: Boolean,
-      default: false
+      default: false,
     },
     canDelete: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
   data () {
     return {
       captionClass:
-        'caption font-weight-bold text-no-wrap grey--text text--darken-1'
+        'caption font-weight-bold text-no-wrap grey--text text--darken-1',
     }
   },
   methods: {
     onDelete () {
       this.edit = false
       this.$emit('delete', this.branch)
-    }
-  }
+    },
+  },
 }
 </script>
 

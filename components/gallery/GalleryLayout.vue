@@ -45,8 +45,8 @@ export default {
   computed: {
     isMobile () {
       return isMobile()
-    }
-  }
+    },
+  },
 }
 </script>
 

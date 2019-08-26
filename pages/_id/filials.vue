@@ -207,15 +207,17 @@ import { roles } from '~/classes/user'
 export default {
   params: {
     items: { type: Array, default: [] },
-    search: { type: String, default: '' }
+    search: { type: String, default: '' },
   },
-  components: { BranchesLayout, FilialCard, Modal, BusinessCardEdit },
+  components: {
+    BranchesLayout, FilialCard, Modal, BusinessCardEdit,
+  },
   filters: {
     formatFilial (n) {
       return conjugateFilial(n)
-    }
+    },
   },
-  mixins: [filials, Users],
+  mixins: [ filials, Users ],
   data () {
     return {
       isCreating: false,
@@ -224,7 +226,7 @@ export default {
       branchToDelete: undefined,
       branchesList: [],
       branchesByCities: {
-        Другие: []
+        Другие: [],
       },
       checkoutModalVisible: false,
       selectedCity: undefined,
@@ -233,30 +235,30 @@ export default {
         text:
           '<div>Вы будете перемещены</div><div>в филиал Estel Professional.</div>',
         leftButton: 'ОТМЕНА',
-        rightButton: 'ПЕРЕЙТИ'
+        rightButton: 'ПЕРЕЙТИ',
       },
       deleteModalVisible: false,
       newBranch: null,
       infoTab: true,
       saveModalTemplate: {
         header: 'Данные были изменены.',
-        text: `Выйти без сохранения?`,
+        text: 'Выйти без сохранения?',
         leftButton: 'ОТМЕНА',
-        rightButton: 'ДА'
+        rightButton: 'ДА',
       },
       sortedUniqueCities: [],
-      showSave: false
+      showSave: false,
     }
   },
   computed: {
     ...mapState({
-      categories: state => state.business.businessCategories
+      categories: state => state.business.businessCategories,
     }),
     ...mapGetters({
       businessId: 'business/businessId',
       businessParent: 'business/businessParent',
       businessInfo: 'business/businessInfo',
-      businessIsFilial: 'business/businessIsFilial'
+      businessIsFilial: 'business/businessIsFilial',
     }),
     filialCount () {
       return this.branchesList && this.branchesList.length
@@ -269,22 +271,22 @@ export default {
       ) {
         return {
           header: 'Удалить филиал?',
-          text: `Это приведет к удалению филиала. Вся информация филиала будет удалена.`,
+          text: 'Это приведет к удалению филиала. Вся информация филиала будет удалена.',
           leftButton: 'ОТМЕНА',
-          rightButton: 'УДАЛИТЬ'
+          rightButton: 'УДАЛИТЬ',
         }
       }
       return {
         header: 'Удалить филиал?',
         text: `Это приведет к удалению филиала ${this.branchToDelete.j.name}. Вся информация филиала будет удалена.`,
         leftButton: 'ОТМЕНА',
-        rightButton: 'УДАЛИТЬ'
+        rightButton: 'УДАЛИТЬ',
       }
-    }
+    },
   },
   watch: {
     businessId: 'getFilials',
-    'user.business': 'getFilials'
+    'user.business': 'getFilials',
   },
   created () {
     this.getFilials()
@@ -300,13 +302,13 @@ export default {
     ...mapActions({
       setActions: 'common/setActions',
       setBusiness: 'business/setBusiness',
-      setBusinessToParent: 'business/setBusinessToParent'
+      setBusinessToParent: 'business/setBusinessToParent',
     }),
     checkout () {
       if (!this.branchToCheckout) {
         return
       }
-      const id = this.branchToCheckout.id
+      const { id } = this.branchToCheckout
       this.setBusiness(id)
         .then(() => {
           this.checkoutTo(id)
@@ -317,8 +319,8 @@ export default {
         name: 'id-visits',
         params: {
           id,
-          date: formatDate(new Date())
-        }
+          date: formatDate(new Date()),
+        },
       })
     },
     closeWithoutSaving () {
@@ -343,9 +345,7 @@ export default {
     filterUserFilials (res) {
       const userBusinessList = this.user.business.map(b => b.id)
       if (this.user.role === roles[1] || this.user.role === roles[2]) {
-        this.branchesList = res.filter(resultFilial =>
-          userBusinessList.includes(resultFilial.id)
-        )
+        this.branchesList = res.filter(resultFilial => userBusinessList.includes(resultFilial.id))
       } else if (
         this.userRole === 'manager' ||
         this.userRole === 'admin' ||
@@ -359,7 +359,7 @@ export default {
           this.branchesList.map(
             branch => branch.j && branch.j.address && branch.j.address.city
           )
-        )
+        ),
       ].sort()
       this.groupBranches()
     },
@@ -376,11 +376,11 @@ export default {
     },
     groupBranches () {
       this.branchesByCities = {
-        Другие: []
+        Другие: [],
       }
       this.branchesList.forEach((branch) => {
         if (branch.j && branch.j.address && branch.j.address.city) {
-          const city = branch.j.address.city
+          const { city } = branch.j.address
 
           if (!this.branchesByCities[city]) {
             this.$set(this.branchesByCities, city, [])
@@ -398,14 +398,14 @@ export default {
         this.newBranch = new Business({
           id: 'new',
           parent: this.businessId,
-          name: this.businessInfo.name
+          name: this.businessInfo.name,
         })
         if (this.businessInfo && this.businessInfo.j) {
           this.newBranch.inn = this.businessInfo.j.inn
-          this.newBranch.schedule = Object.assign(
-            {},
-            this.businessInfo.j.schedule
-          )
+          this.newBranch.schedule = {
+
+            ...this.businessInfo.j.schedule,
+          }
           if (
             this.categories &&
             this.categories.includes(this.businessInfo.j.category)
@@ -438,8 +438,8 @@ export default {
     showDeleteDialog (branch) {
       this.deleteModalVisible = true
       this.branchToDelete = branch
-    }
-  }
+    },
+  },
 }
 </script>
 

@@ -181,14 +181,14 @@ export default {
     MainButton,
     MessageList,
     PageLayout,
-    PaymentList
+    PaymentList,
   },
   data () {
     return {
       amount: '',
       activeTab: 0,
       businessSettings: new BusinessSettings(),
-      oferta_agree: false
+      oferta_agree: false,
     }
   },
   computed: {
@@ -211,10 +211,10 @@ export default {
     },
     phone () {
       return this.userInfo && this.userInfo.data && this.userInfo.data.j && this.userInfo.data.j.phone
-    }
+    },
   },
   watch: {
-    businessId: 'load'
+    businessId: 'load',
   },
   mounted () {
     this.load()
@@ -222,14 +222,14 @@ export default {
 
   methods: {
     ...mapActions({
-      openMessageWindow: 'common/openMessageWindow'
+      openMessageWindow: 'common/openMessageWindow',
     }),
     add () {
       if (!this.businessId || !this.amount) {
         return
       }
       const paymentNo = uuidv4()
-      const amount = this.amount
+      const { amount } = this
       const paymasterId = process.env.VUE_APP_PAYMASTER_ID
       const returnUrl = window.location.href
       const paramsList = {
@@ -248,7 +248,7 @@ export default {
         'LMI_SHOPPINGCART.ITEMS[0].TAX': 'no_vat',
         'LMI_SHOPPINGCART.ITEMS[0].AGENT.TYPE': 4,
         'LMI_SHOPPINGCART.ITEMS[0].SUPPLIER.NAME': 'ООО "Электронная отчетность"',
-        'LMI_SHOPPINGCART.ITEMS[0].SUBJECT': 10
+        'LMI_SHOPPINGCART.ITEMS[0].SUBJECT': 10,
       }
       if (this.phone) {
         paramsList.LMI_PAYER_PHONE_NUMBER = this.phone
@@ -256,7 +256,7 @@ export default {
       if (this.email) {
         paramsList.LMI_PAYER_EMAIL = this.email
       }
-      const urlBase = `https://paymaster.ru/payment/init`
+      const urlBase = 'https://paymaster.ru/payment/init'
       const params = Object.keys(paramsList)
         .map(x => `${x}=${encodeURIComponent(paramsList[x])}`)
         .join('&')
@@ -280,8 +280,8 @@ export default {
     },
     updateAll () {
       console.log('sdlfjsjdf')
-    }
-  }
+    },
+  },
 }
 </script>
 

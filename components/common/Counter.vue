@@ -20,32 +20,32 @@ export default {
   props: {
     id: {
       type: String,
-      required: true
+      required: true,
     },
     inputDisabled: {
       type: Boolean,
-      default: false
+      default: false,
     },
     value: {
       type: Number,
-      default: 0
+      default: 0,
     },
     maxValue: {
       type: Number,
-      default: 999
+      default: 999,
     },
     minValue: {
       type: Number,
-      default: 0
+      default: 0,
     },
     interval: {
       type: Number,
-      default: 1
+      default: 1,
     },
     roundCounter: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   methods: {
     findResult (realResult) {
@@ -103,8 +103,8 @@ export default {
         event.target.value = this.maxValue
       }
       this.$emit('changeCount', newVal)
-    }
-  }
+    },
+  },
 }
 </script>
 

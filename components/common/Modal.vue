@@ -38,7 +38,7 @@ export default {
   props: {
     visible: {
       type: Boolean,
-      default: false
+      default: false,
     },
     template: {
       type: Object,
@@ -46,11 +46,11 @@ export default {
         return {
           header: '',
           leftButton: '',
-          rightButton: ''
+          rightButton: '',
         }
-      }
-    }
-  }
+      },
+    },
+  },
 }
 </script>
 

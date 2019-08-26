@@ -16,23 +16,23 @@
 export default {
   model: {
     prop: 'expanded',
-    event: 'click'
+    event: 'click',
   },
   props: {
     expanded: {
       type: Boolean,
-      default: null
-    }
+      default: null,
+    },
   },
   data () {
     return {
-      expandedData: false
+      expandedData: false,
     }
   },
   computed: {
     isOpen () {
       return this.expanded !== null ? this.expanded : this.expandedData
-    }
+    },
   },
   created () {
     if (this.expanded !== null) {
@@ -43,8 +43,8 @@ export default {
     onClick () {
       this.expandedData = !this.expandedData
       this.$emit('click', !this.expanded)
-    }
-  }
+    },
+  },
 }
 </script>
 

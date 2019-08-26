@@ -177,23 +177,23 @@ import Socials from '~/components/home/Socials.vue'
 export default {
   components: {
     Layout,
-    Socials
+    Socials,
   },
   head () {
     return {
-      title: this.title
+      title: this.title,
     }
   },
   data () {
     return {
-      tokenTimerId: undefined
+      tokenTimerId: undefined,
     }
   },
   computed: {
     ...mapGetters({
       appTitle: 'common/appTitle',
       businessName: 'business/businessName',
-      userRole: 'user/userRole'
+      userRole: 'user/userRole',
     }),
     title () {
       if (!this.appTitle) {
@@ -206,8 +206,8 @@ export default {
         return `${this.appTitle} ${this.userRole}`
       }
       return this.appTitle
-    }
-  }
+    },
+  },
 }
 </script>
 

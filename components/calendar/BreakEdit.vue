@@ -79,7 +79,7 @@ import Api from '~/api/backend'
 import { makeAlert } from '~/api/utils'
 import {
   dateISOInLocalTimeZone,
-  dateFromISO
+  dateFromISO,
 } from '~/components/calendar/utils'
 import Counter from '~/components/common/Counter'
 import DeleteButton from '~/components/common/DeleteButton'
@@ -88,46 +88,46 @@ export default {
   components: { Counter, DeleteButton },
   model: {
     prop: 'visible',
-    event: 'close'
+    event: 'close',
   },
   props: {
     workBreak: {
       type: Object,
       default () {
         return {}
-      }
+      },
     },
     employeeId: {
       type: String,
-      default: ''
+      default: '',
     },
     employeeVisits: {
       type: Array,
       default () {
         return []
-      }
+      },
     },
     startTime: {
       type: String,
-      default: ''
+      default: '',
     },
     endTime: {
       type: String,
-      default: ''
+      default: '',
     },
     notesProp: {
       type: String,
-      default: ''
+      default: '',
     },
     visible: {
       type: Boolean,
       default: false,
-      required: true
-    }
+      required: true,
+    },
   },
   data () {
     return {
-      error: ''
+      error: '',
     }
   },
   computed: {
@@ -163,14 +163,14 @@ export default {
             dateFromISO(this.workBreak.ts_begin).getTime()) /
           (1000 * 60)
         )
-      }
+      },
     },
     selectedDateFormatted () {
       const options = {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
-        weekday: 'short'
+        weekday: 'short',
       }
       return this.date.toLocaleString('ru', options)
     },
@@ -185,7 +185,7 @@ export default {
         return this.workBreak && this.workBreak.ts_begin
           ? this.startTime.substring(11, 16)
           : ''
-      }
+      },
     },
     end: {
       set (newVal) {
@@ -198,7 +198,7 @@ export default {
         return this.workBreak && this.workBreak.ts_end
           ? this.endTime.substring(11, 16)
           : ''
-      }
+      },
     },
     notes: {
       set (newVal) {
@@ -207,13 +207,13 @@ export default {
       get () {
         const n = this.workBreak && this.workBreak.j ? this.notesProp : ''
         return n
-      }
+      },
     },
     dayVisits () {
       return this.employeeVisits.filter(v =>
         v.ts_begin.includes(this.dateString)
       )
-    }
+    },
   },
   methods: {
     ...mapActions({ alert: 'alerts/alert' }),
@@ -271,8 +271,8 @@ export default {
         .catch((err) => {
           this.alert(makeAlert(err))
         })
-    }
-  }
+    },
+  },
 }
 </script>
 

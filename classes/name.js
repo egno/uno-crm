@@ -15,7 +15,7 @@ class Name {
       return
     }
     if (typeof val === 'string') {
-      [this.forename, this.surname] = val.split(' ')
+      [ this.forename, this.surname ] = val.split(' ')
       this.fullname = val
     } else {
       this.forename = ''

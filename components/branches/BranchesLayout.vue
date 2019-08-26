@@ -55,13 +55,13 @@ export default {
   props: {
     isCreating: {
       type: Boolean,
-      default: false
+      default: false,
     },
     isButtonVisible: {
       type: Boolean,
-      default: false
-    }
-  }
+      default: false,
+    },
+  },
 }
 </script>
 

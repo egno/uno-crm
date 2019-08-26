@@ -9,7 +9,7 @@ export default {
         return `${c.j.name.fullname}${c.j.phone ? c.j.phone : c.j.phones[0]}`
       },
       nameInput: '',
-      suggestedClients: []
+      suggestedClients: [],
     }
   },
   created () {
@@ -47,6 +47,6 @@ export default {
       }
       this.debouncedGetClients(companyId, val)
       return val
-    }
-  }
+    },
+  },
 }

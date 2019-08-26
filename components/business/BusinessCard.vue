@@ -100,22 +100,22 @@ export default {
   components: {
     BusinessSchedule,
     PhoneView,
-    Avatar
+    Avatar,
   },
-  mixins: [businessMixins],
+  mixins: [ businessMixins ],
   props: {
     businessInfo: {
       type: Object,
       default () {
         return {}
-      }
-    }
+      },
+    },
   },
   data () {
     return {
       captionClass:
         'caption font-weight-bold text-no-wrap grey--text text--lighten-1',
-      expanded: false
+      expanded: false,
     }
   },
   computed: {
@@ -157,9 +157,9 @@ export default {
     },
     INN () {
       return this.businessInfo && this.businessInfo.j && this.businessInfo.j.inn
-    }
+    },
   },
-  methods: {}
+  methods: {},
 }
 </script>
 

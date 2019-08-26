@@ -35,7 +35,7 @@ class Client extends ApiObject {
     this.name = newVal && newVal.j && newVal.j.name || ''
     this.email = newVal && newVal.j && newVal.j.email
     this.phone = newVal && newVal.j && newVal.j.phone
-    this.phones = newVal && newVal.j && newVal.j.phones || ['']
+    this.phones = newVal && newVal.j && newVal.j.phones || [ '' ]
     this.sex = newVal && newVal.j && newVal.j.sex
     this.notes = newVal && newVal.j && newVal.j.notes
     this.message_agreement = newVal && newVal.j && newVal.j.message_agreement
@@ -50,7 +50,7 @@ class Client extends ApiObject {
     return [
       { code: 'M', display: 'Муж' },
       { code: 'F', display: 'Жен' },
-      { code: 'C', display: 'Дети' }
+      { code: 'C', display: 'Дети' },
     ]
   }
 
@@ -145,7 +145,7 @@ class Client extends ApiObject {
    * @param {String} newVal
    */
   set phones (newVal) {
-    this.j.phones = newVal || ['']
+    this.j.phones = newVal || [ '' ]
   }
 
   get phones () {

@@ -84,8 +84,8 @@ import Layout from '~/components/home/Layout.vue'
 export default {
   name: 'News',
   components: {
-    Layout
-  }
+    Layout,
+  },
 }
 </script>
 

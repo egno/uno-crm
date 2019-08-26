@@ -33,17 +33,17 @@ export default {
     placeText: { type: String, default: 'Перетащите файлы сюда' },
     src: { type: String, default: undefined },
     placeHolder: { type: String, default: undefined },
-    hasSlot: { type: Boolean, default: false }
+    hasSlot: { type: Boolean, default: false },
   },
   data () {
     return {
       fileCount: undefined,
       status: undefined,
-      uploadFieldName: 'file'
+      uploadFieldName: 'file',
     }
   },
   computed: {
-    ...mapGetters({ businessId: 'business/businessId' })
+    ...mapGetters({ businessId: 'business/businessId' }),
   },
   methods: {
     filesChange (fieldName, fileList) {
@@ -65,8 +65,8 @@ export default {
         .post(process.env.VUE_APP_UPLOAD, formData, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-            businessid: this.businessId
-          }
+            businessid: this.businessId,
+          },
         })
         .then((res) => {
           if (res.status === 200) {
@@ -80,8 +80,8 @@ export default {
           console.log('FAILURE!!')
           vm.status = ''
         })
-    }
-  }
+    },
+  },
 }
 </script>
 

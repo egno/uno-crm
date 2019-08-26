@@ -37,36 +37,36 @@ export default {
   components: { VisitTimeLineRow },
   model: {
     prop: 'value',
-    event: 'close'
+    event: 'close',
   },
   props: {
     client: {
       type: Object,
       default () {
         return newClient()
-      }
+      },
     },
     value: {
       type: Boolean,
       default: false,
-      required: true
-    }
+      required: true,
+    },
   },
   data () {
     return {
       visits: [],
-      active: 0
+      active: 0,
     }
   },
   computed: {
     ...mapGetters({ businessId: 'business/businessId' }),
     clientId () {
       return this.client && this.client.id
-    }
+    },
   },
   watch: {
     clientId: 'load',
-    businessId: 'load'
+    businessId: 'load',
   },
   mounted () {
     this.load()
@@ -104,8 +104,8 @@ export default {
     },
     onSave () {
       this.$emit('onSave', this.client)
-    }
-  }
+    },
+  },
 }
 </script>
 

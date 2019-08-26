@@ -1,5 +1,6 @@
 import BusinessSchedule from '~/classes/businessSchedule'
 import Api from '~/api/backend'
+import { dayScheduleMixin } from '~/mixins/dayScheduleMixin'
 
 export const businessMixins = {
   computed: {
@@ -19,8 +20,8 @@ export const businessMixins = {
       if (Array.isArray(this.data.j.phones)) {
         return this.data.j.phones
       }
-      return [this.data.j.phones]
-    }
+      return [ this.data.j.phones ]
+    },
   },
   methods: {
     prependHttpToUrl (url) {
@@ -44,7 +45,7 @@ export const businessMixins = {
         data.j.links = {
           vk: '',
           instagram: '',
-          others: [{ uri: '' }]
+          others: [ { uri: '' } ],
         }
       }
       if (!data.j.address) {
@@ -58,13 +59,13 @@ export const businessMixins = {
       }
       if (!data.j.weekSchedule.data) {
         data.j.weekSchedule.data = [
-          ['', ''],
-          ['', ''],
-          ['', ''],
-          ['', ''],
-          ['', ''],
-          ['', ''],
-          ['', '']
+          [ '', '' ],
+          [ '', '' ],
+          [ '', '' ],
+          [ '', '' ],
+          [ '', '' ],
+          [ '', '' ],
+          [ '', '' ],
         ]
       }
       return data
@@ -77,24 +78,25 @@ export const businessMixins = {
         const v = c === 'x' ? r : (r & 0x3) | 0x8
         return v.toString(16)
       })
-    }
-  }
+    },
+  },
 }
 
 export const scheduleMixin = {
+  mixins: [ dayScheduleMixin ],
   props: {
     weekSchedule: {
       type: Object,
       default () {
         return {}
-      }
-    }
+      },
+    },
   },
   watch: {
     weekSchedule () {
       this.update()
       this.setDays()
-    }
+    },
   },
   data () {
     return {
@@ -105,11 +107,11 @@ export const scheduleMixin = {
         'Четверг',
         'Пятница',
         'Суббота',
-        'Воскресенье'
+        'Воскресенье',
       ],
       newWeekSchedule:
         this.weekSchedule && new BusinessSchedule(this.weekSchedule),
-      days: undefined
+      days: undefined,
     }
   },
   created () {
@@ -129,7 +131,7 @@ export const scheduleMixin = {
         days.push({
           dayName,
           dayIndex,
-          value: weekSchedule[dayIndex]
+          value: weekSchedule[dayIndex],
         })
       })
 
@@ -139,41 +141,7 @@ export const scheduleMixin = {
       this.newWeekSchedule =
         this.weekSchedule && new BusinessSchedule(this.weekSchedule)
     },
-    getDayScheduleErrors (newDaySchedule) {
-      const errors = []
-      const startTime = this.getTimeArray(newDaySchedule.start)
-      const endTime = this.getTimeArray(newDaySchedule.end)
-      if (
-        endTime[0] < startTime[0] ||
-        (endTime[0] === startTime[0] && endTime[1] < startTime[1])
-      ) {
-        errors.push('intervalError')
-      }
-
-      if (
-        !Array.isArray(newDaySchedule) &&
-        ((newDaySchedule.start && !newDaySchedule.end) ||
-          (!newDaySchedule.start && newDaySchedule.end))
-      ) {
-        errors.push('halfEmptyValueError')
-      }
-
-      if (
-        Array.isArray(newDaySchedule) &&
-        ((newDaySchedule[0] && !newDaySchedule[1]) ||
-          (!newDaySchedule[0] && newDaySchedule[1]))
-      ) {
-        errors.push('halfEmptyValueError')
-      }
-
-      return errors
-    },
-    getTimeArray (timeString) {
-      return !timeString
-        ? [null, null]
-        : timeString.split(':').map(str => parseInt(str))
-    }
-  }
+  },
 }
 
 export const filials = {
@@ -201,6 +169,6 @@ export const filials = {
       return Api()
         .get(`business?parent=eq.${id}`)
         .then(res => res.data)
-    }
-  }
+    },
+  },
 }
