@@ -328,11 +328,14 @@
                   @edit="openEditForm"
                   @delete="deleteEmpTemplate"
                 >
-                  <div>
-                    <div>Дата начала шаблона</div>
-                    <div>{{ startDayFormatted }}</div>
+                  <div class="current-template__start">
+                    <div class="current-template__text">
+                      Дата начала шаблона
+                    </div>
+                    <div class="current-template__start-date">
+                      {{ startDayFormatted }}
+                    </div>
                   </div>
-                  <div />
                 </TemplateCard>
               </template>
             </Accordion>
@@ -1212,6 +1215,16 @@ export default {
     .accordion.current-template .accordion__header:after,
     .accordion.available-templates .accordion__header:after {
       display: none;
+    }
+    .current-template {
+      &__start {
+        border-top: 1px solid rgba(137, 149, 175, 0.1);
+        padding: 10px 16px;
+        font-size: 12px;
+      }
+      &__text {
+        font-weight: 600;
+      }
     }
     .checkbox {
       margin-top: 30px;

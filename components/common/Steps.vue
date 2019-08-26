@@ -64,12 +64,12 @@ export default {
     }
 
     &._prev {
-      background-image: url('~assets/images/svg/next.svg');
+      background-image: url('~assets/images/svg/arrow-right.svg');
       transform: rotate(180deg);
     }
 
     &._next {
-      background-image: url('~assets/images/svg/next.svg');
+      background-image: url('~assets/images/svg/arrow-right.svg');
     }
 
     &[disabled='disabled'] {
