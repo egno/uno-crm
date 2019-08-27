@@ -180,7 +180,7 @@
 
     <v-dialog
       :value="templateAssignForm"
-      :content-class="`right-attached-panel businesscard-form _templates ${isCreating ? 'creating' : ''}`"
+      :content-class="`right-attached-panel businesscard-form templates ${isCreating ? 'creating' : ''}`"
       transition="slide"
       @input="closeAssignForm"
     >
@@ -227,16 +227,16 @@
                 :rules="[ rules.required ]"
               />
             </div>
-            <div class="right-attached-panel__field-block">
-              <div v-show="templateType" class="employees-schedule__warning">
-                Заполните рабочее время сотрудника,
-                или оставьте поля пустыми, если день
-                является выходным
-              </div>
+            <div>
               <template v-if="templateType === 'week'">
-                <div class="employees-schedule__week-template is-creating">
-                  <v-layout justify-space-between class="employees-schedule__heading">
-                    <span>День недели</span><span>Расписание</span>
+                <div v-show="templateType" class="employees-schedule__warning">
+                  Заполните рабочее время сотрудника,
+                  или оставьте поля пустыми, если день
+                  является выходным
+                </div>
+                <div class="templates__times-inputs">
+                  <v-layout justify-space-between class="templates__heading">
+                    <span class="important-text">День недели</span> <span class="important-text">Время работы</span>
                   </v-layout>
                   <BusinessScheduleEdit
                     :show-header="false"
@@ -245,14 +245,43 @@
                     @editWeek="scheduleEdit"
                   />
                 </div>
+                <v-menu>
+                  <template v-slot:activator="{ on }">
+                    <div class="right-attached-panel__field-block templates__date">
+                      <button type="button" v-on="on">
+                        Дата начала {{ startDayFormatted }}
+                      </button>
+                    </div>
+                  </template>
+                  <v-date-picker
+                    v-model="templateStartDate"
+                    :allowed-dates="allowedDates"
+                    locale="ru-RU"
+                    no-title
+                    first-day-of-week="1"
+                  />
+                </v-menu>
               </template>
               <template v-else-if="templateType === 'shift'">
-                <div class="employees-schedule__shift-template is-creating">
-                  <v-layout justify-space-between class="employees-schedule__heading">
-                    <span>День смены</span><span>Расписание</span>
-                  </v-layout>
-                  <div>
-                    <div v-for="(day, index) in shiftDays" :key="index" xs12 class="business-schedule">
+                <div>
+                  <div class="employees-schedule__warning">
+                    Введите количество рабочих и&nbsp;выходных дней в шаблоне
+                  </div>
+                  <div class="templates__shift-days">
+                    <v-layout align-center justify-space-between class="templates__days">
+                      <div>Рабочие дни</div>
+                      <v-text-field v-model="templateWorkingDaysCount" mask="#" type="text" min="1" max="7" placeholder="0" class="templates__input" @input="setShiftDays" />
+                    </v-layout>
+                    <v-layout align-center justify-space-between class="templates__days">
+                      <div>Выходные</div>
+                      <v-text-field v-model="templateDaysOffCount" mask="#" type="text" min="0" max="7" placeholder="0" class="templates__input" @input="setShiftDays" />
+                    </v-layout>
+                  </div>
+                  <div v-show="+templateWorkingDaysCount" class="templates__times-inputs">
+                    <v-layout justify-space-between class="templates__heading">
+                      <span class="important-text">День смены</span> <span class="important-text">Время работы</span>
+                    </v-layout>
+                    <div v-for="(day, index) in templateWorkingDays" :key="index" xs12 class="business-schedule">
                       <div class="business-schedule__wrapper">
                         <div class="business-schedule__dayname">
                           {{ index + 1 }}й
@@ -262,23 +291,21 @@
                             :day-schedule="day"
                             @editDay="onEditShiftDay(index, $event)"
                           />
-                          <button type="button" @click="deleteShiftDay(index)">
-                            убрать
-                          </button>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div>
-                    <button type="button" class="employees-schedule__add-shift" @click="addShiftDay">
-                      Добавить день смены
-                    </button>
+                    <!-- eslint-disable-next-line vue/no-unused-vars, vue/require-v-for-key -->
+                    <div v-for="dayOff in templateDaysOff">
+                      выходной
+                    </div>
                   </div>
                   <v-menu>
                     <template v-slot:activator="{ on }">
-                      <button type="button" v-on="on">
-                        Дата начала {{ startDayFormatted }}
-                      </button>
+                      <div class="right-attached-panel__field-block templates__date">
+                        <button type="button" v-on="on">
+                          Дата начала {{ startDayFormatted }}
+                        </button>
+                      </div>
                     </template>
                     <v-date-picker
                       v-model="templateStartDate"
@@ -295,7 +322,7 @@
               <button
                 type="button"
                 class="right-attached-panel__save"
-                :class="{ _disabled: !templateTitle || !templateType || shiftScheduleHasErrors }"
+                :class="{ _disabled: isSaveDisabled }"
                 @click="isEditing? saveEmployee() : saveTemplate()"
               >
                 Сохранить
@@ -339,7 +366,7 @@
                 </TemplateCard>
               </template>
             </Accordion>
-            <Accordion v-if="commonTemplates.length" :expanded="true" class="available-templates">
+            <Accordion v-if="commonTemplates.length" :expanded="true" class="templates__available">
               <template slot="heading">
                 <div>Список шаблонов</div>
               </template>
@@ -447,9 +474,10 @@ import Business from '~/classes/business'
 import Employee from '~/classes/employee'
 import { formatDate, getWeeks, hyphensStringToDate } from '~/components/calendar/utils'
 import Api from '~/api/backend'
+import { makeAlert } from '~/api/utils'
 
 export default {
-  // eslint-disable-next-line standard/object-curly-even-spacing
+  // eslint-disable-next-line standard/object-curly-even-spacing,vue/no-unused-components
   components: { Accordion, BusinessScheduleEdit, Chip, DaySchedule, EmployeesSelection, EmployeeSimpleCard, MainButton, TemplateCard, TimeEdit },
   mixins: [ dayScheduleMixin, employeesCategorized ],
   data () {
@@ -457,6 +485,7 @@ export default {
       dayScheduleErrors: [],
       isStillEditing: false,
       enabled: null,
+      hasEmptyWorkingDays: true,
       isCreating: false,
       isCommonTemplate: false,
       isEditing: false,
@@ -467,10 +496,6 @@ export default {
       selectedDate: '',
       selectedEmployee: null,
       selectedOnStart: false,
-      shiftDays: [ {
-        start: '',
-        end: '',
-      } ],
       shiftScheduleHasErrors: false,
       templateAssignForm: false,
       templatesListEdit: false,
@@ -487,6 +512,10 @@ export default {
           name: 'Сменный',
         },
       ],
+      templateDaysOff: [],
+      templateDaysOffCount: 0,
+      templateWorkingDays: [ { start: '', end: '' } ],
+      templateWorkingDaysCount: 1,
       weekTemplate: [],
       workingDays: {},
       visibleEmployees: [],
@@ -502,6 +531,9 @@ export default {
     ...mapState({
       businessInfo: state => state.business.businessInfo,
     }),
+    isSaveDisabled () {
+      return !this.templateTitle || !this.templateType || this.shiftScheduleHasErrors || this.hasEmptyWorkingDays
+    },
     commonTemplates () {
       if (!this.businessInfo.scheduleTemplates) {
         return []
@@ -570,6 +602,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      alert: 'alerts/alert',
       saveBusiness: 'business/saveBusiness',
       addEmployeeItem: 'employee/addEmployeeItem',
     }),
@@ -578,12 +611,6 @@ export default {
 
       dt.setDate(dt.getDate() + 7 * vector)
       this.selectedDate = formatDate(dt)
-    },
-    addShiftDay () {
-      this.shiftDays.push({
-        start: '',
-        end: '',
-      })
     },
     addVisibleEmployee (e) {
       this.visibleEmployees.push(e)
@@ -604,11 +631,12 @@ export default {
       this.templateStartDate = this.actualDate
       this.templateTitle = ''
       this.templateType = ''
-      this.shiftDays = [ {
-        start: '',
-        end: '',
-      } ]
+      this.templateWorkingDays = [ { start: '', end: '' } ]
+      this.templateWorkingDaysCount = 1
+      this.templateDaysOff = []
+      this.templateDaysOffCount = 0
       this.shiftScheduleHasErrors = false
+      this.hasEmptyWorkingDays = false
     },
     closeTemplatesList () {
       this.newBusiness = {}
@@ -625,9 +653,6 @@ export default {
     },
     deleteEmpTemplate () {
       this.assignTemplate(null, false)
-    },
-    deleteShiftDay (index) {
-      this.shiftDays.splice(index, 1)
     },
     fillTable () {
       this.visibleEmployees.forEach((employee) => {
@@ -762,6 +787,11 @@ export default {
           this.oldWorkingDays = cloneDeep(this.workingDays)
         })
     },
+    calcEmptyWorkingDays () {
+      this.hasEmptyWorkingDays = this.templateType === 'shift'
+        ? this.templateWorkingDays.some(d => !d.start || !d.end)
+        : !this.weekTemplate.some(d => d.start && d.end)
+    },
     initVisibleEmployees () {
       this.businessEmployees.forEach((employee) => {
         if (!this.workingDays[employee.id]) {
@@ -820,12 +850,13 @@ export default {
       this.templateTitle = template.title
       this.templateType = template.type
       if (template.type === 'shift') {
-        this.shiftDays = cloneDeep(template.data)
+        const workDaysCount = template.data.findIndex(d => !d.start)
+        this.templateWorkingDays = template.data.slice(0, workDaysCount)
+        this.templateWorkingDaysCount = this.templateWorkingDays.length
+        this.templateDaysOff = template.data.slice(workDaysCount)
+        this.templateDaysOffCount = this.templateDaysOff.length
       }
       this.isEditing = true
-    },
-    onClearDay (index) {
-      this.shiftDays[index] = { start: '', end: '' }
     },
     onClick (date, employeeId, target) {
       if (this.dayScheduleErrors.length && this.lastEdited !== date + employeeId) {
@@ -843,11 +874,12 @@ export default {
       }
     },
     onEditShiftDay (dayIndex, { newDaySchedule, errors }) {
-      if (!this.shiftDays || !this.shiftDays.length) {
+      if (!this.templateWorkingDays || !this.templateWorkingDays.length) {
         return
       }
-      this.shiftDays[dayIndex] = newDaySchedule
+      this.$set(this.templateWorkingDays, dayIndex, newDaySchedule)
       this.shiftScheduleHasErrors = !!errors.length
+      this.calcEmptyWorkingDays()
     },
     resetChanges () {
       this.workingDays = cloneDeep(this.oldWorkingDays)
@@ -856,7 +888,7 @@ export default {
       const newTemplate = {
         title: this.templateTitle,
         type: this.templateType,
-        data: this.templateType === 'shift' ? this.shiftDays : this.weekTemplate,
+        data: this.templateType === 'shift' ? this.templateWorkingDays.concat(this.templateDaysOff) : this.weekTemplate,
       }
 
       // check if the template was created or edited
@@ -898,6 +930,19 @@ export default {
     saveTemplatesList () {
       this.saveBusiness(this.newBusiness)
         .then(() => {
+          this.businessEmployees.forEach((e) => {
+            // we have to check all employees
+            // in case of some common templates were deleted
+            if (!this.getEmployeeTemplate(e)) {
+              const newEmp = new Employee(e)
+              newEmp.workTemplate = null
+              newEmp.save()
+                .then((res) => {
+                  this.addEmployeeItem(res)
+                })
+                .catch(e => this.alert(makeAlert(e)))
+            }
+          })
           this.templatesListEdit = false
         })
     },
@@ -925,6 +970,24 @@ export default {
     },
     scheduleEdit (newWeek) {
       this.weekTemplate = newWeek.data
+      this.calcEmptyWorkingDays()
+    },
+    setShiftDays () {
+      const newLength = +this.templateWorkingDaysCount
+      const length = this.templateWorkingDays.length
+
+      this.templateDaysOff = new Array(+this.templateDaysOffCount).fill({ start: '', end: '' })
+
+      if (!newLength) {
+        return
+      }
+      if (newLength < length) {
+        this.templateWorkingDays = this.templateWorkingDays.slice(0, newLength)
+      } else {
+        const arr = new Array(newLength - length).fill({ start: '', end: '' })
+        this.templateWorkingDays = this.templateWorkingDays.concat(arr)
+      }
+      this.calcEmptyWorkingDays()
     },
     showTemplatesListEdit () {
       this.newBusiness = new Business(cloneDeep(this.businessInfo))
@@ -1020,6 +1083,9 @@ export default {
     transform: rotate(90deg);
   }
 
+  .important-text {
+    font-weight: 600;
+  }
   .employees-schedule {
     background-color: #fff;
     .fill-table {
@@ -1137,9 +1203,6 @@ export default {
       @include border-left();
       border-right: 1px solid  #d6dae3;
     }
-    .important-text {
-      font-weight: 600;
-    }
     &__warning {
       font-size: 12px;
       color: #8995AF;
@@ -1218,9 +1281,40 @@ export default {
       }
     }
   }
-  ._templates {
+  .templates {
+    &__shift-days {
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(137, 149, 175, 0.1);
+    }
+    &__days {
+      width: 200px;
+      margin: 4px auto 0;
+    }
+    &__input {
+      max-width: 49px;
+      input::placeholder {
+        font-size: 14px;
+      }
+    }
+    &__times-inputs {
+      margin-top: 20px;
+      padding-left: 27px;
+    }
+    &__heading {
+      max-width: 213px;
+      margin-bottom: 17px;
+    }
+    &__date {
+      border-top: 1px solid rgba(137, 149, 175, 0.1);
+    }
+    .right-attached-panel__content {
+      width: 265px;
+    }
+    .accordion {
+      padding: 40px 0 0;
+    }
     .accordion.current-template .accordion__header:after,
-    .accordion.available-templates .accordion__header:after {
+    .accordion.templates__available .accordion__header:after {
       display: none;
     }
     .current-template {
@@ -1239,11 +1333,19 @@ export default {
     .checkbox__label {
       margin-bottom: 0;
     }
-    .employees-schedule__heading {
-      max-width: 195px;
-    }
+
     button {
       outline: none;
+    }
+    .employees-schedule__warning {
+      margin: 32px auto 24px;
+      width: 217px;
+    }
+    .business-schedule__main {
+      padding: 0;
+    }
+    .time-edit input {
+      padding-bottom: 0;
     }
   }
 </style>

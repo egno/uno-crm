@@ -96,6 +96,7 @@ export default {
       background: url('~assets/images/down.png') center no-repeat;
       transform: rotate(0);
       transition: transform 0.5s;
+      outline: none;
       &.up {
         transform: rotate(180deg);
       }
