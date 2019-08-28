@@ -206,16 +206,19 @@
             <v-form>
               <div class="right-attached-panel__field-block">
                 <VTextField
+                  ref="templateTitle"
                   v-model="templateTitle"
                   label="НАЗВАНИЕ ШАБЛОНА"
                   :rules="[
                     rules.required,
+                    rules.uniqueTitle,
                     (value) =>
                       (!!value && value.length <= 20) ||
                       'Слишком длинное название'
                   ]"
                   maxlength="50"
                   class="businesscard-form__field"
+                  @update:error="onError"
                 />
               </div>
               <div class="right-attached-panel__field-block dropdown-select">
@@ -554,6 +557,7 @@ export default {
       rules: {
         required: value => !!value || 'Обязательно для заполнения',
         minWorkDaysCount: value => (!value || (+value > 0)) || 'Введите не менее 1 рабочего дня',
+        uniqueTitle: value => !this.businessInfo.scheduleTemplates.some(t => t.title === value) || 'Название шаблона должно быть уникально',
       },
     }
   },
@@ -869,9 +873,15 @@ export default {
       return res[day]
     },
     onError () {
-      this.templateError = this.$refs.templateWorkingDaysCount.errorBucket.length
+      const titleError = !this.templateTitle ? 'Введите название шаблона' : this.rules.uniqueTitle(this.templateTitle)
+      if (typeof titleError === 'string') {
+        this.templateError = titleError
+        return
+      }
+
+      this.templateError = this.$refs.templateWorkingDaysCount && this.$refs.templateWorkingDaysCount.errorBucket.length
         ? this.$refs.templateWorkingDaysCount.errorBucket[0]
-        : this.$refs.templateDaysOffCount.errorBucket[0]
+        : this.$refs.templateDaysOffCount && this.$refs.templateDaysOffCount.errorBucket[0]
     },
     openAssignForm (employee) {
       this.selectedEmployee = new Employee(cloneDeep(employee))
@@ -1143,6 +1153,7 @@ export default {
       font-size: 14px;
       text-align: center;
       color: #FFFFFF;
+      outline: none;
     }
     .change-week {
       display: flex;
@@ -1229,6 +1240,7 @@ export default {
     }
     &__template-column {
       width: 150px;
+      padding: 0 20px;
       font-weight: 600;
       font-size: 16px;
       @include border-left();
@@ -1271,6 +1283,7 @@ export default {
       height: 40px;
       border-left: 1px solid rgba(137, 149, 175, 0.35);
       background: url('~assets/images/svg/pencil.svg') center no-repeat  rgba(137, 149, 175, 0.5);
+      outline: none;
     }
   }
   .schedule-row {
