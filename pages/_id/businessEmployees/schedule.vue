@@ -801,13 +801,15 @@ export default {
               this.workingDays[employee.id] = []
             }
           })
-
           res.forEach((el) => {
             if (!el.start) {
               el.start = ''
             }
             if (!el.end) {
               el.end = ''
+            }
+            if (!this.workingDays[el.employeeId]) {
+              this.$set(this.workingDays, el.employeeId, [])
             }
             this.workingDays[el.employeeId].push(el)
           })
