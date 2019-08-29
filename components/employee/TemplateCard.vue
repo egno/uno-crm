@@ -112,6 +112,7 @@ export default {
       margin: 0 1px;
       background: url('~assets/images/svg/pencil.svg') center no-repeat  rgba(137, 149, 175, 0.5);
       border-radius: 2px;
+      outline: none;
     }
     &__delete {
       display: flex;

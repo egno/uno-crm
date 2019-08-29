@@ -7,11 +7,11 @@
             <v-layout>
               <main-button
                 class="fill-table"
-                @click="fillTable"
+                @click="fillTableDebounced"
               >
                 <span>Заполнить график по шаблонам</span>
               </main-button>
-              <button v-if="businessTemplates.length" type="button" class="templates-list-edit" @click="showTemplatesListEdit" />
+              <button v-if="businessTemplates.length" type="button" class="templates-list-edit" @click="showTemplatesListEditDebounced" />
             </v-layout>
           </td>
           <td colspan="4">
@@ -91,7 +91,7 @@
             <EmployeeSimpleCard :employee="employee" />
           </td>
           <td class="schedule-row__data-cell schedule-row__template">
-            <template v-if="employee.j.workTemplate && employee.j.workTemplate.title">
+            <template v-if="employee.j.workTemplate && getEmployeeTemplate(employee)">
               <div> {{ getEmployeeTemplate(employee).title }} </div>
               <div>
                 <button type="button" class="schedule-row__add-template" @click="openAssignForm(employee)">
@@ -109,7 +109,12 @@
           <td
             v-for="(day , di) in workingDays[employee.id]"
             :key="day.date + day.employeeId"
-            :class="[ 'schedule-row__data-cell', { 'editing': enabled === day.date + day.employeeId, 'day-off': !day || !day.start } ]"
+            :class="[ 'schedule-row__data-cell',
+                      { 'editing': enabled === day.date + day.employeeId,
+                        'day-off': !day || !day.start,
+                        'past': day.date < actualDate,
+                      },
+            ]"
             @click="onClick(day.date, day.employeeId, $event.target)"
           >
             <div :class="{ white: day && (day.start || day.end) }">
@@ -212,162 +217,17 @@
             v-if="!isCreating && !isEditing || isCreating"
             id="create_template"
             v-model="isCreating"
-            :checked="isCreating"
             label="Создать новый шаблон"
             name="create_template"
           />
-
           <template v-if="isCreating || isEditing">
-            <v-form>
-              <div class="right-attached-panel__field-block">
-                <VTextField
-                  ref="templateTitle"
-                  v-model="templateTitle"
-                  label="НАЗВАНИЕ ШАБЛОНА"
-                  :rules="[
-                    rules.required,
-                    rules.uniqueTitle,
-                    (value) =>
-                      (!!value && value.length <= 20) ||
-                      'Слишком длинное название'
-                  ]"
-                  maxlength="50"
-                  class="businesscard-form__field"
-                  @update:error="onError"
-                />
-              </div>
-              <div class="right-attached-panel__field-block dropdown-select">
-                <VSelect
-                  v-model="templateType"
-                  :items="templateTypes"
-                  :item-text="(temp) => temp.name"
-                  label="ВИД"
-                  attach=".right-attached-panel__field-block.dropdown-select"
-                  :rules="[ rules.required ]"
-                />
-              </div>
-              <div>
-                <template v-if="templateType === 'week'">
-                  <div v-show="templateType" class="employees-schedule__warning">
-                    Заполните рабочее время сотрудника,
-                    или оставьте поля пустыми, если день
-                    является выходным
-                  </div>
-                  <div class="templates__times-inputs">
-                    <v-layout justify-space-between class="templates__heading">
-                      <span class="important-text">День недели</span> <span class="important-text">Время работы</span>
-                    </v-layout>
-                    <BusinessScheduleEdit
-                      :show-header="false"
-                      :show-tumbler="false"
-                      :week-schedule="selectedEmployeeTemplate"
-                      @editWeek="scheduleEdit"
-                    />
-                  </div>
-                </template>
-                <template v-else-if="templateType === 'shift'">
-                  <div class="employees-schedule__warning">
-                    Введите количество рабочих и&nbsp;выходных дней в шаблоне
-                  </div>
-                  <div class="templates__shift-days">
-                    <v-layout align-center justify-space-between class="templates__days">
-                      <div class="important-text">
-                        Рабочие дни
-                      </div>
-                      <v-text-field
-                        ref="templateWorkingDaysCount"
-                        v-model="templateWorkingDaysCount"
-                        mask="#" type="text"
-                        :rules="[ rules.minWorkDaysCount ]"
-                        placeholder="0"
-                        class="templates__input"
-                        @input="setShiftDays"
-                        @update:error="onError"
-                      />
-                    </v-layout>
-                    <v-layout align-center justify-space-between class="templates__days">
-                      <div class="important-text">
-                        Выходные
-                      </div>
-                      <v-text-field
-                        ref="templateDaysOffCount"
-                        v-model="templateDaysOffCount"
-                        mask="#" type="text"
-                        placeholder="0"
-                        class="templates__input"
-                        @input="setShiftDays"
-                        @update:error="onError"
-                      />
-                    </v-layout>
-                  </div>
-                  <div v-show="+templateWorkingDaysCount" class="templates__times-inputs">
-                    <v-layout justify-space-between class="templates__heading">
-                      <span class="important-text">День смены</span> <span class="important-text">Время работы</span>
-                    </v-layout>
-                    <div v-for="(day, index) in templateWorkingDays" :key="index" xs12 class="business-schedule">
-                      <div class="business-schedule__wrapper">
-                        <div class="business-schedule__dayname">
-                          {{ index | numberInWords }}
-                        </div>
-                        <div class="business-schedule__content">
-                          <DaySchedule
-                            :day-schedule="day"
-                            @editDay="onEditShiftDay(index, $event)"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    <!-- eslint-disable-next-line vue/no-unused-vars, vue/valid-v-for, vue/require-v-for-key -->
-                    <v-layout v-for="(dayOff, dayOffIndex) in templateDaysOff" justify-space-between align-center class="templates__days-off">
-                      <div class="important-text">
-                        {{ dayOffIndex + templateWorkingDays.length | numberInWords }}
-                      </div>
-                      <div class="templates__day-off">
-                        Выходной
-                      </div>
-                    </v-layout>
-                  </div>
-                </template>
-                <v-menu>
-                  <template v-slot:activator="{ on }">
-                    <div class="right-attached-panel__field-block templates__date">
-                      <button type="button" v-on="on">
-                        <span class="important-text">Дата начала</span> {{ startDayFormatted }}
-                      </button>
-                    </div>
-                  </template>
-                  <v-date-picker
-                    v-model="templateStartDate"
-                    :allowed-dates="allowedDates"
-                    locale="ru-RU"
-                    no-title
-                    first-day-of-week="1"
-                  />
-                </v-menu>
-              </div>
-              <div v-if="templateError" class="right-attached-panel__error">
-                {{ templateError }}
-              </div>
-              <div class="right-attached-panel__buttons">
-                <button
-                  type="button"
-                  class="right-attached-panel__save"
-                  :class="{ _disabled: isSaveDisabled }"
-                  @click="saveTemplateDebounced"
-                >
-                  Сохранить
-                </button>
-                <button
-                  type="button"
-                  class="right-attached-panel__cancel"
-                  @click="closeAssignForm"
-                >
-                  Отмена
-                </button>
-              </div>
-            </v-form>
+            <TemplateEdit
+              :template="isCreating? {} : selectedEmployeeTemplate"
+              :show-start-date="true"
+              @cancel="closeAssignForm"
+              @saved="onTemplateSaved"
+            />
           </template>
-
           <template v-else-if="selectedEmployee && !isCreating">
             <Accordion
               v-if="selectedEmployee.j.workTemplate && selectedEmployee.j.workTemplate.title"
@@ -390,9 +250,9 @@
                     <div class="current-template__text">
                       Дата начала шаблона
                     </div>
-                    <div class="current-template__start-date">
+                    <!--<div class="current-template__start-date">
                       {{ startDayFormatted }}
-                    </div>
+                    </div>-->
                   </div>
                 </TemplateCard>
               </template>
@@ -436,49 +296,58 @@
     </v-dialog>
     <v-dialog
       :value="templatesListEdit"
-      content-class="right-attached-panel businesscard-form _templates"
+      content-class="right-attached-panel businesscard-form templates"
       transition="slide"
-      @input="templatesListEdit = false"
+      @input="closeTemplatesList"
     >
       <v-layout class="right-attached-panel__container">
         <button
           type="button"
           class="right-attached-panel__close"
-          @click="templatesListEdit = false"
+          @click="closeTemplatesList"
         />
         <div class="right-attached-panel__content">
           <div class="right-attached-panel__header">
             Редактирование списка шаблонов
           </div>
-
-          <div v-if="newBusiness && newBusiness.j" class="templates-list">
-            <div class="templates-list__content">
-              <TemplateCard
-                v-for="(template, i) in newBusiness.j.scheduleTemplates"
-                :key="i"
-                :editable="true"
-                :selectable="false"
-                :template="template"
-                @delete="deleteBusinessTemplate(template)"
-              />
+          <template v-if="isEditing">
+            <TemplateEdit
+              :template="editingTemplate"
+              @cancel="isEditing = false; editingTemplate = {}"
+              @saved="isEditing = false"
+            />
+          </template>
+          <template v-else>
+            <div v-if="newBusiness && newBusiness.j" class="templates-list">
+              <div class="templates-list__content">
+                <TemplateCard
+                  v-for="(template, i) in newBusiness.j.scheduleTemplates"
+                  :key="i"
+                  :editable="true"
+                  :selectable="false"
+                  :template="template"
+                  @edit="openEditForm(template)"
+                  @delete="deleteBusinessTemplate(template)"
+                />
+              </div>
             </div>
-          </div>
-          <div class="right-attached-panel__buttons">
-            <button
-              type="button"
-              class="right-attached-panel__save"
-              @click="saveTemplatesListDebounced"
-            >
-              Сохранить
-            </button>
-            <button
-              type="button"
-              class="right-attached-panel__cancel"
-              @click="closeTemplatesList"
-            >
-              Отмена
-            </button>
-          </div>
+            <div class="right-attached-panel__buttons">
+              <button
+                type="button"
+                class="right-attached-panel__save"
+                @click="saveTemplatesListDebounced"
+              >
+                Сохранить
+              </button>
+              <button
+                type="button"
+                class="right-attached-panel__cancel"
+                @click="closeTemplatesList"
+              >
+                Отмена
+              </button>
+            </div>
+          </template>
         </div>
       </v-layout>
     </v-dialog>
@@ -492,13 +361,12 @@ import { employeesCategorized } from '~/mixins/employee'
 import { dayScheduleMixin } from '~/mixins/dayScheduleMixin'
 import Modal from '~/components/common/Modal'
 import Accordion from '~/components/common/Accordion'
-import BusinessScheduleEdit from '~/components/business/BusinessScheduleEdit.vue'
 import Chip from '~/components/common/Chip.vue'
-import DaySchedule from '~/components/business/DaySchedule.vue'
 import EmployeesSelection from '~/components/employee/EmployeesSelection.vue'
 import EmployeeSimpleCard from '~/components/employee/EmployeeSimpleCard.vue'
 import MainButton from '~/components/common/MainButton.vue'
 import TemplateCard from '~/components/employee/TemplateCard.vue'
+import TemplateEdit from '~/components/employee/TemplateEdit.vue'
 import TimeEdit from '~/components/TimeEdit.vue'
 import Business from '~/classes/business'
 import Employee from '~/classes/employee'
@@ -508,20 +376,14 @@ import { makeAlert } from '~/api/utils'
 
 export default {
   // eslint-disable-next-line standard/object-curly-even-spacing
-  components: { Accordion, BusinessScheduleEdit, Chip, DaySchedule, EmployeesSelection, EmployeeSimpleCard, MainButton, Modal, TemplateCard, TimeEdit },
-  filters: {
-    numberInWords (n) {
-      const indexes = [ 'Первый', 'Второй', 'Третий', 'Четвертый', 'Пятый', 'Шестой', 'Седьмой', 'Восьмой', 'Девятый', 'Десятый', 'Одиннадцатый', 'Двенадцатый', 'Тринадцатый', 'Четырнадцатый' ]
-      return indexes[n]
-    },
-  },
+  components: { Accordion, Chip, EmployeesSelection, EmployeeSimpleCard, MainButton, Modal, TemplateCard, TemplateEdit, TimeEdit },
   mixins: [ dayScheduleMixin, employeesCategorized ],
   data () {
     return {
+      editingTemplate: {},
       dayScheduleErrors: [],
       isStillEditing: false,
       enabled: null,
-      hasEmptyWorkingDays: true,
       isCreating: false,
       isEditing: false,
       lastEdited: '',
@@ -531,23 +393,10 @@ export default {
       selectedDate: '',
       selectedEmployee: null,
       selectedOnStart: false,
-      shiftScheduleHasErrors: false,
       showReset: false,
-      templateError: '',
       templateAssignForm: false,
       templatesListEdit: false,
       templateStartDate: '',
-      templateTitle: '',
-      templateType: '',
-      templateTypes: [
-        { value: 'week', name: 'Недельный' },
-        { value: 'shift', name: 'Сменный' },
-      ],
-      templateDaysOff: [ { start: '', end: '' }, { start: '', end: '' } ],
-      templateDaysOffCount: 2,
-      templateWorkingDays: [ { start: '', end: '' }, { start: '', end: '' } ],
-      templateWorkingDaysCount: 2,
-      weekTemplate: [],
       workingDays: {},
       visibleEmployees: [],
       resetModalTemplate: {
@@ -555,8 +404,6 @@ export default {
         rightButton: 'ПРИНЯТЬ',
       },
       rules: {
-        required: value => !!value || 'Обязательно для заполнения',
-        minWorkDaysCount: value => (!value || (+value > 0)) || 'Введите не менее 1 рабочего дня',
         uniqueTitle: value => !this.businessInfo.scheduleTemplates.some(t => t.title === value) || 'Название шаблона должно быть уникально',
       },
     }
@@ -568,9 +415,6 @@ export default {
     ...mapState({
       businessInfo: state => state.business.businessInfo,
     }),
-    isSaveDisabled () {
-      return !this.templateTitle || !this.templateType || this.shiftScheduleHasErrors || this.hasEmptyWorkingDays
-    },
     businessTemplates () {
       if (!this.businessInfo.scheduleTemplates) {
         return []
@@ -603,19 +447,6 @@ export default {
     selectedMonth () {
       return getWeeks(+this.selectedDate.slice(0, 4), +this.selectedDate.slice(5, 7) - 1)
     },
-    startDayFormatted () {
-      if (!this.templateStartDate) { return '' }
-      const options = {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        weekday: 'short',
-      }
-      return hyphensStringToDate(this.templateStartDate).toLocaleString(
-        'ru',
-        options
-      )
-    },
   },
   watch: {
     'businessInfo.id': {
@@ -639,10 +470,11 @@ export default {
     },
   },
   created () {
-    this.saveTemplateDebounced = debounce(this.saveTemplate, 300)
     this.saveEmployeeDebounced = debounce(this.saveEmployee, 300)
     this.saveTemplatesListDebounced = debounce(this.saveTemplatesList, 300)
     this.saveTableDebounced = debounce(this.saveTable, 300)
+    this.fillTableDebounced = debounce(this.fillTable, 300)
+    this.showTemplatesListEditDebounced = debounce(this.showTemplatesListEdit, 300)
   },
   beforeMount () {
     this.selectedDate = this.actualDate
@@ -666,9 +498,6 @@ export default {
       this.visibleEmployees.push(e)
       this.visibleEmployees.sort(this.compareByName)
     },
-    allowedDates (dateStr) {
-      return dateStr > this.selectedDate
-    },
     assignTemplate (template, isChecked) {
       this.selectedEmployee.j.workTemplate = template && isChecked
         ? template
@@ -679,19 +508,11 @@ export default {
       this.isCreating = false
       this.isEditing = false
       this.templateStartDate = this.actualDate
-      this.templateTitle = ''
-      this.templateType = ''
-      this.templateWorkingDays = [ { start: '', end: '' }, { start: '', end: '' } ]
-      this.templateWorkingDaysCount = 2
-      this.templateDaysOff = [ { start: '', end: '' }, { start: '', end: '' } ]
-      this.templateDaysOffCount = 2
-      this.shiftScheduleHasErrors = false
-      this.hasEmptyWorkingDays = false
-      this.templateError = ''
     },
     closeTemplatesList () {
       this.newBusiness = {}
       this.templatesListEdit = false
+      this.isEditing = false
     },
     getDiffInDays (first, second) {
       return Math.floor((second - first) / (1000 * 60 * 60 * 24))
@@ -840,11 +661,6 @@ export default {
           this.oldWorkingDays = cloneDeep(this.workingDays)
         })
     },
-    calcEmptyWorkingDays () {
-      this.hasEmptyWorkingDays = this.templateType === 'shift'
-        ? this.templateWorkingDays.some(d => !d.start || !d.end)
-        : !this.weekTemplate.some(d => d.start && d.end)
-    },
     initVisibleEmployees () {
       this.businessEmployees.forEach((employee) => {
         if (!this.workingDays[employee.id]) {
@@ -887,49 +703,19 @@ export default {
 
       return res[day]
     },
-    onError () {
-      const titleError = !this.templateTitle ? 'Введите название шаблона' : this.rules.uniqueTitle(this.templateTitle)
-      if (typeof titleError === 'string') {
-        this.templateError = titleError
-        return
-      }
-
-      this.templateError = this.$refs.templateWorkingDaysCount && this.$refs.templateWorkingDaysCount.errorBucket.length
-        ? this.$refs.templateWorkingDaysCount.errorBucket[0]
-        : this.$refs.templateDaysOffCount && this.$refs.templateDaysOffCount.errorBucket[0]
-    },
     onSelectTemplate (template, $event) {
       this.assignTemplate(template, $event)
-      this.selectedEmployee.j.workTemplate.startDate = this.templateStartDate
+      this.selectedEmployee.j.workTemplate.startDate = this.selectedDate
     },
     openAssignForm (employee) {
       this.selectedEmployee = new Employee(cloneDeep(employee))
-      const template = this.selectedEmployeeTemplate
-
-      if (template) {
-        this.templateTitle = template.title
-        this.templateType = template.type
-        this.templateStartDate = template.startDate
-        if (!template.data) {
-          this.selectedEmployee.j.workTemplate.data = []
-        }
-      }
-
       this.templateAssignForm = true
     },
-    openEditForm () {
-      const template = this.selectedEmployeeTemplate
-      this.templateTitle = template.title
-      this.templateType = template.type
-      this.templateStartDate = template.startDate
-      if (template.type === 'shift') {
-        const workDaysCount = template.data.findIndex(d => !d.start)
-        this.templateWorkingDays = template.data.slice(0, workDaysCount)
-        this.templateWorkingDaysCount = this.templateWorkingDays.length
-        this.templateDaysOff = template.data.slice(workDaysCount)
-        this.templateDaysOffCount = this.templateDaysOff.length
-      }
+    openEditForm (template) {
       this.isEditing = true
+      if (template) {
+        this.editingTemplate = template
+      }
     },
     onClick (date, employeeId, target) {
       if (this.dayScheduleErrors.length && this.lastEdited !== date + employeeId) {
@@ -946,37 +732,14 @@ export default {
         input.focus()
       }
     },
-    onEditShiftDay (dayIndex, { newDaySchedule, errors }) {
-      if (!this.templateWorkingDays || !this.templateWorkingDays.length) {
-        return
-      }
-      this.$set(this.templateWorkingDays, dayIndex, newDaySchedule)
-      this.shiftScheduleHasErrors = !!errors.length
-      this.calcEmptyWorkingDays()
+    onTemplateSaved (newTemplate) {
+      this.templateStartDate = newTemplate.startDate
+      this.isCreating = false
+      this.isEditing = false
+      this.assignTemplate(newTemplate, true)
     },
     resetChanges () {
       this.workingDays = cloneDeep(this.oldWorkingDays)
-    },
-    saveTemplate () {
-      const newTemplate = {
-        title: this.templateTitle,
-        type: this.templateType,
-        data: this.templateType === 'shift' ? this.templateWorkingDays.concat(this.templateDaysOff) : this.weekTemplate,
-      }
-
-      const newValues = new Business(cloneDeep(this.businessInfo))
-
-      if (newValues.scheduleTemplates) {
-        newValues.scheduleTemplates.push(newTemplate)
-      } else {
-        newValues.scheduleTemplates = [ newTemplate ]
-      }
-      this.saveBusiness(newValues)
-        .then(() => {
-          this.isCreating = false
-          this.isEditing = false
-          this.assignTemplate(newTemplate, true)
-        })
     },
     saveEmployee () {
       if (this.selectedEmployee.j.workTemplate) {
@@ -1003,7 +766,7 @@ export default {
             // we have to check all employees
             // in case of some common templates were deleted
             if (!this.getEmployeeTemplate(e)) {
-              const newEmp = new Employee(e)
+              const newEmp = new Employee(cloneDeep(e))
               newEmp.workTemplate = null
               newEmp.save()
                 .then((res) => {
@@ -1037,34 +800,6 @@ export default {
         .then(() => {
           this.oldWorkingDays = cloneDeep(this.workingDays)
         })
-    },
-    scheduleEdit (newWeek) {
-      this.weekTemplate = newWeek.data
-      this.calcEmptyWorkingDays()
-    },
-    setShiftDays () {
-      let newLength = +this.templateWorkingDaysCount
-      const length = this.templateWorkingDays.length
-
-      if (+this.templateDaysOffCount > 7) {
-        this.templateDaysOffCount = '7'
-      }
-      this.templateDaysOff = new Array(+this.templateDaysOffCount).fill({ start: '', end: '' })
-
-      if (!newLength) {
-        return
-      }
-      if (newLength > 7) {
-        this.templateWorkingDaysCount = '7'
-        newLength = 7
-      }
-      if (newLength < length) {
-        this.templateWorkingDays = this.templateWorkingDays.slice(0, newLength)
-      } else {
-        const arr = new Array(newLength - length).fill({ start: '', end: '' })
-        this.templateWorkingDays = this.templateWorkingDays.concat(arr)
-      }
-      this.calcEmptyWorkingDays()
     },
     showTemplatesListEdit () {
       this.newBusiness = new Business(cloneDeep(this.businessInfo))
@@ -1334,6 +1069,9 @@ export default {
         input::placeholder {
           color: #8995AF !important;
         }
+      }
+      &.past {
+        pointer-events: none;
       }
     }
     &__template {
