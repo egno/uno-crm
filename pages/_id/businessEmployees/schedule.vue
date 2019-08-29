@@ -40,7 +40,7 @@
             </v-layout>
           </td>
           <td colspan="3">
-            <button type="button" class="employees-schedule__reset" @click="resetChanges">
+            <button type="button" class="employees-schedule__reset" @click="showReset = true">
               Загрузить сохранение
             </button>
           </td>
@@ -171,13 +171,27 @@
         <main-button
           class="button save-table"
           :class="{ button_disabled: !isChanged() || dayScheduleErrors.length }"
-          @click="saveTable"
+          @click="saveTableDebounced"
         >
           <span>СОХРАНИТЬ</span>
         </main-button>
       </v-bottom-nav>
     </v-expand-transition>
-
+    <Modal
+      :visible="showReset"
+      :template="resetModalTemplate"
+      @rightButtonClick="resetChanges"
+      @leftButtonClick="showReset = false"
+      @close="showReset = false"
+    >
+      <template slot="text">
+        <div class="employees-schedule__modal-text">
+          <div>Вернуться к последнему сохраненному графику работы?</div>
+          <br>
+          <div>Измененные данные при этом будут&nbsp;утеряны.</div>
+        </div>
+      </template>
+    </Modal>
     <v-dialog
       :value="templateAssignForm"
       :content-class="`right-attached-panel businesscard-form templates ${isCreating ? 'creating' : ''}`"
@@ -339,7 +353,7 @@
                   type="button"
                   class="right-attached-panel__save"
                   :class="{ _disabled: isSaveDisabled }"
-                  @click="saveTemplate"
+                  @click="saveTemplateDebounced"
                 >
                   Сохранить
                 </button>
@@ -404,7 +418,7 @@
                 type="button"
                 class="right-attached-panel__save"
                 :class="{ button_disabled: selectedEmployee.workTemplate && selectedEmployee.workTemplate.type === 'shift' && ! templateStartDate }"
-                @click="saveEmployee"
+                @click="saveEmployeeDebounced"
               >
                 {{ selectedEmployeeTemplate ? 'Назначить' : 'Сохранить' }}
               </main-button>
@@ -420,7 +434,6 @@
         </div>
       </v-layout>
     </v-dialog>
-
     <v-dialog
       :value="templatesListEdit"
       content-class="right-attached-panel businesscard-form _templates"
@@ -454,7 +467,7 @@
             <button
               type="button"
               class="right-attached-panel__save"
-              @click="saveTemplatesList"
+              @click="saveTemplatesListDebounced"
             >
               Сохранить
             </button>
@@ -474,10 +487,10 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
-import { cloneDeep, isEqual } from 'lodash'
+import { cloneDeep, debounce, isEqual } from 'lodash'
 import { employeesCategorized } from '~/mixins/employee'
 import { dayScheduleMixin } from '~/mixins/dayScheduleMixin'
-// import Modal from '~/components/common/Modal'
+import Modal from '~/components/common/Modal'
 import Accordion from '~/components/common/Accordion'
 import BusinessScheduleEdit from '~/components/business/BusinessScheduleEdit.vue'
 import Chip from '~/components/common/Chip.vue'
@@ -495,7 +508,7 @@ import { makeAlert } from '~/api/utils'
 
 export default {
   // eslint-disable-next-line standard/object-curly-even-spacing
-  components: { Accordion, BusinessScheduleEdit, Chip, DaySchedule, EmployeesSelection, EmployeeSimpleCard, MainButton, TemplateCard, TimeEdit },
+  components: { Accordion, BusinessScheduleEdit, Chip, DaySchedule, EmployeesSelection, EmployeeSimpleCard, MainButton, Modal, TemplateCard, TimeEdit },
   filters: {
     numberInWords (n) {
       const indexes = [ 'Первый', 'Второй', 'Третий', 'Четвертый', 'Пятый', 'Шестой', 'Седьмой', 'Восьмой', 'Девятый', 'Десятый', 'Одиннадцатый', 'Двенадцатый', 'Тринадцатый', 'Четырнадцатый' ]
@@ -519,6 +532,7 @@ export default {
       selectedEmployee: null,
       selectedOnStart: false,
       shiftScheduleHasErrors: false,
+      showReset: false,
       templateError: '',
       templateAssignForm: false,
       templatesListEdit: false,
@@ -536,6 +550,10 @@ export default {
       weekTemplate: [],
       workingDays: {},
       visibleEmployees: [],
+      resetModalTemplate: {
+        leftButton: 'ОТМЕНА',
+        rightButton: 'ПРИНЯТЬ',
+      },
       rules: {
         required: value => !!value || 'Обязательно для заполнения',
         minWorkDaysCount: value => (!value || (+value > 0)) || 'Введите не менее 1 рабочего дня',
@@ -619,6 +637,12 @@ export default {
       handler: 'getWorkingDays',
       deep: true,
     },
+  },
+  created () {
+    this.saveTemplateDebounced = debounce(this.saveTemplate, 300)
+    this.saveEmployeeDebounced = debounce(this.saveEmployee, 300)
+    this.saveTemplatesListDebounced = debounce(this.saveTemplatesList, 300)
+    this.saveTableDebounced = debounce(this.saveTable, 300)
   },
   beforeMount () {
     this.selectedDate = this.actualDate
@@ -1274,6 +1298,10 @@ export default {
     }
     &__footer {
       height: 40px;
+    }
+    &__modal-text {
+      width: 80%;
+      margin: 0 auto;
     }
     .templates-list-edit {
       width: 56px;
