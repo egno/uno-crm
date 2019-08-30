@@ -119,10 +119,6 @@ export default {
         return []
       },
     },
-    holiday: {
-      type: Boolean,
-      default: false,
-    },
     now: {
       type: Date,
       default () {
@@ -173,15 +169,7 @@ export default {
       return this.slotHeight / this.slotDuration
     },
     isDayOff () {
-      if (
-        !this.employeeSchedule ||
-        !this.employeeSchedule[0] ||
-        !this.employeeSchedule[1]
-      ) {
-        return true
-      }
-
-      return this.holiday
+      return !this.employeeSchedule || !this.employeeSchedule[0] || !this.employeeSchedule[1]
     },
     isToday () {
       return areSameDates(this.today, this.day.date)

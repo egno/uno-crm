@@ -1,4 +1,4 @@
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 
 export const employeesCategorized = {
   data () {
@@ -10,6 +10,9 @@ export const employeesCategorized = {
   computed: {
     ...mapGetters({
       businessEmployees: 'employee/employees',
+    }),
+    ...mapState({
+      businessInfo: state => state.business.businessInfo,
     }),
     employeesCategories () {
       return [
@@ -23,6 +26,13 @@ export const employeesCategorized = {
   methods: {
     compareByName (a, b) {
       return a.j.name.toLowerCase() < b.j.name.toLowerCase() ? -1 : 1
+    },
+    getEmployeeTemplate (employee) {
+      if (!employee.j.workTemplate || !employee.j.workTemplate.title) {
+        return
+      }
+
+      return this.businessInfo.j.scheduleTemplates.find(t => t.title === employee.j.workTemplate.title)
     },
     removeVisibleEmployee (employee) {
       const i = this.visibleEmployees.findIndex(e => e.id === employee.id)

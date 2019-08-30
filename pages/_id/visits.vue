@@ -198,7 +198,7 @@
                           <div
                             :class="[
                               'calendar-controls__dow',
-                              { 'day-off': isDayOff(day.dateKey, dayIndex) }
+                              { 'day-off': isSelectedEmpDayOff(day.dateKey) }
                             ]"
                           >
                             <span class="desktop">{{
@@ -207,12 +207,6 @@
                               })
                             }}</span>
                           </div>
-                          <!--<div v-if="!isDayOff(day.dateKey, dayIndex)" class="day-column__schedule">
-                            {{ employeeSchedule[0] }} – {{ employeeSchedule[1] }}
-                          </div>
-                          <div v-else class="day-column__schedule">
-                            Выходной
-                          </div>-->
                         </div>
                       </template>
                       <div
@@ -221,13 +215,13 @@
                         @click="
                           onDayEdit({
                             day,
-                            isDayOff: isDayOff(day.dateKey, dayIndex)
+                            isDayOff: isSelectedEmpDayOff(day.dateKey)
                           })
                         "
                       >
                         <div>
                           {{
-                            isDayOff(day.dateKey, dayIndex)
+                            isSelectedEmpDayOff(day.dateKey)
                               ? 'Сделать рабочим'
                               : 'Сделать выходным'
                           }}
@@ -386,7 +380,6 @@
                 :show-time="true"
                 :day="selectedDateObj"
                 :now="now"
-                :holiday="isHoliday(selectedDate, employee)"
                 :visits="dayVisits(selectedDate, employee)"
                 :employee-schedule="
                   getIrregularDay(selectedDate, employee)
@@ -418,7 +411,6 @@
                   :show-time="!i || day.dateKey === selectedDate"
                   :day="day"
                   :now="now"
-                  :holiday="isHoliday(day.dateKey, selectedEmployee)"
                   :visits="dayVisits(day.dateKey, selectedEmployee)"
                   :employee-schedule="
                     getIrregularDay(day.dateKey, selectedEmployee)
@@ -634,6 +626,7 @@ if (process.client) {
 }
 
 export default {
+  name: 'Visits',
   components: {
     Accordion,
     Chip,
@@ -702,38 +695,38 @@ export default {
       return hyphenStrToDay(this.selectedDate)
     },
     displayTimes () {
-      const selectedEmployeeSchedule = this.selectedEmployee.j.schedule.data
-      let start = selectedEmployeeSchedule &&
-        selectedEmployeeSchedule.find(day => !!day[0])[0]
-      let end = selectedEmployeeSchedule &&
-        selectedEmployeeSchedule.find(day => !!day[1])[1]
+      const selectedEmployeeSchedule = this.getEmployeeTemplate(this.selectedEmployee)
+      const workingDay = selectedEmployeeSchedule &&
+        selectedEmployeeSchedule.data.find(day => !!day.start && !!day.end)
+      let start = workingDay && workingDay.start
+      let end = workingDay && workingDay.end
 
       if (this.displayMode === 'day') {
         this.businessEmployees.forEach((employee) => {
-          const schedule = employee.j.schedule.data
+          const schedule = this.getEmployeeTemplate(employee)
 
-          schedule.forEach((day) => {
-            if (!day[0] || !day[1]) {
+          schedule.data.forEach((day) => {
+            if (!day.start || !day.end) {
               return
             }
-            if (day[0] < start) {
-              start = day[0]
+            if (day.start < start) {
+              start = day.start
             }
-            if (day[1] > end) {
-              end = day[1]
+            if (day.end > end) {
+              end = day.end
             }
           })
         })
       } else {
-        selectedEmployeeSchedule.forEach((day) => {
-          if (!day[0] || !day[1]) {
+        selectedEmployeeSchedule.data.forEach((day) => {
+          if (!day.start || !day.end) {
             return
           }
-          if (day[0] < start) {
-            start = day[0]
+          if (day.start < start) {
+            start = day.start
           }
-          if (day[1] > end) {
-            end = day[1]
+          if (day.end > end) {
+            end = day.end
           }
         })
       }
@@ -855,24 +848,15 @@ export default {
       this.selectVisit(visit)
     },
     getIrregularDays () {
-      if (
-        !this.selectedEmployee ||
-        !this.selectedEmployee.id ||
-        !this.selectedWeek
-      ) {
+      if (!this.selectedWeek) {
         return
       }
-      const sunday = this.selectedWeek[6]
-      const nextMonday = new Date(sunday.date)
 
-      nextMonday.setDate(sunday.date.getDate() + 1)
+      const params = `parent_business_id=eq.${this.businessInfo.id}&dt=gte.${this.selectedWeek[0].dateKey}&dt=lte.${this.selectedWeek[6].dateKey}&order=business_id,dt`
+
       Api()
         .get(
-          `/business_calendar?business_id=eq.${
-            this.selectedEmployee.id
-          }&changed=eq.true&dt=gte.${
-            this.selectedWeek[0].dateKey
-          }&dt=lt.${formatDate(nextMonday)}`
+          `/business_calendar?${params}`
         )
         .then(({ data }) => {
           this.irregularDays = data.map(x => ({
@@ -907,23 +891,14 @@ export default {
       }
       this.selectAllEmployees()
     },
-    isDayOff (dateString, dayIndex) {
+    isSelectedEmpDayOff (dateString) {
       const irregularDay = this.getIrregularDay(
         dateString,
         this.selectedEmployee
       )
-      const employeeSchedule = irregularDay
-        ? irregularDay.schedule
-        : (this.selectedEmployee &&
-            this.selectedEmployee.j &&
-            this.selectedEmployee.j.schedule.data[dayIndex]) ||
-          false
+      const employeeSchedule = irregularDay && irregularDay.schedule
 
-      if (!employeeSchedule || !employeeSchedule[0] || !employeeSchedule[1]) {
-        return true
-      }
-
-      return this.isHoliday(dateString, this.selectedEmployee)
+      return !employeeSchedule || !employeeSchedule[0] || !employeeSchedule[1]
     },
     onAction () {
       this.createVisit()

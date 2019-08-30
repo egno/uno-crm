@@ -375,7 +375,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { cloneDeep, debounce, isEqual } from 'lodash'
 import { employeesCategorized } from '~/mixins/employee'
 import { dayScheduleMixin } from '~/mixins/dayScheduleMixin'
@@ -437,9 +437,6 @@ export default {
   computed: {
     ...mapGetters({
       actualDate: 'common/actualDate',
-    }),
-    ...mapState({
-      businessInfo: state => state.business.businessInfo,
     }),
     businessTemplates () {
       if (!this.businessInfo.scheduleTemplates) {
@@ -648,13 +645,6 @@ export default {
       } else {
         return empty
       }
-    },
-    getEmployeeTemplate (employee) {
-      if (!employee.j.workTemplate || !employee.j.workTemplate.title) {
-        return
-      }
-
-      return this.businessInfo.scheduleTemplates.find(t => t.title === employee.j.workTemplate.title)
     },
     getWorkingDays () {
       if (!this.selectedWeek || !this.businessInfo.id) {
