@@ -197,6 +197,19 @@
         </div>
       </template>
     </Modal>
+    <Modal
+      :visible="showDelete"
+      :template="deleteModalTemplate"
+      @rightButtonClick="deleteBusinessTemplate(deletingTemplate)"
+      @leftButtonClick="showDelete = false; deletingTemplate = null"
+      @close="showDelete = false; deletingTemplate = null"
+    >
+      <template slot="text">
+        <div v-if="deletingTemplate" class="employees-schedule__modal-text">
+          Данный шаблон назначен {{ businessEmployees.filter(e => e.j.workTemplate && e.j.workTemplate.title === deletingTemplate.title).length }} сотрудникам. Хотите удалить?
+        </div>
+      </template>
+    </Modal>
     <v-dialog
       :value="templateAssignForm"
       :content-class="`right-attached-panel businesscard-form templates ${isCreating ? 'creating' : ''}`"
@@ -223,7 +236,7 @@
           <template v-if="isCreating || isEditing">
             <TemplateEdit
               :template="isCreating? {} : selectedEmployeeTemplate"
-              :show-start-date="true"
+              :show-start-date="false"
               @cancel="closeAssignForm"
               @saved="onTemplateSaved"
             />
@@ -239,20 +252,27 @@
               </template>
               <template slot="content">
                 <TemplateCard
-                  :editable="true"
+                  :editable="false"
                   :selectable="true"
-                  :checked="true"
+                  :checked="isAssigned(selectedEmployeeTemplate)"
                   :template="selectedEmployeeTemplate"
+                  @change="onSelectTemplate(selectedEmployeeTemplate, $event)"
                   @edit="openEditForm"
                   @delete="deleteEmpTemplate"
                 >
                   <div class="current-template__start">
-                    <div class="current-template__text">
-                      Дата начала шаблона
+                    <div class="current-template__start-date">
+                      <v-text-field
+                        :value="getMaskedDate(templateStartDate)"
+                        mask="##.##.####"
+                        label="ДАТА НАЧАЛА"
+                        placeholder="ДД.ММ.ГГГГ"
+                        :rules="[validateDate]"
+                        validate-on-blur
+                        return-masked-value
+                        @input="onInputDate"
+                      />
                     </div>
-                    <!--<div class="current-template__start-date">
-                      {{ startDayFormatted }}
-                    </div>-->
                   </div>
                 </TemplateCard>
               </template>
@@ -277,7 +297,7 @@
               <main-button
                 type="button"
                 class="right-attached-panel__save"
-                :class="{ button_disabled: selectedEmployee.workTemplate && selectedEmployee.workTemplate.type === 'shift' && ! templateStartDate }"
+                :class="{ button_disabled: selectedEmployee.workTemplate && !templateStartDate }"
                 @click="saveEmployeeDebounced"
               >
                 {{ selectedEmployeeTemplate ? 'Назначить' : 'Сохранить' }}
@@ -327,7 +347,7 @@
                   :selectable="false"
                   :template="template"
                   @edit="openEditForm(template)"
-                  @delete="deleteBusinessTemplate(template)"
+                  @delete="deletingTemplate = template; showDelete = true"
                 />
               </div>
             </div>
@@ -382,6 +402,7 @@ export default {
     return {
       editingTemplate: {},
       dayScheduleErrors: [],
+      deletingTemplate: null,
       isStillEditing: false,
       enabled: null,
       isCreating: false,
@@ -393,6 +414,7 @@ export default {
       selectedDate: '',
       selectedEmployee: null,
       selectedOnStart: false,
+      showDelete: false,
       showReset: false,
       templateAssignForm: false,
       templatesListEdit: false,
@@ -402,6 +424,10 @@ export default {
       resetModalTemplate: {
         leftButton: 'ОТМЕНА',
         rightButton: 'ПРИНЯТЬ',
+      },
+      deleteModalTemplate: {
+        leftButton: 'ОТМЕНА',
+        rightButton: 'УДАЛИТЬ',
       },
       rules: {
         uniqueTitle: value => !this.businessInfo.scheduleTemplates.some(t => t.title === value) || 'Название шаблона должно быть уникально',
@@ -446,6 +472,19 @@ export default {
     },
     selectedMonth () {
       return getWeeks(+this.selectedDate.slice(0, 4), +this.selectedDate.slice(5, 7) - 1)
+    },
+    startDayFormatted () {
+      if (!this.selectedEmployeeTemplate) { return '' }
+      const options = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        weekday: 'short',
+      }
+      return hyphensStringToDate(this.selectedEmployeeTemplate.startDate).toLocaleString(
+        'ru',
+        options
+      )
     },
   },
   watch: {
@@ -500,8 +539,8 @@ export default {
     },
     assignTemplate (template, isChecked) {
       this.selectedEmployee.j.workTemplate = template && isChecked
-        ? template
-        : null
+        ? cloneDeep(template)
+        : {}
     },
     closeAssignForm () {
       this.templateAssignForm = false
@@ -541,6 +580,20 @@ export default {
           this.workingDays[emp.id] = this.selectedWeek.map(d => ({ date: d.dateKey, employeeId: emp.id, start: '', end: '' }))
         }
       })
+    },
+    getHyphenedDate (dotDateString) {
+      const arr = dotDateString.split('.')
+      if (dotDateString.includes('-')) {
+        return dotDateString
+      }
+      return `${arr[2]}-${arr[1]}-${arr[0]}`
+    },
+    getMaskedDate (dateString) {
+      const arr = dateString.split('-')
+      if (dateString.includes('.')) {
+        return dateString
+      }
+      return `${arr[2]}.${arr[1]}.${arr[0]}`
     },
     getEmpWeekSchedule (employee) {
       const empty = this.selectedWeek.map(d => ({ date: d.dateKey, employeeId: employee.id, start: '', end: '' }))
@@ -703,13 +756,27 @@ export default {
 
       return res[day]
     },
-    onSelectTemplate (template, $event) {
-      this.assignTemplate(template, $event)
+    onInputDate (newVal) {
+      if (this.validateDate(newVal) === true) {
+        this.templateStartDate = newVal
+      } else {
+        this.templateStartDate = ''
+      }
+    },
+    onSelectTemplate (template, isChecked) {
+      this.assignTemplate(template, isChecked)
       this.selectedEmployee.j.workTemplate.startDate = this.selectedDate
+      if (!this.templateStartDate) {
+        this.templateStartDate = this.selectedDate
+      }
     },
     openAssignForm (employee) {
       this.selectedEmployee = new Employee(cloneDeep(employee))
       this.templateAssignForm = true
+      this.templateStartDate = employee.j.workTemplate && employee.j.workTemplate.startDate
+      if (!this.templateStartDate) {
+        this.templateStartDate = this.selectedDate
+      }
     },
     openEditForm (template) {
       this.isEditing = true
@@ -749,7 +816,7 @@ export default {
         // the corresponding data in employee
         this.selectedEmployee.j.workTemplate = cloneDeep(this.selectedEmployee.j.workTemplate)
         this.selectedEmployee.j.workTemplate.data = null
-        this.selectedEmployee.j.workTemplate.startDate = this.templateStartDate
+        this.selectedEmployee.j.workTemplate.startDate = this.getHyphenedDate(this.templateStartDate)
       }
 
       this.selectedEmployee.save()
@@ -804,6 +871,53 @@ export default {
     showTemplatesListEdit () {
       this.newBusiness = new Business(cloneDeep(this.businessInfo))
       this.templatesListEdit = true
+    },
+    validateDate (dottedValue) {
+      const dateFormat = /^(0?[1-9]|[12][0-9]|3[01])\.(0?[1-9]|1[012])\.(19\d{2}|20\d{2})$/
+      // eslint-disable-next-line prefer-const
+      let today = new Date()
+      let match
+
+      today.setHours(0, 0, 0)
+
+      if (!dottedValue) {
+        return false
+      }
+
+      // eslint-disable-next-line prefer-const
+      match = dottedValue.match(dateFormat)
+
+      if (!match) {
+        return 'Неправильная дата'
+      }
+      const day = match[1]
+      const month = match[2]
+      const year = match[3]
+      const monthLength = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ]
+
+      // Adjust for leap years
+      if (year % 400 === 0 || (year % 100 !== 0 && year % 4 === 0)) {
+        monthLength[1] = 29
+      }
+
+      // Check the range of the day
+      if (day > monthLength[month - 1]) {
+        return 'Неправильная дата'
+      }
+
+      // eslint-disable-next-line prefer-const
+      let date = new Date()
+
+      date.setHours(0, 0, 0)
+      date.setDate(day)
+      date.setMonth(month - 1)
+      date.setFullYear(year)
+
+      if (date >= today) {
+        return true
+      } else {
+        return 'Укажите будущую дату'
+      }
     },
     changeDateSchedule (employeeId, i, data, isStart) {
       this.workingDays[employeeId][i][isStart ? 'start' : 'end'] = data
@@ -1154,7 +1268,7 @@ export default {
     .current-template {
       &__start {
         border-top: 1px solid rgba(137, 149, 175, 0.1);
-        padding: 10px 16px;
+        padding: 30px 16px 20px;
         font-size: 12px;
       }
       &__text {

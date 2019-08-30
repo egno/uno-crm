@@ -115,7 +115,7 @@
         <template v-slot:activator="{ on }">
           <div class="right-attached-panel__field-block templates__date">
             <button type="button" v-on="on">
-              <span class="important-text">Дата начала</span> {{ startDayFormatted }}
+              <span class="important-text">Дата начала</span> {{ startDayFormatted(templateStartDate) }}
             </button>
           </div>
         </template>
@@ -215,20 +215,7 @@ export default {
       businessInfo: state => state.business.businessInfo,
     }),
     isSaveDisabled () {
-      return !this.templateTitle || !this.templateType || this.shiftScheduleHasErrors || this.hasEmptyWorkingDays || this.templateError
-    },
-    startDayFormatted () {
-      if (!this.templateStartDate) { return '' }
-      const options = {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        weekday: 'short',
-      }
-      return hyphensStringToDate(this.templateStartDate).toLocaleString(
-        'ru',
-        options
-      )
+      return !this.templateTitle || !this.templateType || (this.templateType === 'shift' && this.shiftScheduleHasErrors) || this.hasEmptyWorkingDays || this.templateError
     },
   },
   created () {
@@ -334,6 +321,19 @@ export default {
         this.templateWorkingDays = this.templateWorkingDays.concat(arr)
       }
       this.calcEmptyWorkingDays()
+    },
+    startDayFormatted (startDate) {
+      if (!startDate) { return '' }
+      const options = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        weekday: 'short',
+      }
+      return hyphensStringToDate(startDate).toLocaleString(
+        'ru',
+        options
+      )
     },
   },
 }
