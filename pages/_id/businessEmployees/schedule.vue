@@ -238,7 +238,7 @@
               :template="isCreating? {} : selectedEmployeeTemplate"
               :show-start-date="false"
               @cancel="closeAssignForm"
-              @saved="onTemplateSaved"
+              @saved="onEmployeeTemplateSaved"
             />
           </template>
           <template v-else-if="selectedEmployee && !isCreating">
@@ -334,7 +334,7 @@
             <TemplateEdit
               :template="editingTemplate"
               @cancel="isEditing = false; editingTemplate = {}"
-              @saved="isEditing = false"
+              @saved="onBusinessTemplateSaved"
             />
           </template>
           <template v-else>
@@ -599,7 +599,16 @@ export default {
       if (employee.j.workTemplate && employee.j.workTemplate.type) {
         const template = this.getEmployeeTemplate(employee)
         if (template.type === 'week') {
-          return this.selectedWeek.map((d, index) => ({ date: d.dateKey, employeeId: employee.id, start: template.data[index].start, end: template.data[index].end }))
+          const startDate = employee.j.workTemplate.startDate
+          if (this.selectedWeek[0].dateKey > startDate) {
+            return this.selectedWeek.map((d, index) => ({ date: d.dateKey, employeeId: employee.id, start: template.data[index].start, end: template.data[index].end }))
+          } else {
+            return this.selectedWeek.map((d, index) => {
+              return d.dateKey < startDate
+                ? { date: d.dateKey, employeeId: employee.id, start: '', end: '' }
+                : { date: d.dateKey, employeeId: employee.id, start: template.data[index].start, end: template.data[index].end }
+            })
+          }
         }
 
         const period = template.data.length
@@ -774,6 +783,10 @@ export default {
         this.editingTemplate = template
       }
     },
+    onBusinessTemplateSaved () {
+      this.newBusiness = new Business(cloneDeep(this.businessInfo))
+      this.isEditing = false
+    },
     onClick (date, employeeId, target) {
       if (this.dayScheduleErrors.length && this.lastEdited !== date + employeeId) {
         return
@@ -789,7 +802,7 @@ export default {
         input.focus()
       }
     },
-    onTemplateSaved (newTemplate) {
+    onEmployeeTemplateSaved (newTemplate) {
       this.templateStartDate = newTemplate.startDate
       this.isCreating = false
       this.isEditing = false
