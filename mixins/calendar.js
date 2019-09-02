@@ -101,30 +101,6 @@ export default {
 
       return this.calendarMonth[this.activeSlide]
     },
-    isHoliday (dt, employee) {
-      if (!dt || !this.selectedWeek) {
-        return false
-      }
-      const dow = this.selectedWeek.findIndex(d => d.dateKey === dt)
-      const irregularDay = this.getIrregularDay(dt, employee)
-
-      if (
-        this.irregularDays.length &&
-        this.irregularDays[0].employeeId !== employee.id
-      ) {
-        // todo check if correct
-        return false
-      }
-
-      if (!irregularDay && !employee) {
-        return false
-      }
-
-      return irregularDay
-        ? !irregularDay.schedule.length
-        : !employee.j.schedule.data[dow].length ||
-            !employee.j.schedule.data[dow][1]
-    },
     getIrregularDay (dt, employee) {
       if (!employee) {
         return

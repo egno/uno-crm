@@ -766,7 +766,10 @@ export default {
       }
     },
     selectedWeek: {
-      handler: 'fetchData',
+      handler () {
+        this.fetchData()
+        this.getIrregularDays()
+      },
       deep: true,
     },
     selectedEmployee: {
