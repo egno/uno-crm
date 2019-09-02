@@ -45,7 +45,7 @@
             </button>
           </td>
           <td colspan="2" class="employees-schedule__summary">
-            <button type="button" class="employees-schedule__empty" @click="fillWithEmpty">
+            <button type="button" class="employees-schedule__empty" @click="showModal = true">
               Очистить
             </button>
           </td>
@@ -164,8 +164,7 @@
       </tfoot>
     </table>
 
-    <div class="bottom-placeholder">
-    </div>
+    <div class="bottom-placeholder" />
     <v-expand-transition>
       <v-bottom-nav
         v-show="isChanged() && !dayScheduleErrors.length"
@@ -184,6 +183,38 @@
         </main-button>
       </v-bottom-nav>
     </v-expand-transition>
+    <!-- todo replace all Modals with one with slots -->
+    <Modal
+      :visible="showModal"
+      @close="showModal = false"
+    >
+      <template slot="header">
+        Очистить график сотрудников?
+      </template>
+      <template slot="text">
+        <div>
+          Все данные за выделенный период
+          с&nbsp;{{ selectedWeek[0].date.toLocaleString('ru-RU', { day: 'numeric', month: '2-digit'}) }}
+          по {{ selectedWeek[6].date.toLocaleString('ru-RU', { day: 'numeric', month: '2-digit'}) }} будут&nbsp;удалены.
+        </div>
+      </template>
+      <template slot="buttons">
+        <button
+          type="button"
+          class="uno-modal__left"
+          @click="showModal = false"
+        >
+          Отмена
+        </button>
+        <button
+          type="button"
+          class="uno-modal__right"
+          @click="fillWithEmpty(); showModal = false"
+        >
+          ПРИНЯТЬ
+        </button>
+      </template>
+    </Modal>
     <Modal
       :visible="showChangeWeekModal"
       :template="saveTableTemplate"
@@ -192,7 +223,7 @@
       @close="showChangeWeekModal = false"
     >
       <template slot="text">
-        <div class="employees-schedule__modal-text">
+        <div>
           Вы внесли изменения в график работы. Сохранить и перейти?
         </div>
       </template>
@@ -205,7 +236,7 @@
       @close="showReset = false"
     >
       <template slot="text">
-        <div class="employees-schedule__modal-text">
+        <div>
           <div>Вернуться к последнему сохраненному графику работы?</div>
           <br>
           <div>Измененные данные при этом будут&nbsp;утеряны.</div>
@@ -220,7 +251,7 @@
       @close="showDelete = false; deletingTemplate = null"
     >
       <template slot="text">
-        <div v-if="deletingTemplate" class="employees-schedule__modal-text">
+        <div v-if="deletingTemplate">
           Данный шаблон назначен {{ businessEmployees.filter(e => e.j.workTemplate && e.j.workTemplate.title === deletingTemplate.title).length }} сотрудникам. Хотите удалить?
         </div>
       </template>
@@ -430,6 +461,7 @@ export default {
       selectedDate: '',
       selectedEmployee: null,
       selectedOnStart: false,
+      showModal: false,
       showDelete: false,
       showReset: false,
       templateAssignForm: false,

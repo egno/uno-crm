@@ -3,11 +3,19 @@
     <div class="uno-modal">
       <button type="button" class="uno-modal__close" @click="$emit('close')" />
       <div class="uno-modal__content">
-        <div class="uno-modal__header">
+        <div v-if="$slots.header" class="uno-modal__header">
+          <slot name="header" />
+        </div>
+        <div v-else class="uno-modal__header">
           {{ template.header }}
         </div>
-        <slot name="text" />
-        <div class="uno-modal__buttons">
+        <div v-if="$slots.text" class="uno-modal__text">
+          <slot name="text" />
+        </div>
+        <div v-if="$slots.buttons" class="uno-modal__buttons">
+          <slot name="buttons" />
+        </div>
+        <div v-else class="uno-modal__buttons">
           <button
             type="button"
             class="uno-modal__left"
