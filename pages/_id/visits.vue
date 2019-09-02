@@ -700,37 +700,44 @@ export default {
       const selectedEmployeeSchedule = this.getEmployeeTemplate(this.selectedEmployee)
       const workingDay = selectedEmployeeSchedule &&
         selectedEmployeeSchedule.data.find(day => !!day.start && !!day.end)
-      let start = workingDay && workingDay.start
-      let end = workingDay && workingDay.end
+      let start = (workingDay && workingDay.start)
+      let end = (workingDay && workingDay.end)
+      const findEdges = (day) => {
+        if (!day.start && !day.end && !day[0] && !day[1]) {
+          return
+        }
+
+        if (!start || day.start < start || day[0] < start) {
+          start = day.start || day[0]
+        }
+        if (!end || day.end > end || day[1] > end) {
+          end = day.end || day[1]
+        }
+      }
 
       if (this.displayMode === 'day') {
         this.businessEmployees.forEach((employee) => {
           const schedule = this.getEmployeeTemplate(employee)
 
-          schedule.data.forEach((day) => {
-            if (!day.start || !day.end) {
-              return
-            }
-            if (day.start < start) {
-              start = day.start
-            }
-            if (day.end > end) {
-              end = day.end
-            }
-          })
-        })
-      } else {
-        selectedEmployeeSchedule.data.forEach((day) => {
-          if (!day.start || !day.end) {
+          if (!schedule) {
             return
           }
-          if (day.start < start) {
-            start = day.start
-          }
-          if (day.end > end) {
-            end = day.end
-          }
+          schedule.data.forEach(findEdges)
         })
+
+        if (!start && !end) {
+          const hasSomeSchedule = this.irregularDays.filter(day => day.date === this.selectedDate && !!day.schedule && day.schedule[0] && day.schedule[1])
+
+          if (hasSomeSchedule && hasSomeSchedule.length) {
+            hasSomeSchedule.forEach(d => findEdges(d.schedule))
+          }
+        }
+      } else {
+        selectedEmployeeSchedule && selectedEmployeeSchedule.data && selectedEmployeeSchedule.data.forEach(findEdges)
+        if (!selectedEmployeeSchedule || !selectedEmployeeSchedule.data) {
+          const empSchedule = this.irregularDays.filter(day => day.employeeId === this.selectedEmployee.id && !!day.schedule && day.schedule[0] && day.schedule[1])
+          empSchedule && empSchedule.length && empSchedule.forEach(d => findEdges(d.schedule))
+        }
       }
 
       return { start, end }
@@ -853,7 +860,7 @@ export default {
       this.selectVisit(visit)
     },
     getIrregularDays () {
-      if (!this.selectedWeek) {
+      if (!this.selectedWeek || !this.businessInfo || !this.businessInfo.id) {
         return
       }
 
