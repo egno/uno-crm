@@ -219,12 +219,12 @@
       :visible="showChangeWeekModal"
       :template="saveTableTemplate"
       @rightButtonClick="saveAndGo"
-      @leftButtonClick="showChangeWeekModal = false"
+      @leftButtonClick="resetChanges(); changeWeek(changeWeekDirection)"
       @close="showChangeWeekModal = false"
     >
       <template slot="text">
         <div>
-          Вы внесли изменения в график работы. Сохранить и перейти?
+          Вы внесли изменения в график работы. Сохранить?
         </div>
       </template>
     </Modal>
@@ -474,7 +474,7 @@ export default {
         rightButton: 'ПРИНЯТЬ',
       },
       saveTableTemplate: {
-        leftButton: 'ОТМЕНА',
+        leftButton: 'ПЕРЕЙТИ',
         rightButton: 'СОХРАНИТЬ',
       },
       showChangeWeekModal: false,

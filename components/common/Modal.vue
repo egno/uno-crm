@@ -109,6 +109,7 @@ export default {
     margin-top: 36px;
     button {
       @extend %button;
+      padding: 0 26px;
     }
   }
 
