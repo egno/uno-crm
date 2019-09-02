@@ -595,7 +595,6 @@ export default {
     getEmpWeekSchedule (employee) {
       const empty = this.selectedWeek.map(d => ({ date: d.dateKey, employeeId: employee.id, start: '', end: '' }))
 
-      // todo merge with irregular days
       if (employee.j.workTemplate && employee.j.workTemplate.type) {
         const template = this.getEmployeeTemplate(employee)
         if (template.type === 'week') {
@@ -622,25 +621,17 @@ export default {
         }
 
         if (startDate < thisMonday) {
-          const diff = this.getDiffInDays(startDate, thisMonday) // или предыдущий день?
-          // const dow = this.selectedWeek.findIndex(d => d.dateKey === employee.j.workTemplate.startDate)
+          const diff = this.getDiffInDays(startDate, thisMonday)
           let currentDay = diff % period
-          // let currentDay = 0
-          // eslint-disable-next-line prefer-const
 
-          // todo add previous week's sunday as a start point
-
-          for (let i = currentDay; i < 7; i++) {
+          for (let i = 0; i < 7; i++) {
             week[i] = Object.assign(week[i], template.data[currentDay])
             currentDay = currentDay < (period - 1) ? (currentDay + 1) : 0
           }
         } else {
-          let i = 0
-
-          while (i < 7) {
+          for (let i = 0; i < 7; i++) {
             if (this.selectedWeek[i].date < startDate) {
               week[i] = Object.assign(week[i], { start: '', end: '' })
-              i++
             } else {
               for (let j = 0; (j < period) && i < 7; j++) {
                 week[i] = Object.assign(week[i], template.data[j])
