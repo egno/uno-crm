@@ -75,13 +75,15 @@ export default {
       }
     },
   },
+  created () {
+    this.setActualDate()
+  },
   beforeMount () {
     this.loadBusiness()
     this.loadApiTime()
     this.setActions()
     this.loadServiceList()
     this.loadServiceGroups()
-    this.setActualDate()
   },
   mounted () {
     this.loadFromStorage()

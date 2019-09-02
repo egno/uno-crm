@@ -524,6 +524,7 @@ export default {
     },
   },
   created () {
+    this.selectedDate = this.actualDate
     this.saveEmployeeDebounced = debounce(this.saveEmployee, 300)
     this.saveTemplatesListDebounced = debounce(this.saveTemplatesList, 300)
     this.saveTableDebounced = debounce(this.saveTable, 300)
@@ -531,7 +532,6 @@ export default {
     this.showTemplatesListEditDebounced = debounce(this.showTemplatesListEdit, 300)
   },
   beforeMount () {
-    this.selectedDate = this.actualDate
     this.templateStartDate = this.actualDate
     this.initVisibleEmployees()
     this.getWorkingDays()
