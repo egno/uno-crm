@@ -164,11 +164,14 @@
       </tfoot>
     </table>
 
+    <div class="bottom-placeholder">
+    </div>
     <v-expand-transition>
       <v-bottom-nav
         v-show="isChanged() && !dayScheduleErrors.length"
         :value="isChanged() && !dayScheduleErrors.length"
         height="80"
+        absolute
         color="transparent"
       >
         <span>Вы внесли изменения в график работы.</span>
@@ -1183,6 +1186,9 @@ export default {
       border-left: 1px solid rgba(137, 149, 175, 0.35);
       background: url('~assets/images/svg/pencil.svg') center no-repeat  rgba(137, 149, 175, 0.5);
       outline: none;
+    }
+    .bottom-placeholder {
+      height: 90px;
     }
   }
   .schedule-row {
