@@ -169,7 +169,6 @@
         v-show="isChanged() && !dayScheduleErrors.length"
         :value="isChanged() && !dayScheduleErrors.length"
         height="80"
-        absolute
         color="transparent"
       >
         <span>Вы внесли изменения в график работы.</span>
@@ -182,6 +181,19 @@
         </main-button>
       </v-bottom-nav>
     </v-expand-transition>
+    <Modal
+      :visible="showChangeWeekModal"
+      :template="saveTableTemplate"
+      @rightButtonClick="saveAndGo"
+      @leftButtonClick="showChangeWeekModal = false"
+      @close="showChangeWeekModal = false"
+    >
+      <template slot="text">
+        <div class="employees-schedule__modal-text">
+          Вы внесли изменения в график работы. Сохранить и перейти?
+        </div>
+      </template>
+    </Modal>
     <Modal
       :visible="showReset"
       :template="resetModalTemplate"
@@ -400,6 +412,7 @@ export default {
   mixins: [ dayScheduleMixin, employeesCategorized ],
   data () {
     return {
+      changeWeekDirection: 0,
       editingTemplate: {},
       dayScheduleErrors: [],
       deletingTemplate: null,
@@ -425,6 +438,11 @@ export default {
         leftButton: 'ОТМЕНА',
         rightButton: 'ПРИНЯТЬ',
       },
+      saveTableTemplate: {
+        leftButton: 'ОТМЕНА',
+        rightButton: 'СОХРАНИТЬ',
+      },
+      showChangeWeekModal: false,
       deleteModalTemplate: {
         leftButton: 'ОТМЕНА',
         rightButton: 'УДАЛИТЬ',
@@ -527,6 +545,11 @@ export default {
     changeWeek (vector) {
       const dt = new Date(this.selectedDate)
 
+      this.changeWeekDirection = vector
+      if (this.isChanged()) {
+        this.showChangeWeekModal = true
+        return
+      }
       dt.setDate(dt.getDate() + 7 * vector)
       this.selectedDate = formatDate(dt)
     },
@@ -802,6 +825,14 @@ export default {
     resetChanges () {
       this.workingDays = cloneDeep(this.oldWorkingDays)
     },
+    saveAndGo () {
+      this.showChangeWeekModal = false
+      this.saveTable()
+        .then(() => {
+          debugger
+          this.changeWeek(this.changeWeekDirection)
+        })
+    },
     saveEmployee () {
       if (this.selectedEmployee.j.workTemplate) {
         // at this moment workTemplate is already in store (in business' templates)
@@ -856,7 +887,7 @@ export default {
         })
       })
 
-      Api()
+      return Api()
         .post(`/business_calendar?branch_id=eq.${this.businessInfo.id}`, data)
         .then(() => {
           this.oldWorkingDays = cloneDeep(this.workingDays)
