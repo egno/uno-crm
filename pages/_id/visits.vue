@@ -13,6 +13,7 @@
           <div class="header">
             <VLayout row align-center class="header__right">
               <button
+                v-if="selectedDateObj"
                 type="button"
                 :disabled="selectedDateObj.dateKey === todayString"
                 class="calendar-controls__today"
@@ -88,6 +89,7 @@
               </div>
               <VLayout row align-center class="calendar-controls__right">
                 <button
+                  v-if="selectedDateObj"
                   type="button"
                   :disabled="selectedDateObj.dateKey === todayString"
                   class="calendar-controls__today"
@@ -146,7 +148,7 @@
                 class="calendar-controls__days _desktop"
               >
                 <!--todo make a component -->
-                <template v-if="displayMode === 'day'">
+                <template v-if="displayMode === 'day' && selectedWeek">
                   <div
                     v-for="(day, dayIndex) in selectedWeek"
                     :key="dayIndex"
