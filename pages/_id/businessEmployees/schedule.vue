@@ -170,7 +170,6 @@
         v-show="isChanged() && !dayScheduleErrors.length"
         :value="isChanged() && !dayScheduleErrors.length"
         height="80"
-        absolute
         color="transparent"
       >
         <span>Вы внесли изменения в график работы.</span>
@@ -1106,9 +1105,13 @@ export default {
       font-size: 18px;
     }
     .v-bottom-nav {
+      position: fixed;
+      bottom: 0;
+      right: 0;
       justify-content: flex-end;
       align-items: center;
       padding: 12px 42px;
+      background-color: #fff !important;
       & > * {
         flex-grow: 0;
       }
